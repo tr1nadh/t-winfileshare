@@ -1,5 +1,6 @@
-package com.example.twinfileshare;
+package com.example.twinfileshare.fx;
 
+import com.example.twinfileshare.TWinFileShareApplication;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
