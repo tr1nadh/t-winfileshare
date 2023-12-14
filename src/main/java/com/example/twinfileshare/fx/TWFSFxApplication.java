@@ -13,7 +13,7 @@ import java.io.IOException;
 public class TWFSFxApplication {
 
     public static void loadView(Stage stage) throws IOException {
-        FXMLLoader loader = new FXMLLoader(TWFSFxApplication.class.getResource("/Main.fxml"));
+        FXMLLoader loader = new FXMLLoader(TWFSFxApplication.class.getResource("/template/Main.fxml"));
         loader.setControllerFactory(TWinFileShareApplication.getApplicationContext()::getBean);
         Parent root = loader.load();
         stage.setScene(new Scene(root));
