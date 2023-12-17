@@ -1,8 +1,6 @@
 package com.example.twinfileshare.fx.service;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeRequestUrl;
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
+import com.google.api.client.googleapis.auth.oauth2.*;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -16,14 +14,17 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Collections;
+import java.security.GeneralSecurityException;
 import java.util.List;
 
 @Service
 public class DriveService {
     private static HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     private static JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
-    private static final List<String> SCOPES = Collections.singletonList(DriveScopes.DRIVE);
+    private static final List<String> SCOPES = List.of(
+            "https://www.googleapis.com/auth/userinfo.email",
+            "https://www.googleapis.com/auth/userinfo.profile",
+            DriveScopes.DRIVE);
 
     @Value("${google.oauth.callback.uri}")
     private String CALLBACK_URI;
@@ -48,4 +49,11 @@ public class DriveService {
         return url.setRedirectUri(CALLBACK_URI).setAccessType("offline").build();
     }
 
+    public void showToken(String code) throws IOException, GeneralSecurityException {
+        GoogleTokenResponse response = flow.newTokenRequest(code).setRedirectUri(CALLBACK_URI).execute();
+        System.out.println("Access token: " + response);
+        var verifier = new GoogleIdTokenVerifier.Builder(HTTP_TRANSPORT, JSON_FACTORY).build();
+        var idToken = verifier.verify(response.getIdToken());
+        System.out.println("Id Token: " + idToken);
+    }
 }
