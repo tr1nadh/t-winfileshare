@@ -10,6 +10,7 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.DriveScopes;
 import jakarta.annotation.PostConstruct;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -21,6 +22,7 @@ import java.security.GeneralSecurityException;
 import java.util.List;
 
 @Service
+@Log4j2
 public class DriveService {
     private static HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     private static JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
@@ -60,9 +62,16 @@ public class DriveService {
             throw new IllegalStateException("Invalid authorization code");
 
         GoogleTokenResponse response = flow.newTokenRequest(authCode).setRedirectUri(CALLBACK_URI).execute();
+        if (!doesResponseHasDriveScope(response))
+            log.warn("User have not given drive access");
+
         var idTokenPayload = verifyIdToken(response.getIdToken());
         var googleUserCRED = GoogleUserCRED.apply(response, idTokenPayload);
         googleUserCREDJPA.save(googleUserCRED);
+    }
+
+    private boolean doesResponseHasDriveScope(GoogleTokenResponse response) {
+        return response.getScope().contains("drive");
     }
 
     private GoogleIdToken.Payload verifyIdToken(String idToken) throws GeneralSecurityException, IOException {
