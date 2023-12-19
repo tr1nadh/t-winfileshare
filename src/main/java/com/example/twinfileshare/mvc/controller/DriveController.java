@@ -22,7 +22,7 @@ public class DriveController {
         String code = req.getParameter("code");
         if (code != null) {
             System.out.println("Authorization code: " + code);
-            driveService.showToken(code);
+            driveService.saveToken(code);
         }
 
         res.getWriter().println("You are successfully connected, You can get back to the application:");

@@ -1,5 +1,7 @@
 package com.example.twinfileshare.fx.service;
 
+import com.example.twinfileshare.GoogleUserCRED;
+import com.example.twinfileshare.GoogleUserCREDJPA;
 import com.google.api.client.googleapis.auth.oauth2.*;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -8,6 +10,7 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.DriveScopes;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -49,11 +52,26 @@ public class DriveService {
         return url.setRedirectUri(CALLBACK_URI).setAccessType("offline").build();
     }
 
-    public void showToken(String code) throws IOException, GeneralSecurityException {
-        GoogleTokenResponse response = flow.newTokenRequest(code).setRedirectUri(CALLBACK_URI).execute();
-        System.out.println("Access token: " + response);
+    @Autowired
+    private GoogleUserCREDJPA googleUserCREDJPA;
+
+    public void saveToken(String authCode) throws IOException, GeneralSecurityException {
+        if (authCode == null || authCode.isBlank())
+            throw new IllegalStateException("Invalid authorization code");
+
+        GoogleTokenResponse response = flow.newTokenRequest(authCode).setRedirectUri(CALLBACK_URI).execute();
+        var idTokenPayload = verifyIdToken(response.getIdToken());
+        var googleUserCRED = GoogleUserCRED.apply(response, idTokenPayload);
+        googleUserCREDJPA.save(googleUserCRED);
+    }
+
+    private GoogleIdToken.Payload verifyIdToken(String idToken) throws GeneralSecurityException, IOException {
+        if (idToken == null || idToken.isBlank())
+            throw new IllegalStateException("Invalid ID token");
+
         var verifier = new GoogleIdTokenVerifier.Builder(HTTP_TRANSPORT, JSON_FACTORY).build();
-        var idToken = verifier.verify(response.getIdToken());
-        System.out.println("Id Token: " + idToken);
+        var googleIdToken = verifier.verify(idToken);
+        if (googleIdToken != null) return googleIdToken.getPayload();
+        else throw new IllegalStateException("Cannot authenticate user");
     }
 }
