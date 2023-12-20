@@ -1,4 +1,4 @@
-package com.example.twinfileshare.fx.service;
+package com.example.twinfileshare.service;
 
 import com.example.twinfileshare.GoogleUserCRED;
 import com.example.twinfileshare.GoogleUserCREDJPA;
@@ -23,7 +23,7 @@ import java.util.List;
 
 @Service
 @Log4j2
-public class DriveService {
+public class GoogleAuthorizationService {
     private static HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     private static JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
     private static final List<String> SCOPES = List.of(

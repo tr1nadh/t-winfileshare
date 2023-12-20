@@ -1,7 +1,7 @@
 package com.example.twinfileshare.fx.controller;
 
 import com.example.twinfileshare.TWinFileShareApplication;
-import com.example.twinfileshare.fx.service.DriveService;
+import com.example.twinfileshare.service.GoogleAuthorizationService;
 import javafx.event.ActionEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,10 +13,10 @@ public class MainController {
     private TWinFileShareApplication tWinFileShareApplication;
 
     @Autowired
-    private DriveService driveService;
+    private GoogleAuthorizationService googleAuthorizationService;
 
     public void connectGoogleDrive(ActionEvent event) {
         var hostServices = tWinFileShareApplication.getHostServices();
-        hostServices.showDocument(driveService.getGoogleSignInURL());
+        hostServices.showDocument(googleAuthorizationService.getGoogleSignInURL());
     }
 }

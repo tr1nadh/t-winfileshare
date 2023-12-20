@@ -1,7 +1,6 @@
 package com.example.twinfileshare.mvc.controller;
 
-import com.example.twinfileshare.fx.service.DriveService;
-import com.google.api.services.drive.Drive;
+import com.example.twinfileshare.service.GoogleAuthorizationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,18 +11,15 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 
 @Controller
-public class DriveController {
+public class GoogleAuthorizationController {
 
     @Autowired
-    private DriveService driveService;
+    private GoogleAuthorizationService googleAuthorizationService;
 
     @GetMapping("/callback")
     public HttpServletResponse callback(HttpServletRequest req, HttpServletResponse res) throws IOException, GeneralSecurityException {
         String code = req.getParameter("code");
-        if (code != null) {
-            System.out.println("Authorization code: " + code);
-            driveService.saveToken(code);
-        }
+        if (code != null) googleAuthorizationService.saveToken(code);
 
         res.getWriter().println("You are successfully connected, You can get back to the application:");
         return res;
