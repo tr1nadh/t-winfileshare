@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User panel</title>
+
+    <style>
+        a {text-decoration: none;}
+        a:hover {color: red;}
+    </style>
+</head>
+<body>
+<h1>Welcome to <a href="/dev/user">User panel</a></h1>
+
+<h3>Access db executions here</h3>
+<a href="/dev/user/db/fetch">Fetch all from db</a>
+<a href="/dev/user/db/clear">Clear all from db</a>
+<a href="/dev/user/db/create-data">Create random user data</a><br>
+
+<h2>Create a user cred</h2>
+<form action="/dev/user/db/create" method="post">
+    <label>Id: <input type="text"></label> <br>
+    <label>Email: <input type="text"></label> <br>
+    <label>Access token: <input type="text"></label> <br>
+    <label>Expires: <input type="number"></label> <br>
+    <label>Refresh token: <input type="number"></label> <br>
+    <input type="submit" value="Create">
+</form>
+</body>
+</html>
