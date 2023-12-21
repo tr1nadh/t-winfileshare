@@ -1,7 +1,7 @@
 package com.example.twinfileshare.mvc.controller;
 
 import com.example.twinfileshare.GoogleUserCRED;
-import com.example.twinfileshare.GoogleUserCREDJPA;
+import com.example.twinfileshare.GoogleUserCREDRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,26 +12,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.io.IOException;
 import java.util.Random;
 import java.util.UUID;
-import java.util.random.RandomGenerator;
-import java.util.random.RandomGeneratorFactory;
 
 @Controller
 @RequestMapping("/dev/user")
 public class UserDBController {
 
     @Autowired
-    private GoogleUserCREDJPA googleUserCREDJPA;
+    private GoogleUserCREDRepository googleUserCREDRepository;
 
     @GetMapping("/db/fetch")
     public String fetch(HttpServletResponse res) throws IOException {
-        res.getWriter().println(googleUserCREDJPA.findAll());
+        res.getWriter().println(googleUserCREDRepository.findAll());
 
         return "/web/panel/user-panel.html";
     }
 
     @GetMapping("/db/clear")
     public String clear() {
-        googleUserCREDJPA.deleteAll();
+        googleUserCREDRepository.deleteAll();
 
         return "/web/panel/user-panel.html";
     }
@@ -52,7 +50,7 @@ public class UserDBController {
             googleUserCRED.setExpires(new Random().nextLong());
             googleUserCRED.setAccessToken("Y98k.access-token.-" + UUID.randomUUID() + "----" + i);
             googleUserCRED.setRefreshToken("/4/refresh-token-" + UUID.randomUUID() + "----" + i);
-            googleUserCREDJPA.save(googleUserCRED);
+            googleUserCREDRepository.save(googleUserCRED);
         }
 
         return "/web/panel/user-panel.html";

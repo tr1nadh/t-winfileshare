@@ -1,6 +1,6 @@
 package com.example.twinfileshare.fx.controller;
 
-import com.example.twinfileshare.GoogleUserCREDJPA;
+import com.example.twinfileshare.GoogleUserCREDRepository;
 import com.example.twinfileshare.TWinFileShareApplication;
 import com.example.twinfileshare.service.GoogleAuthorizationService;
 import javafx.event.ActionEvent;
@@ -33,11 +33,11 @@ public class MainController implements Initializable {
     private ChoiceBox<String> accountChoiceBox;
 
     @Autowired
-    private GoogleUserCREDJPA googleUserCREDJPA;
+    private GoogleUserCREDRepository googleUserCREDRepository;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        accountChoiceBox.getItems().addAll(googleUserCREDJPA.getAllEmails());
+        accountChoiceBox.getItems().addAll(googleUserCREDRepository.getAllEmails());
     }
 
     @Autowired
@@ -46,7 +46,7 @@ public class MainController implements Initializable {
     public void disconnectSelectedAccount() throws GeneralSecurityException, IOException {
         var currentSelectedEmail = accountChoiceBox.getValue();
         authorizationService.revokeUserWithEmail(currentSelectedEmail);
-        googleUserCREDJPA.deleteByEmail(currentSelectedEmail);
+        googleUserCREDRepository.deleteByEmail(currentSelectedEmail);
         removeItemFromChoiceBox(currentSelectedEmail);
     }
 

@@ -1,7 +1,7 @@
 package com.example.twinfileshare.service;
 
 import com.example.twinfileshare.GoogleUserCRED;
-import com.example.twinfileshare.GoogleUserCREDJPA;
+import com.example.twinfileshare.GoogleUserCREDRepository;
 import com.google.api.client.googleapis.auth.oauth2.*;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.GenericUrl;
@@ -60,7 +60,7 @@ public class GoogleAuthorizationService {
     }
 
     @Autowired
-    private GoogleUserCREDJPA googleUserCREDJPA;
+    private GoogleUserCREDRepository googleUserCREDRepository;
 
     public void saveToken(String authCode) throws IOException, GeneralSecurityException {
         if (authCode == null || authCode.isBlank())
@@ -72,7 +72,7 @@ public class GoogleAuthorizationService {
 
         var idTokenPayload = verifyIdToken(response.getIdToken());
         var googleUserCRED = GoogleUserCRED.apply(response, idTokenPayload);
-        googleUserCREDJPA.save(googleUserCRED);
+        googleUserCREDRepository.save(googleUserCRED);
     }
 
     private boolean doesResponseHasDriveScope(GoogleTokenResponse response) {
@@ -92,7 +92,7 @@ public class GoogleAuthorizationService {
     public void revokeUserWithEmail(String email) throws GeneralSecurityException, IOException {
         var url = "https://oauth2.googleapis.com/revoke";
         Map<String, String> data = new HashMap<>();
-        data.put("token", googleUserCREDJPA.findByEmail(email).getAccessToken());
+        data.put("token", googleUserCREDRepository.findByEmail(email).getAccessToken());
         data.put("client_id", "${GOOGLE_CLIENT_ID}");
         data.put("client_secret", "${GOOGLE_CLIENT_SECRET_TEXT}");
 
