@@ -15,5 +15,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .setViewName("/web/panel/user-panel.html");
         registry.addViewController("/").setViewName("/web/index.html");
         registry.addViewController("/error").setViewName("/web/error.html");
+        registry.addViewController("/callback").setViewName("/web/callback.html");
     }
 }
