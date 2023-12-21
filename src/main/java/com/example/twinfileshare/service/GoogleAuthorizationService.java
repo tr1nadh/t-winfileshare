@@ -3,7 +3,10 @@ package com.example.twinfileshare.service;
 import com.example.twinfileshare.GoogleUserCRED;
 import com.example.twinfileshare.GoogleUserCREDJPA;
 import com.google.api.client.googleapis.auth.oauth2.*;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.UrlEncodedContent;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
@@ -19,7 +22,9 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Log4j2
@@ -82,5 +87,22 @@ public class GoogleAuthorizationService {
         var googleIdToken = verifier.verify(idToken);
         if (googleIdToken != null) return googleIdToken.getPayload();
         else throw new IllegalStateException("Cannot authenticate user");
+    }
+
+    public void revokeUserWithEmail(String email) throws GeneralSecurityException, IOException {
+        var url = "https://oauth2.googleapis.com/revoke";
+        Map<String, String> data = new HashMap<>();
+        data.put("token", googleUserCREDJPA.findByEmail(email).getAccessToken());
+        data.put("client_id", "${GOOGLE_CLIENT_ID}");
+        data.put("client_secret", "${GOOGLE_CLIENT_SECRET_TEXT}");
+
+        var response = GoogleNetHttpTransport.newTrustedTransport()
+                .createRequestFactory()
+                .buildPostRequest(new GenericUrl(url), new UrlEncodedContent(data))
+                .execute();
+
+        var statusCode = response.getStatusCode();
+        if (statusCode == 200) System.out.println("User with email: " + email + " has been revoked");
+        else System.out.println("Error revoking user: " + email + ", status code: " + statusCode);
     }
 }

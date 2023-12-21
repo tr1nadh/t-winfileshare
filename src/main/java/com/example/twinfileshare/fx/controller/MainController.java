@@ -10,7 +10,9 @@ import javafx.scene.control.ChoiceBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.io.IOException;
 import java.net.URL;
+import java.security.GeneralSecurityException;
 import java.util.ResourceBundle;
 
 @Controller
@@ -35,6 +37,21 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        accountChoiceBox.getItems().addAll(googleUserCREDJPA.findAllEmail());
+        accountChoiceBox.getItems().addAll(googleUserCREDJPA.getAllEmails());
+    }
+
+    @Autowired
+    private GoogleAuthorizationService authorizationService;
+
+    public void disconnectSelectedAccount() throws GeneralSecurityException, IOException {
+        var currentSelectedEmail = accountChoiceBox.getValue();
+        authorizationService.revokeUserWithEmail(currentSelectedEmail);
+        googleUserCREDJPA.deleteByEmail(currentSelectedEmail);
+        removeItemFromChoiceBox(currentSelectedEmail);
+    }
+
+    private void removeItemFromChoiceBox(String currentSelectedEmail) {
+        accountChoiceBox.setValue("Select an email");
+        accountChoiceBox.getItems().remove(currentSelectedEmail);
     }
 }
