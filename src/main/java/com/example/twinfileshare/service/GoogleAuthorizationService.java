@@ -1,7 +1,7 @@
 package com.example.twinfileshare.service;
 
-import com.example.twinfileshare.GoogleUserCRED;
-import com.example.twinfileshare.GoogleUserCREDRepository;
+import com.example.twinfileshare.entity.GoogleUserCRED;
+import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.google.api.client.googleapis.auth.oauth2.*;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.GenericUrl;

@@ -1,4 +1,4 @@
-package com.example.twinfileshare;
+package com.example.twinfileshare.entity;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;

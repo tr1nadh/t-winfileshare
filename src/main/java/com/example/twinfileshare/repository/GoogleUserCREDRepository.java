@@ -1,5 +1,6 @@
-package com.example.twinfileshare;
+package com.example.twinfileshare.repository;
 
+import com.example.twinfileshare.entity.GoogleUserCRED;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -10,7 +11,7 @@ import java.util.List;
 @Repository
 public interface GoogleUserCREDRepository extends JpaRepository<GoogleUserCRED, Long> {
 
-    @Query(value = "SELECT email  FROM google_user_cred", nativeQuery = true)
+    @Query(value = "SELECT email FROM google_user_cred", nativeQuery = true)
     List<String> getAllEmails();
 
     @Transactional

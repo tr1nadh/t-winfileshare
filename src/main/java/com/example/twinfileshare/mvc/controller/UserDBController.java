@@ -1,7 +1,7 @@
 package com.example.twinfileshare.mvc.controller;
 
-import com.example.twinfileshare.GoogleUserCRED;
-import com.example.twinfileshare.GoogleUserCREDRepository;
+import com.example.twinfileshare.entity.GoogleUserCRED;
+import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

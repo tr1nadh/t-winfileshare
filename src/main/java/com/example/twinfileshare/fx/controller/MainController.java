@@ -1,6 +1,6 @@
 package com.example.twinfileshare.fx.controller;
 
-import com.example.twinfileshare.GoogleUserCREDRepository;
+import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.example.twinfileshare.TWinFileShareApplication;
 import com.example.twinfileshare.service.GoogleAuthorizationService;
 import javafx.event.ActionEvent;
