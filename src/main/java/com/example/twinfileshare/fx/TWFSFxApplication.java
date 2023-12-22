@@ -17,6 +17,7 @@ public class TWFSFxApplication {
         loader.setControllerFactory(TWinFileShareApplication.getApplicationContext()::getBean);
         Parent root = loader.load();
         stage.setScene(new Scene(root));
+        stage.setResizable(false);
         stage.show();
     }
 }
