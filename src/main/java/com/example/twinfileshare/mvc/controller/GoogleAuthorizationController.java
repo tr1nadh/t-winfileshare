@@ -17,11 +17,9 @@ public class GoogleAuthorizationController {
     private GoogleAuthorizationService googleAuthorizationService;
 
     @GetMapping("/callback")
-    public HttpServletResponse callback(HttpServletRequest req, HttpServletResponse res) throws IOException, GeneralSecurityException {
-        String code = req.getParameter("code");
+    public String callback(String code) throws IOException, GeneralSecurityException {
         if (code != null) googleAuthorizationService.saveToken(code);
 
-        res.getWriter().println("You are successfully connected, You can get back to the application:");
-        return res;
+        return "/web/callback.html";
     }
 }

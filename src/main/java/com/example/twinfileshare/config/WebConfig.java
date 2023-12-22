@@ -1,10 +1,12 @@
 package com.example.twinfileshare.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
+@EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
 
     @Override
@@ -15,6 +17,5 @@ public class WebConfig implements WebMvcConfigurer {
                 .setViewName("/web/panel/user-panel.html");
         registry.addViewController("/").setViewName("/web/index.html");
         registry.addViewController("/error").setViewName("/web/error.html");
-        registry.addViewController("/callback").setViewName("/web/callback.html");
     }
 }
