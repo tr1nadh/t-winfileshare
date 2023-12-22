@@ -92,7 +92,7 @@ public class GoogleAuthorizationService {
     public void revokeUserWithEmail(String email) throws GeneralSecurityException, IOException {
         var url = "https://oauth2.googleapis.com/revoke";
         Map<String, String> data = new HashMap<>();
-        data.put("token", googleUserCREDRepository.findByEmail(email).getAccessToken());
+        data.put("token", googleUserCREDRepository.findAccessTokenByEmail(email));
         data.put("client_id", "${GOOGLE_CLIENT_ID}");
         data.put("client_secret", "${GOOGLE_CLIENT_SECRET_TEXT}");
 
