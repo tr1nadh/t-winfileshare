@@ -7,12 +7,12 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.twinfileshare.fx.controller.MainController">
    <children>
-      <Button layoutX="113.0" layoutY="69.0" mnemonicParsing="false" onAction="#connectGoogleDrive" prefHeight="39.0" prefWidth="374.0" text="Connect google drive account">
+      <Button layoutX="113.0" layoutY="48.0" mnemonicParsing="false" onAction="#connectGoogleDrive" prefHeight="39.0" prefWidth="374.0" text="Connect google drive account">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <ChoiceBox fx:id="accountChoiceBox" value="Select an email" layoutX="113.0" layoutY="120.0" prefHeight="31.0" prefWidth="293.0" />
-      <Button fx:id="accountDisconnectBTN" layoutX="411.0" layoutY="120.0" mnemonicParsing="false" onAction="#disconnectSelectedAccount" prefHeight="31.0" prefWidth="76.0" text="Disconnect" />
+      <ChoiceBox fx:id="accountChoiceBox" layoutX="113.0" layoutY="99.0" prefHeight="31.0" prefWidth="293.0" value="Select an email" />
+      <Button fx:id="accountDisconnectBTN" layoutX="411.0" layoutY="99.0" mnemonicParsing="false" onAction="#disconnectSelectedAccount" prefHeight="31.0" prefWidth="76.0" text="Disconnect" />
    </children>
 </AnchorPane>
