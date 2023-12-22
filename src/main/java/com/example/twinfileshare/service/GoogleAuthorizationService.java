@@ -1,6 +1,7 @@
 package com.example.twinfileshare.service;
 
 import com.example.twinfileshare.entity.GoogleUserCRED;
+import com.example.twinfileshare.event.payload.UserConnectedEvent;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.google.api.client.googleapis.auth.oauth2.*;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -16,6 +17,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
@@ -62,6 +64,9 @@ public class GoogleAuthorizationService {
     @Autowired
     private GoogleUserCREDRepository googleUserCREDRepository;
 
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
+
     public void saveToken(String authCode) throws IOException, GeneralSecurityException {
         if (authCode == null || authCode.isBlank())
             throw new IllegalStateException("Invalid authorization code");
@@ -73,6 +78,7 @@ public class GoogleAuthorizationService {
         var idTokenPayload = verifyIdToken(response.getIdToken());
         var googleUserCRED = GoogleUserCRED.apply(response, idTokenPayload);
         googleUserCREDRepository.save(googleUserCRED);
+        eventPublisher.publishEvent(new UserConnectedEvent(this, googleUserCRED.getEmail()));
     }
 
     private boolean doesResponseHasDriveScope(GoogleTokenResponse response) {

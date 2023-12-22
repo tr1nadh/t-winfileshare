@@ -1,13 +1,16 @@
 package com.example.twinfileshare.fx.controller;
 
-import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.example.twinfileshare.TWinFileShareApplication;
+import com.example.twinfileshare.event.payload.UserConnectedEvent;
+import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.example.twinfileshare.service.GoogleAuthorizationService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
@@ -53,5 +56,14 @@ public class MainController implements Initializable {
     private void removeItemFromChoiceBox(String currentSelectedEmail) {
         accountChoiceBox.setValue("Select an email");
         accountChoiceBox.getItems().remove(currentSelectedEmail);
+    }
+
+    @Component
+    public class UserConnectedListener {
+
+        @EventListener
+        public void handleUserConnectedEvent(UserConnectedEvent event) {
+            accountChoiceBox.getItems().add(event.getEmail());
+        }
     }
 }
