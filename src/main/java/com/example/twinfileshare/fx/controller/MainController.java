@@ -1,6 +1,7 @@
 package com.example.twinfileshare.fx.controller;
 
 import com.example.twinfileshare.TWinFileShareApplication;
+import com.example.twinfileshare.event.payload.DoubleEmailConnectEvent;
 import com.example.twinfileshare.event.payload.NoDriveAccessEvent;
 import com.example.twinfileshare.event.payload.UserConnectedEvent;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
@@ -107,6 +108,31 @@ public class MainController implements Initializable {
                         .filter(res -> res == ButtonType.OK)
                         .ifPresent(res -> openAuthLinkInDefaultBrowser());
             });
+        }
+
+        @Autowired
+        private GoogleUserCREDRepository googleUserCREDRepository;
+
+        @EventListener
+        public void doubleEmailConnectListener(DoubleEmailConnectEvent event) {
+            Platform.runLater(
+                    () -> {
+                        var doubleEmailAlert = new Alert(Alert.AlertType.ERROR);
+                        doubleEmailAlert.setTitle("Double email");
+                        doubleEmailAlert.setResizable(false);
+                        doubleEmailAlert.setHeaderText(event.getMessage());
+                        doubleEmailAlert.setContentText("Do you want to change it to current email: "
+                                + event.getCurrentEmail());
+                        doubleEmailAlert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+                        doubleEmailAlert.showAndWait()
+                                .filter(res -> res == ButtonType.YES)
+                                .ifPresent(res -> {
+                                    var dbAccount = event.getGoogleUserCRED();
+                                    dbAccount.setEmail(event.getCurrentEmail());
+                                    googleUserCREDRepository.save(dbAccount);
+                                });
+                    }
+            );
         }
     }
 }
