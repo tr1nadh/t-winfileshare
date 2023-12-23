@@ -14,6 +14,9 @@ public interface GoogleUserCREDRepository extends JpaRepository<GoogleUserCRED, 
     @Query(value = "SELECT email FROM google_user_cred", nativeQuery = true)
     List<String> getAllEmails();
 
+    @Query(value = "SELECT id FROM google_user_cred", nativeQuery = true)
+    List<String> getAllIds();
+
     @Transactional
     int deleteByEmail(String email);
 
