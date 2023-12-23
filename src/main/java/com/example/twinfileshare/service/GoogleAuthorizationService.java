@@ -1,6 +1,7 @@
 package com.example.twinfileshare.service;
 
 import com.example.twinfileshare.entity.GoogleUserCRED;
+import com.example.twinfileshare.event.payload.DoubleEmailConnectEvent;
 import com.example.twinfileshare.event.payload.NoDriveAccessEvent;
 import com.example.twinfileshare.event.payload.UserConnectedEvent;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
@@ -21,13 +22,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Log4j2
@@ -68,26 +68,48 @@ public class GoogleAuthorizationService {
     @Autowired
     private ApplicationEventPublisher eventPublisher;
 
-    public void saveToken(String authCode) throws IOException, GeneralSecurityException {
-        if (authCode == null || authCode.isBlank())
+    public void checkAndSaveToken(String authCode, String scope) throws IOException, GeneralSecurityException {
+        if (StringUtils.isEmptyOrWhitespace(authCode))
             throw new IllegalStateException("Invalid authorization code");
+
+        if (StringUtils.isEmptyOrWhitespace(scope))
+            throw new IllegalStateException("Invalid scopes");
+
+        if (!hasDriveScope(Arrays.stream(scope.split(" ")).toList())) {
+            log.warn("User have not given drive access");
+            eventPublisher.publishEvent(new NoDriveAccessEvent(this));
+            return;
+        }
 
         GoogleTokenResponse response = flow.newTokenRequest(authCode).setRedirectUri(CALLBACK_URI).execute();
         var idTokenPayload = verifyIdToken(response.getIdToken());
         var googleUserCRED = GoogleUserCRED.apply(response, idTokenPayload);
 
-        if (!doesResponseHasDriveScope(response)) {
-            log.warn("User with email" + googleUserCRED.getEmail() + " have not given drive access");
-            eventPublisher.publishEvent(new NoDriveAccessEvent(this));
-            return;
-        }
+        saveToken(checkForDoubleEmail(googleUserCRED));
+    }
 
+    private void saveToken(GoogleUserCRED googleUserCRED) {
         googleUserCREDRepository.save(googleUserCRED);
         eventPublisher.publishEvent(new UserConnectedEvent(this, googleUserCRED.getEmail()));
     }
 
-    private boolean doesResponseHasDriveScope(GoogleTokenResponse response) {
-        return response.getScope().contains("drive");
+    private GoogleUserCRED checkForDoubleEmail(GoogleUserCRED googleUserCRED) {
+        var optionalAccountFromDb = googleUserCREDRepository
+                .findById(Long.valueOf(googleUserCRED.getId()));
+        optionalAccountFromDb.ifPresent(
+                (account) -> {
+                    var message = "A drive account already exists with the email: " + account.getEmail();
+                    log.warn(message);
+                    eventPublisher.publishEvent(new DoubleEmailConnectEvent(this, account, message, googleUserCRED.getEmail()));
+                    googleUserCRED.setEmail(account.getEmail());
+                }
+        );
+
+        return googleUserCRED;
+    }
+
+    private boolean hasDriveScope(List<String> scopes) {
+        return new HashSet<>(scopes).containsAll(SCOPES);
     }
 
     private GoogleIdToken.Payload verifyIdToken(String idToken) throws GeneralSecurityException, IOException {
