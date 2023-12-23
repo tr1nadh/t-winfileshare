@@ -1,6 +1,7 @@
 package com.example.twinfileshare.service;
 
 import com.example.twinfileshare.entity.GoogleUserCRED;
+import com.example.twinfileshare.event.payload.NoDriveAccessEvent;
 import com.example.twinfileshare.event.payload.UserConnectedEvent;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.google.api.client.googleapis.auth.oauth2.*;
@@ -72,11 +73,15 @@ public class GoogleAuthorizationService {
             throw new IllegalStateException("Invalid authorization code");
 
         GoogleTokenResponse response = flow.newTokenRequest(authCode).setRedirectUri(CALLBACK_URI).execute();
-        if (!doesResponseHasDriveScope(response))
-            log.warn("User have not given drive access");
-
         var idTokenPayload = verifyIdToken(response.getIdToken());
         var googleUserCRED = GoogleUserCRED.apply(response, idTokenPayload);
+
+        if (!doesResponseHasDriveScope(response)) {
+            log.warn("User with email" + googleUserCRED.getEmail() + " have not given drive access");
+            eventPublisher.publishEvent(new NoDriveAccessEvent(this));
+            return;
+        }
+
         googleUserCREDRepository.save(googleUserCRED);
         eventPublisher.publishEvent(new UserConnectedEvent(this, googleUserCRED.getEmail()));
     }
