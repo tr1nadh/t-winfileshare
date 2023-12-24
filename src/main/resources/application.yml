@@ -25,13 +25,3 @@ spring:
       hibernate:
         show-sql: true
         dialect: org.hibernate.dialect.DerbyDialect
-
-google:
-  client:
-    secret: ${GOOGLE_CLIENT_SECRET}
-  credential:
-    store:
-      path: ${GOOGLE_CREDENTIAL_STORE_PATH}
-  oauth:
-    callback:
-      uri: http://localhost:8080/callback
