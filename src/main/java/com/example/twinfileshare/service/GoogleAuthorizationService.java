@@ -95,7 +95,7 @@ public class GoogleAuthorizationService {
 
     private GoogleUserCRED checkForDoubleEmail(GoogleUserCRED googleUserCRED) {
         var optionalAccountFromDb = googleUserCREDRepository
-                .findById(Long.valueOf(googleUserCRED.getId()));
+                .findById(googleUserCRED.getId());
         optionalAccountFromDb.ifPresent(
                 (account) -> {
                     var message = "A drive account already exists with the email: " + account.getEmail();
