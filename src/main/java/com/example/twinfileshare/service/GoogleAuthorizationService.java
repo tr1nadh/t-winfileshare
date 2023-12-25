@@ -45,16 +45,12 @@ public class GoogleAuthorizationService {
     @Value("${google.oauth2.client.secret-json}")
     private Resource gClientSecret;
 
-    @Value("${google.credential.store.path}")
-    private Resource credentialsFolder;
-
     private GoogleAuthorizationCodeFlow flow;
 
     @PostConstruct
     public void init() throws IOException {
         GoogleClientSecrets secrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(gClientSecret.getInputStream()));
-        flow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY, secrets, SCOPES)
-                .setDataStoreFactory(new FileDataStoreFactory(credentialsFolder.getFile())).build();
+        flow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY, secrets, SCOPES).build();
     }
 
     public String getGoogleSignInURL() {
