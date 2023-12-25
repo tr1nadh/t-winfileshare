@@ -39,10 +39,10 @@ public class GoogleAuthorizationService {
             "https://www.googleapis.com/auth/userinfo.profile",
             DriveScopes.DRIVE);
 
-    @Value("${google.oauth.callback.uri}")
+    @Value("${google.oauth2.callback-uri}")
     private String CALLBACK_URI;
 
-    @Value("${google.client.secret}")
+    @Value("${google.oauth2.client.secret-json}")
     private Resource gClientSecret;
 
     @Value("${google.credential.store.path}")
@@ -126,8 +126,8 @@ public class GoogleAuthorizationService {
         var url = "https://oauth2.googleapis.com/revoke";
         Map<String, String> data = new HashMap<>();
         data.put("token", googleUserCREDRepository.findAccessTokenByEmail(email));
-        data.put("client_id", "${GOOGLE_CLIENT_ID}");
-        data.put("client_secret", "${GOOGLE_CLIENT_SECRET_TEXT}");
+        data.put("client_id", "${google.oauth2.client.id}");
+        data.put("client_secret", "${google.oauth2.client.secret}");
 
         var response = GoogleNetHttpTransport.newTrustedTransport()
                 .createRequestFactory()
