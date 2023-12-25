@@ -73,6 +73,25 @@ public class MainController implements Initializable {
 
     public void disconnectSelectedAccount() throws GeneralSecurityException, IOException {
         var currentSelectedEmail = accountChoiceBox.getValue();
+        var alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Disconnect Account");
+        alert.setHeaderText("Are sure you want to disconnect the google drive \n" +
+                "account with email: " + currentSelectedEmail);
+        alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
+        alert.showAndWait()
+                        .filter(res -> res == ButtonType.YES)
+                .ifPresent(res -> {
+                    try {
+                        disconnectAccount(currentSelectedEmail);
+                    } catch (GeneralSecurityException | IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+        alert.setResizable(false);
+
+    }
+
+    private void disconnectAccount(String currentSelectedEmail) throws GeneralSecurityException, IOException {
         authorizationService.revokeUserWithEmail(currentSelectedEmail);
         googleUserCREDRepository.deleteByEmail(currentSelectedEmail);
         removeItemFromChoiceBox(currentSelectedEmail);
