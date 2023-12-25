@@ -16,7 +16,7 @@ public class GoogleAuthorizationController {
     private GoogleAuthorizationService googleAuthorizationService;
 
     @GetMapping("/callback")
-    public String callback(String code, String scope, HttpServletRequest req) throws IOException, GeneralSecurityException {
+    public String callback(String code, String scope) throws IOException, GeneralSecurityException {
         googleAuthorizationService.checkAndSaveToken(code, scope);
 
         return "/web/callback.html";
