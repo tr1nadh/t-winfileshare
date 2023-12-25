@@ -1,5 +1,6 @@
 package com.example.twinfileshare.service;
 
+import com.example.twinfileshare.service.utility.UserScopes;
 import com.example.twinfileshare.entity.GoogleUserCRED;
 import com.example.twinfileshare.event.payload.DoubleEmailConnectEvent;
 import com.example.twinfileshare.event.payload.NoDriveAccessEvent;
@@ -13,7 +14,6 @@ import com.google.api.client.http.UrlEncodedContent;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.DriveScopes;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.log4j.Log4j2;
@@ -35,8 +35,8 @@ public class GoogleAuthorizationService {
     private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
     private static final List<String> SCOPES = List.of(
-            "https://www.googleapis.com/auth/userinfo.email",
-            "https://www.googleapis.com/auth/userinfo.profile",
+            UserScopes.USER_INFO_EMAIL,
+            UserScopes.USER_INFO_PROFILE,
             DriveScopes.DRIVE);
 
     @Value("${google.oauth2.callback-uri}")
