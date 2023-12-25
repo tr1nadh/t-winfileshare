@@ -32,8 +32,8 @@ import java.util.*;
 @Service
 @Log4j2
 public class GoogleAuthorizationService {
-    private static HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
-    private static JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
+    private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
+    private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
     private static final List<String> SCOPES = List.of(
             "https://www.googleapis.com/auth/userinfo.email",
             "https://www.googleapis.com/auth/userinfo.profile",
