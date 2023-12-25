@@ -4,6 +4,7 @@ import com.example.twinfileshare.TWinFileShareApplication;
 import com.example.twinfileshare.event.payload.DoubleEmailConnectEvent;
 import com.example.twinfileshare.event.payload.NoDriveAccessEvent;
 import com.example.twinfileshare.event.payload.UserConnectedEvent;
+import com.example.twinfileshare.fx.service.MainService;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.example.twinfileshare.service.GoogleAuthorizationService;
 import javafx.application.Platform;
@@ -30,7 +31,7 @@ public class MainController implements Initializable {
     private TWinFileShareApplication tWinFileShareApplication;
 
     @Autowired
-    private GoogleAuthorizationService googleAuthorizationService;
+    private MainService mainService;
 
     public void connectGoogleDrive(ActionEvent event) {
         var alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -44,34 +45,20 @@ public class MainController implements Initializable {
                 .ifPresent(res -> openAuthLinkInDefaultBrowser());
     }
 
-    private void showGoogleDriveSuccess() {
-        var successAlert = new Alert(Alert.AlertType.INFORMATION);
-        successAlert.setTitle("Authorization successful");
-        successAlert.setResizable(false);
-        successAlert.setHeaderText("Google drive successfully connected");
-        successAlert.showAndWait();
-    }
-
     private void openAuthLinkInDefaultBrowser() {
         var hostServices = tWinFileShareApplication.getHostServices();
-        hostServices.showDocument(googleAuthorizationService.getGoogleSignInURL());
+        hostServices.showDocument(mainService.getGoogleSignInURL());
     }
 
     @FXML
     private ChoiceBox<String> accountChoiceBox;
 
-    @Autowired
-    private GoogleUserCREDRepository googleUserCREDRepository;
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        accountChoiceBox.getItems().addAll(googleUserCREDRepository.getAllEmails());
+        accountChoiceBox.getItems().addAll(mainService.getAllEmails());
     }
 
-    @Autowired
-    private GoogleAuthorizationService authorizationService;
-
-    public void disconnectSelectedAccount() throws GeneralSecurityException, IOException {
+    public void disconnectSelectedAccount() {
         var currentSelectedEmail = accountChoiceBox.getValue();
         var alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Disconnect Account");
@@ -92,8 +79,7 @@ public class MainController implements Initializable {
     }
 
     private void disconnectAccount(String currentSelectedEmail) throws GeneralSecurityException, IOException {
-        authorizationService.revokeUserWithEmail(currentSelectedEmail);
-        googleUserCREDRepository.deleteByEmail(currentSelectedEmail);
+        mainService.disconnectAccount(currentSelectedEmail);
         removeItemFromChoiceBox(currentSelectedEmail);
     }
 
@@ -111,7 +97,13 @@ public class MainController implements Initializable {
             if (!accountChoiceBox.getItems().contains(email))
                 accountChoiceBox.getItems().add(email);
 
-            Platform.runLater(MainController.this::showGoogleDriveSuccess);
+            Platform.runLater(() -> {
+                var successAlert = new Alert(Alert.AlertType.INFORMATION);
+                successAlert.setTitle("Authorization successful");
+                successAlert.setResizable(false);
+                successAlert.setHeaderText("Google drive successfully connected");
+                successAlert.showAndWait();
+            });
         }
 
         @EventListener
