@@ -1,4 +1,10 @@
 spring:
+
+# Load config
+  config:
+    import: application-secrets.yml
+
+# Cache config
   resources:
     cache:
       cachecontrol:
@@ -25,3 +31,12 @@ spring:
       hibernate:
         show-sql: true
         dialect: org.hibernate.dialect.DerbyDialect
+
+# Google client configuration
+google:
+  oauth2:
+    client:
+      id: ${GOOGLE_OAUTH2_CLIENT_ID}
+      secret: ${GOOGLE_OAUTH2_CLIENT_SECRET}
+      secret-json: ${GOOGLE_OAUTH2_CLIENT_SECRET_JSON}
+    callback-uri: ${GOOGLE_OAUTH2_CALLBACK_URI}
