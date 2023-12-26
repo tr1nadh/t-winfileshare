@@ -8,20 +8,27 @@ import com.example.twinfileshare.fx.service.MainService;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.example.twinfileshare.service.GoogleAuthorizationService;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ListView;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.security.GeneralSecurityException;
+import java.util.List;
 import java.util.ResourceBundle;
 
 @Controller
@@ -86,6 +93,33 @@ public class MainController implements Initializable {
     private void removeItemFromChoiceBox(String currentSelectedEmail) {
         accountChoiceBox.setValue("Select an email");
         accountChoiceBox.getItems().remove(currentSelectedEmail);
+    }
+
+    @FXML
+    private ListView<String> listViewFiles;
+
+    private final ObservableList<String> fileList = FXCollections.observableArrayList();
+
+    public void openFileManager(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose a File");
+
+        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+        List<File> selectedFiles = fileChooser.showOpenMultipleDialog(stage);
+
+        for (var file : selectedFiles) {
+            if (file != null) {
+                fileList.add(file.getName());
+            }
+        }
+        listViewFiles.setItems(fileList);
+    }
+
+    public void removeFile(ActionEvent event) {
+        var selectedItems = listViewFiles.getSelectionModel().getSelectedItems();
+        for (var items : selectedItems) {
+            System.out.println(items);
+        }
     }
 
     @Component
