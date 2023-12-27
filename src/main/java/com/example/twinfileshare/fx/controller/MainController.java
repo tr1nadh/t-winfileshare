@@ -6,17 +6,13 @@ import com.example.twinfileshare.event.payload.NoDriveAccessEvent;
 import com.example.twinfileshare.event.payload.UserConnectedEvent;
 import com.example.twinfileshare.fx.service.MainService;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
-import com.example.twinfileshare.service.GoogleAuthorizationService;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,12 +97,18 @@ public class MainController implements Initializable {
     private final ObservableList<String> fileList = FXCollections.observableArrayList();
 
     public void openFileManager(ActionEvent event) {
+        listViewFiles.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose a File");
 
         Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
         List<File> selectedFiles = fileChooser.showOpenMultipleDialog(stage);
 
+        if (selectedFiles != null) showInListView(selectedFiles);
+    }
+
+    private void showInListView(List<File> selectedFiles) {
         for (var file : selectedFiles) {
             if (file != null) {
                 fileList.add(file.getName());
@@ -117,9 +119,7 @@ public class MainController implements Initializable {
 
     public void removeFile(ActionEvent event) {
         var selectedItems = listViewFiles.getSelectionModel().getSelectedItems();
-        for (var items : selectedItems) {
-            System.out.println(items);
-        }
+        listViewFiles.getItems().removeAll(selectedItems);
     }
 
     @Component
