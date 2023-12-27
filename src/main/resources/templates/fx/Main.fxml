@@ -16,7 +16,7 @@
       <ChoiceBox fx:id="accountChoiceBox" layoutX="113.0" layoutY="75.0" prefHeight="31.0" prefWidth="293.0" value="Select an email" />
       <Button fx:id="accountDisconnectBTN" layoutX="411.0" layoutY="75.0" mnemonicParsing="false" onAction="#disconnectSelectedAccount" prefHeight="31.0" prefWidth="76.0" text="Disconnect" />
       <Button layoutX="113.0" layoutY="121.0" mnemonicParsing="false" onAction="#openFileManager" prefHeight="31.0" prefWidth="89.0" text="Add files" />
-      <ListView fx:id="listViewFiles" layoutX="113.0" layoutY="160.0" prefHeight="178.0" prefWidth="374.0" />
+      <ListView fx:id="listViewFiles" layoutX="113.0" layoutY="160.0" prefHeight="166.0" prefWidth="374.0" />
       <Button layoutX="212.0" layoutY="121.0" mnemonicParsing="false" onAction="#removeFile" prefHeight="31.0" prefWidth="69.0" text="Remove" />
    </children>
 </AnchorPane>
