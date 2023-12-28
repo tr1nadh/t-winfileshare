@@ -23,11 +23,11 @@ import org.springframework.stereotype.Controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutionException;
 
 @Controller
 public class MainController implements Initializable {
@@ -126,20 +126,56 @@ public class MainController implements Initializable {
         listViewFiles.getItems().removeAll(selectedItems);
     }
 
-    public void uploadFiles(ActionEvent event) throws IOException {
-        var selectedEmail = accountChoiceBox.getValue();
-        System.out.println("Uploading to google drive account: " + selectedEmail);
+    @FXML
+    private Button uploadBTN;
+    private boolean isUploadingActive;
 
-        var requiredFiles = listViewFiles.getItems();
-        for (var file : addedFilesToList) {
-            var fileName = file.getName();
-            if (requiredFiles.contains(fileName)) {
-                var itemType = Files.probeContentType(file.toPath());
-                System.out.println("File name: " + file.getName() + " ||| file type: " + itemType);
-            }
+    public void uploadFiles(ActionEvent event) throws IOException, InterruptedException, ExecutionException {
+        if (isUploadingActive) {
+            System.out.println("Upload cancelled!");
+            uploadBTN.setText("Upload files");
+            mainService.cancelUploadFiles();
+            return;
         }
 
-        addedFilesToList = new ArrayList<>();
+        isUploadingActive = true;
+        uploadBTN.setText("Cancel");
+        System.out.println("Uploading.........");
+
+        var uploadTask = mainService.uploadFilesToGoogleDrive(
+                accountChoiceBox.getValue(),
+                addedFilesToList,
+                listViewFiles.getItems()
+        );
+
+        uploadTask.thenAcceptAsync(isFinished -> {
+            isUploadingActive = false;
+            Platform.runLater(() -> uploadBTN.setText("Upload files"));
+            if (!isFinished) {
+                Platform.runLater(this::showUploadCancelledAlert);
+                return;
+            }
+            System.out.println("Upload finished...");
+            addedFilesToList = new ArrayList<>();
+            Platform.runLater(() -> listViewFiles.getItems().clear());
+            Platform.runLater(this::showUploadFinishedAlert);
+        });
+    }
+
+    private void showUploadCancelledAlert() {
+        var alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setResizable(false);
+        alert.setTitle("Upload cancelled");
+        alert.setHeaderText("Upload has been cancelled!");
+        alert.showAndWait();
+    }
+
+    private void showUploadFinishedAlert() {
+        var alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setResizable(false);
+        alert.setTitle("Upload success");
+        alert.setHeaderText("Successfully files are uploaded!");
+        alert.showAndWait();
     }
 
     @Component
