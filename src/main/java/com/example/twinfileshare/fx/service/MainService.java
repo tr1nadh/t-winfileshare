@@ -1,8 +1,10 @@
 package com.example.twinfileshare.fx.service;
 
+import com.example.twinfileshare.event.payload.HandleProgressEvent;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.example.twinfileshare.service.GoogleAuthorizationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +38,9 @@ public class MainService {
 
     private boolean isUploadCancelled;
 
+    @Autowired
+    private ApplicationEventPublisher publisher;
+
     @Async
     public CompletableFuture<Boolean> uploadFilesToGoogleDrive(String email, List<File> allFiles,
                                                       List<String> requiredFileNames) throws IOException, InterruptedException {
@@ -47,6 +52,7 @@ public class MainService {
                 var itemType = Files.probeContentType(file.toPath());
                 System.out.println("File name: " + file.getName() + " ||| file type: " + itemType);
                 Thread.sleep(3000);
+                publisher.publishEvent(new HandleProgressEvent(this, true, (double) requiredFileNames.size()/10, false));
             }
             if (isUploadCancelled) {
                 System.out.println("Deleting the uploaded files till now");
@@ -55,6 +61,7 @@ public class MainService {
             }
         }
 
+        publisher.publishEvent(new HandleProgressEvent(this, false, 0.0, true));
         return CompletableFuture.completedFuture(true);
     }
 

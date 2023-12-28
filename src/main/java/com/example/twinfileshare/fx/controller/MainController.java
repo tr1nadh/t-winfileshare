@@ -2,6 +2,7 @@ package com.example.twinfileshare.fx.controller;
 
 import com.example.twinfileshare.TWinFileShareApplication;
 import com.example.twinfileshare.event.payload.DoubleEmailConnectEvent;
+import com.example.twinfileshare.event.payload.HandleProgressEvent;
 import com.example.twinfileshare.event.payload.NoDriveAccessEvent;
 import com.example.twinfileshare.event.payload.UserConnectedEvent;
 import com.example.twinfileshare.fx.service.MainService;
@@ -61,6 +62,7 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         accountChoiceBox.getItems().addAll(mainService.getAllEmails());
+        mainUploadPB.setVisible(false);
     }
 
     public void disconnectSelectedAccount() {
@@ -130,6 +132,9 @@ public class MainController implements Initializable {
     private Button uploadBTN;
     private boolean isUploadingActive;
 
+    @FXML
+    private ProgressBar mainUploadPB;
+
     public void uploadFiles(ActionEvent event) throws IOException, InterruptedException, ExecutionException {
         if (isUploadingActive) {
             System.out.println("Upload cancelled!");
@@ -138,6 +143,7 @@ public class MainController implements Initializable {
             return;
         }
 
+        mainUploadPB.setVisible(true);
         isUploadingActive = true;
         uploadBTN.setText("Cancel");
         System.out.println("Uploading.........");
@@ -149,6 +155,7 @@ public class MainController implements Initializable {
         );
 
         uploadTask.thenAcceptAsync(isFinished -> {
+            Platform.runLater(() -> mainUploadPB.setVisible(false));
             isUploadingActive = false;
             Platform.runLater(() -> uploadBTN.setText("Upload files"));
             if (!isFinished) {
@@ -180,6 +187,17 @@ public class MainController implements Initializable {
 
     @Component
     public class UserConnectedListener {
+
+        @EventListener
+        public void handleProgressBar(HandleProgressEvent event) {
+            Platform.runLater(() -> {
+                if (event.isIncrease()) {
+                    mainUploadPB.setProgress(
+                            Math.min(mainUploadPB.getProgress() + event.getIncreaseValue(), 1.0));
+                }
+                if (event.isReset()) mainUploadPB.setProgress(0.0);
+            });
+        }
 
         @EventListener
         public void handleUserConnectedEvent(UserConnectedEvent event) {
