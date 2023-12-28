@@ -23,7 +23,9 @@ import org.springframework.stereotype.Controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -96,6 +98,8 @@ public class MainController implements Initializable {
 
     private final ObservableList<String> fileList = FXCollections.observableArrayList();
 
+    private List<File> addedFilesToList;
+
     public void openFileManager(ActionEvent event) {
         listViewFiles.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
@@ -103,13 +107,13 @@ public class MainController implements Initializable {
         fileChooser.setTitle("Choose a File");
 
         Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-        List<File> selectedFiles = fileChooser.showOpenMultipleDialog(stage);
+        addedFilesToList = fileChooser.showOpenMultipleDialog(stage);
 
-        if (selectedFiles != null) showInListView(selectedFiles);
+        if (addedFilesToList != null) showInListView();
     }
 
-    private void showInListView(List<File> selectedFiles) {
-        for (var file : selectedFiles) {
+    private void showInListView() {
+        for (var file : addedFilesToList) {
             if (file != null) {
                 fileList.add(file.getName());
             }
@@ -120,6 +124,22 @@ public class MainController implements Initializable {
     public void removeFile(ActionEvent event) {
         var selectedItems = listViewFiles.getSelectionModel().getSelectedItems();
         listViewFiles.getItems().removeAll(selectedItems);
+    }
+
+    public void uploadFiles(ActionEvent event) throws IOException {
+        var selectedEmail = accountChoiceBox.getValue();
+        System.out.println("Uploading to google drive account: " + selectedEmail);
+
+        var requiredFiles = listViewFiles.getItems();
+        for (var file : addedFilesToList) {
+            var fileName = file.getName();
+            if (requiredFiles.contains(fileName)) {
+                var itemType = Files.probeContentType(file.toPath());
+                System.out.println("File name: " + file.getName() + " ||| file type: " + itemType);
+            }
+        }
+
+        addedFilesToList = new ArrayList<>();
     }
 
     @Component
