@@ -46,13 +46,19 @@ public class MainService {
                                                       List<String> requiredFileNames) throws IOException, InterruptedException {
         System.out.println("Uploading to google drive account: " + email);
 
+        var progressEvent = HandleProgressEvent.getInstance()
+                .setSource(this)
+                .setTotalRotations(requiredFileNames.size() / 10)
+                .close();
+
+        publisher.publishEvent(progressEvent);
         for (var file : allFiles) {
             var fileName = file.getName();
             if (requiredFileNames.contains(fileName) && !isUploadCancelled) {
                 var itemType = Files.probeContentType(file.toPath());
                 System.out.println("File name: " + file.getName() + " ||| file type: " + itemType);
                 Thread.sleep(3000);
-                publisher.publishEvent(new HandleProgressEvent(this, true, (double) requiredFileNames.size()/10, false));
+                publisher.publishEvent(progressEvent.setIncrease(true));
             }
             if (isUploadCancelled) {
                 System.out.println("Deleting the uploaded files till now");
@@ -61,7 +67,7 @@ public class MainService {
             }
         }
 
-        publisher.publishEvent(new HandleProgressEvent(this, false, 0.0, true));
+        publisher.publishEvent(progressEvent.setComplete(true));
         return CompletableFuture.completedFuture(true);
     }
 

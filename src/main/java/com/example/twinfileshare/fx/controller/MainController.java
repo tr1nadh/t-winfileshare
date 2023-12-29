@@ -191,11 +191,17 @@ public class MainController implements Initializable {
         @EventListener
         public void handleProgressBar(HandleProgressEvent event) {
             Platform.runLater(() -> {
-                if (event.isIncrease()) {
-                    mainUploadPB.setProgress(
-                            Math.min(mainUploadPB.getProgress() + event.getIncreaseValue(), 1.0));
+                if (event.isIncrease() && !event.isComplete()) {
+                    if (event.getCurrentRotation() > 0) {
+                        event.setCurrentRotation(event.getCurrentRotation() - 1);
+                        return;
+                    }
+                    mainUploadPB.setProgress(mainUploadPB.getProgress() + 0.1);
+                    event.setCurrentRotation(event.getTotalRotations());
                 }
-                if (event.isReset()) mainUploadPB.setProgress(0.0);
+                if (event.isComplete()) {
+                    mainUploadPB.setProgress(1.0);
+                }
             });
         }
 
