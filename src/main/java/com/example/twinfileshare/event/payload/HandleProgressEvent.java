@@ -7,10 +7,11 @@ import org.springframework.context.ApplicationEvent;
 public class HandleProgressEvent extends ApplicationEvent {
 
     private Object source;
-    private boolean increase;
+    private boolean start;
     private boolean complete;
     private int totalRotations;
     private int currentRotation;
+    private boolean shouldIncrease;
 
     private static HandleProgressEvent handleProgressEvent;
 
@@ -31,8 +32,8 @@ public class HandleProgressEvent extends ApplicationEvent {
         return handleProgressEvent;
     }
 
-    public HandleProgressEvent setIncrease(boolean increase) {
-        this.increase = increase;
+    public HandleProgressEvent start() {
+        this.start = true;
 
         return handleProgressEvent;
     }
@@ -59,4 +60,30 @@ public class HandleProgressEvent extends ApplicationEvent {
         return handleProgressEvent;
     }
 
+    public HandleProgressEvent increaseProgress() {
+        if (isStart() && !isComplete()) {
+            if (getCurrentRotation() > 0) {
+                setCurrentRotation(getCurrentRotation() - 1);
+                return handleProgressEvent;
+            }
+
+            shouldIncrease = true;
+            setCurrentRotation(getTotalRotations());
+        }
+
+        return handleProgressEvent;
+    }
+
+    public HandleProgressEvent progressCompleted() {
+        this.complete = true;
+
+        return handleProgressEvent;
+    }
+
+    public boolean shouldIncrease() {
+        var actualIncrease = shouldIncrease;
+        if (shouldIncrease) shouldIncrease = false;
+
+        return actualIncrease;
+    }
 }

@@ -48,6 +48,7 @@ public class MainService {
 
         var progressEvent = HandleProgressEvent.getInstance()
                 .setSource(this)
+                .start()
                 .setTotalRotations(requiredFileNames.size() / 10)
                 .close();
 
@@ -58,7 +59,7 @@ public class MainService {
                 var itemType = Files.probeContentType(file.toPath());
                 System.out.println("File name: " + file.getName() + " ||| file type: " + itemType);
                 Thread.sleep(3000);
-                publisher.publishEvent(progressEvent.setIncrease(true));
+                publisher.publishEvent(progressEvent.increaseProgress());
             }
             if (isUploadCancelled) {
                 System.out.println("Deleting the uploaded files till now");
