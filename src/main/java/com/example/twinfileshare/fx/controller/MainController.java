@@ -135,7 +135,24 @@ public class MainController implements Initializable {
     @FXML
     private ProgressBar mainUploadPB;
 
-    public void uploadFiles(ActionEvent event) throws IOException, InterruptedException, ExecutionException {
+    public void uploadFiles(ActionEvent event) throws IOException, InterruptedException {
+        if (!accountChoiceBox.getValue().contains("@")) {
+            var alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setResizable(false);
+            alert.setTitle("No email selected");
+            alert.setHeaderText("Select an email to upload files");
+            alert.show();
+            return;
+        }
+        if (listViewFiles.getItems().isEmpty()) {
+            var alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setResizable(false);
+            alert.setTitle("No files to upload");
+            alert.setHeaderText("Add some files to upload");
+            alert.show();
+            return;
+        }
+
         if (isUploadingActive) {
             System.out.println("Upload cancelled!");
             uploadBTN.setText("Upload files");
