@@ -67,6 +67,15 @@ public class MainController implements Initializable {
 
     public void disconnectSelectedAccount() {
         var currentSelectedEmail = accountChoiceBox.getValue();
+        if (!currentSelectedEmail.contains("@")) {
+            var alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setResizable(false);
+            alert.setTitle("Cannot disconnect account");
+            alert.setHeaderText("Select an email");
+            alert.show();
+            return;
+        }
+
         var alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Disconnect Account");
         alert.setHeaderText("Are sure you want to disconnect the google drive \n" +
