@@ -49,7 +49,7 @@ public class MainService {
         var progressEvent = HandleProgressEvent.getInstance()
                 .setSource(this)
                 .start()
-                .setTotalRotations(requiredFileNames.size() / 10)
+                .setTotalRotations(requiredFileNames.size())
                 .close();
 
         publisher.publishEvent(progressEvent);

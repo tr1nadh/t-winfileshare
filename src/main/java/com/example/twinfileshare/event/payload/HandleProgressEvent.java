@@ -12,6 +12,8 @@ public class HandleProgressEvent extends ApplicationEvent {
     private int totalRotations;
     private int currentRotation;
     private boolean shouldIncrease;
+    private int tillProgressHappened;
+    private int totalRawRotations;
 
     private static HandleProgressEvent handleProgressEvent;
 
@@ -46,7 +48,8 @@ public class HandleProgressEvent extends ApplicationEvent {
     }
 
     public HandleProgressEvent setTotalRotations(int totalRotations) {
-        this.totalRotations = (totalRotations <= 10) ? 0 : totalRotations;
+        this.totalRotations = (totalRotations / 10);
+        this.totalRawRotations = totalRotations;
 
         return handleProgressEvent;
     }
@@ -62,7 +65,10 @@ public class HandleProgressEvent extends ApplicationEvent {
     }
 
     public HandleProgressEvent increaseProgress() {
+        if (isThisPreLastRotation()) completeProgress();
+
         if (isStart() && !isComplete()) {
+            tillProgressHappened += 1;
             if (getCurrentRotation() > 0) {
                 setCurrentRotation(getCurrentRotation() - 1);
                 return handleProgressEvent;
@@ -75,16 +81,23 @@ public class HandleProgressEvent extends ApplicationEvent {
         return handleProgressEvent;
     }
 
+    private boolean isThisPreLastRotation() {
+        return tillProgressHappened == totalRawRotations - 2;
+    }
+
     public HandleProgressEvent completeProgress() {
         this.complete = true;
         this.start = false;
+        tillProgressHappened = 0;
 
         return handleProgressEvent;
     }
 
     public boolean shouldIncrease() {
         var actualIncrease = shouldIncrease;
-        if (shouldIncrease) shouldIncrease = false;
+        if (shouldIncrease) {
+            shouldIncrease = false;
+        }
 
         return actualIncrease;
     }
