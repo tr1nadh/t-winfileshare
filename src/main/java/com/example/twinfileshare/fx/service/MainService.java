@@ -68,7 +68,7 @@ public class MainService {
             }
         }
 
-        publisher.publishEvent(progressEvent.setComplete(true));
+        publisher.publishEvent(progressEvent.completeProgress());
         return CompletableFuture.completedFuture(true);
     }
 

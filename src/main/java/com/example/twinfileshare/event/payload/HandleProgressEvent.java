@@ -34,6 +34,7 @@ public class HandleProgressEvent extends ApplicationEvent {
 
     public HandleProgressEvent start() {
         this.start = true;
+        this.complete = false;
 
         return handleProgressEvent;
     }
@@ -74,8 +75,9 @@ public class HandleProgressEvent extends ApplicationEvent {
         return handleProgressEvent;
     }
 
-    public HandleProgressEvent progressCompleted() {
+    public HandleProgressEvent completeProgress() {
         this.complete = true;
+        this.start = false;
 
         return handleProgressEvent;
     }

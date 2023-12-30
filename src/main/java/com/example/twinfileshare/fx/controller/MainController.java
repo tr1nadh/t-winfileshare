@@ -155,7 +155,10 @@ public class MainController implements Initializable {
         );
 
         uploadTask.thenAcceptAsync(isFinished -> {
-            Platform.runLater(() -> mainUploadPB.setVisible(false));
+            Platform.runLater(() -> {
+                mainUploadPB.setVisible(false);
+                mainUploadPB.setProgress(0.0);
+            });
             isUploadingActive = false;
             Platform.runLater(() -> uploadBTN.setText("Upload files"));
             if (!isFinished) {
