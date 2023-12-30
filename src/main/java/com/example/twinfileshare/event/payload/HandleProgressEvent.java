@@ -46,7 +46,7 @@ public class HandleProgressEvent extends ApplicationEvent {
     }
 
     public HandleProgressEvent setTotalRotations(int totalRotations) {
-        this.totalRotations = totalRotations;
+        this.totalRotations = (totalRotations <= 10) ? 0 : totalRotations;
 
         return handleProgressEvent;
     }
