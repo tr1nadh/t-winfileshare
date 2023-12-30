@@ -133,6 +133,15 @@ public class MainController implements Initializable {
     }
 
     public void removeFile(ActionEvent event) {
+        if (listViewFiles.getItems().isEmpty()) {
+            var alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setResizable(false);
+            alert.setTitle("Cannot remove");
+            alert.setHeaderText("Add some files to remove");
+            alert.show();
+            return;
+        }
+
         var selectedItems = listViewFiles.getSelectionModel().getSelectedItems();
         listViewFiles.getItems().removeAll(selectedItems);
     }
