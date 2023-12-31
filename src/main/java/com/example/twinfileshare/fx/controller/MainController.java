@@ -28,7 +28,6 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.ExecutionException;
 
 @Controller
 public class MainController implements Initializable {
@@ -178,6 +177,8 @@ public class MainController implements Initializable {
             return;
         }
 
+        disableRequiredUploadElements();
+
         mainUploadPB.setVisible(true);
         isUploadingActive = true;
         uploadBTN.setText("Cancel");
@@ -195,6 +196,7 @@ public class MainController implements Initializable {
                 mainUploadPB.setProgress(0.0);
             });
             isUploadingActive = false;
+            enableRequiredUploadElements();
             Platform.runLater(() -> uploadBTN.setText("Upload files"));
             if (!isFinished) {
                 Platform.runLater(this::showUploadCancelledAlert);
@@ -205,6 +207,33 @@ public class MainController implements Initializable {
             Platform.runLater(() -> listViewFiles.getItems().clear());
             Platform.runLater(this::showUploadFinishedAlert);
         });
+    }
+
+    @FXML
+    private Button accountDisconnectBTN;
+    @FXML
+    private Button addFilesBTN;
+    @FXML
+    private Button removeFilesBTN;
+    @FXML
+    private Button clearFilesBTN;
+
+    private void disableRequiredUploadElements() {
+        accountChoiceBox.setDisable(true);
+        accountDisconnectBTN.setDisable(true);
+        addFilesBTN.setDisable(true);
+        removeFilesBTN.setDisable(true);
+        clearFilesBTN.setDisable(true);
+        listViewFiles.setDisable(true);
+    }
+
+    private void enableRequiredUploadElements() {
+        accountChoiceBox.setDisable(false);
+        accountDisconnectBTN.setDisable(false);
+        addFilesBTN.setDisable(false);
+        removeFilesBTN.setDisable(false);
+        clearFilesBTN.setDisable(false);
+        listViewFiles.setDisable(false);
     }
 
     private void showUploadCancelledAlert() {

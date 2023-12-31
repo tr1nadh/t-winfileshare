@@ -16,15 +16,15 @@
       </Button>
       <ChoiceBox fx:id="accountChoiceBox" layoutX="113.0" layoutY="75.0" prefHeight="31.0" prefWidth="293.0" value="Select an email" />
       <Button fx:id="accountDisconnectBTN" layoutX="411.0" layoutY="75.0" mnemonicParsing="false" onAction="#disconnectSelectedAccount" prefHeight="31.0" prefWidth="76.0" text="Disconnect" />
-      <Button layoutX="113.0" layoutY="121.0" mnemonicParsing="false" onAction="#openFileManager" prefHeight="31.0" prefWidth="89.0" text="Add files" />
+      <Button fx:id="addFilesBTN" layoutX="113.0" layoutY="121.0" mnemonicParsing="false" onAction="#openFileManager" prefHeight="31.0" prefWidth="89.0" text="Add files" />
       <ListView fx:id="listViewFiles" layoutX="113.0" layoutY="160.0" prefHeight="166.0" prefWidth="374.0" />
-      <Button layoutX="212.0" layoutY="121.0" mnemonicParsing="false" onAction="#removeFile" prefHeight="31.0" prefWidth="69.0" text="Remove" />
+      <Button fx:id="removeFilesBTN" layoutX="212.0" layoutY="121.0" mnemonicParsing="false" onAction="#removeFile" prefHeight="31.0" prefWidth="69.0" text="Remove" />
       <Button fx:id="uploadBTN" layoutX="113.0" layoutY="339.0" mnemonicParsing="false" onAction="#uploadFiles" prefHeight="39.0" prefWidth="374.0" text="Upload files">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
       <ProgressBar fx:id="mainUploadPB" layoutX="113.0" layoutY="329.0" prefHeight="9.0" prefWidth="375.0" progress="0.0" />
-      <Button layoutX="294.0" layoutY="121.0" mnemonicParsing="false" onAction="#clearListView" prefHeight="31.0" prefWidth="69.0" text="Clear" />
+      <Button fx:id="clearFilesBTN" layoutX="294.0" layoutY="121.0" mnemonicParsing="false" onAction="#clearListView" prefHeight="31.0" prefWidth="69.0" text="Clear" />
    </children>
 </AnchorPane>
