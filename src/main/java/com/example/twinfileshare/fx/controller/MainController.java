@@ -223,6 +223,20 @@ public class MainController implements Initializable {
         alert.showAndWait();
     }
 
+    public void clearListView(ActionEvent event) {
+        if (listViewFiles.getItems().isEmpty()) {
+            var alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setResizable(false);
+            alert.setTitle("No files to clear");
+            alert.setHeaderText("Add some files to clear");
+            alert.show();
+            return;
+        }
+
+        listViewFiles.setItems(FXCollections.observableArrayList());
+        addedFilesToList = new ArrayList<>();
+    }
+
     @Component
     public class UserConnectedListener {
 
