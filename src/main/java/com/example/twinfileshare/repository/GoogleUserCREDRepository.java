@@ -11,6 +11,9 @@ import java.util.List;
 @Repository
 public interface GoogleUserCREDRepository extends JpaRepository<GoogleUserCRED, String> {
 
+
+    GoogleUserCRED findByEmail(String email);
+
     @Query(value = "SELECT email FROM google_user_cred", nativeQuery = true)
     List<String> getAllEmails();
 
