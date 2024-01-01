@@ -3,6 +3,7 @@ package com.example.twinfileshare.fx.service;
 import com.example.twinfileshare.event.payload.HandleProgressEvent;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.example.twinfileshare.service.GoogleAuthorizationService;
+import com.example.twinfileshare.service.GoogleDriveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Async;
@@ -39,6 +40,9 @@ public class MainService {
     private boolean isUploadCancelled;
 
     @Autowired
+    private GoogleDriveService driveService;
+
+    @Autowired
     private ApplicationEventPublisher publisher;
 
     @Async
@@ -58,7 +62,7 @@ public class MainService {
             if (requiredFileNames.contains(fileName) && !isUploadCancelled) {
                 var itemType = Files.probeContentType(file.toPath());
                 System.out.println("File name: " + file.getName() + " ||| file type: " + itemType);
-                Thread.sleep(3000);
+                driveService.uploadFile(email, file);
                 publisher.publishEvent(progressEvent.increaseProgress());
             }
             if (isUploadCancelled) {
