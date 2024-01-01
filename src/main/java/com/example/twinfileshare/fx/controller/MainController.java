@@ -196,7 +196,6 @@ public class MainController implements Initializable {
                 mainUploadPB.setProgress(0.0);
             });
             isUploadingActive = false;
-            enableRequiredUploadElements();
             Platform.runLater(() -> uploadBTN.setText("Upload files"));
             if (!isFinished) {
                 Platform.runLater(this::showUploadCancelledAlert);
@@ -207,6 +206,8 @@ public class MainController implements Initializable {
             Platform.runLater(() -> listViewFiles.getItems().clear());
             Platform.runLater(this::showUploadFinishedAlert);
         });
+
+        enableRequiredUploadElements();
     }
 
     @FXML
