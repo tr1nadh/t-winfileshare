@@ -33,9 +33,14 @@ public class GoogleDriveService {
         var drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, cred)
                 .setApplicationName("${google.oauth2.client.application-name}").build();
 
+        var googleFile = new File();
+        googleFile.setName(file.getName());
+
         var uploadedFile = drive.files().create(
-                new File(),
+                googleFile,
                 new FileContent(Files.probeContentType(file.toPath()), file)
-        ).execute();
+        ).setFields("id").execute();
+
+        System.out.println("Uploaded file Id: " + uploadedFile.getId());
     }
 }
