@@ -57,7 +57,7 @@ public class MainController implements Initializable {
         mainUploadPB.setVisible(false);
     }
 
-    public void disconnectSelectedAccount() {
+    public void disconnectSelectedAccount(ActionEvent event) {
         var currentSelectedEmail = accountChoiceBox.getValue();
         if (!currentSelectedEmail.contains("@")) {
             var alert = new Alert(Alert.AlertType.INFORMATION);
