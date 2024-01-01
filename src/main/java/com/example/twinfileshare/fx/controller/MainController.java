@@ -5,6 +5,7 @@ import com.example.twinfileshare.event.payload.DoubleEmailConnectEvent;
 import com.example.twinfileshare.event.payload.HandleProgressEvent;
 import com.example.twinfileshare.event.payload.NoDriveAccessEvent;
 import com.example.twinfileshare.event.payload.UserConnectedEvent;
+import com.example.twinfileshare.fx.MainPresenter;
 import com.example.twinfileshare.fx.service.MainService;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import javafx.application.Platform;
@@ -34,23 +35,15 @@ public class MainController implements Initializable {
 
     @Autowired
     private TWinFileShareApplication tWinFileShareApplication;
-
+    private MainPresenter presenter;
     @Autowired
     private MainService mainService;
 
     public void connectGoogleDrive(ActionEvent event) {
-        var alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setResizable(false);
-        alert.setTitle("Google drive authorization");
-        alert.setHeaderText("Check the google drive box when giving permissions \n" +
-                " in consent screen to give access.");
-        alert.setContentText("Press OK to open the link in default browser.");
-        alert.showAndWait()
-                .filter(res -> res == ButtonType.OK)
-                .ifPresent(res -> openAuthLinkInDefaultBrowser());
+        presenter.handleConnectGoogleDrive();
     }
 
-    private void openAuthLinkInDefaultBrowser() {
+    public void openAuthLinkInDefaultBrowser() {
         var hostServices = tWinFileShareApplication.getHostServices();
         hostServices.showDocument(mainService.getGoogleSignInURL());
     }
@@ -265,6 +258,10 @@ public class MainController implements Initializable {
 
         listViewFiles.setItems(FXCollections.observableArrayList());
         addedFilesToList = new ArrayList<>();
+    }
+
+    public void setMainPresenter(MainPresenter presenter) {
+        this.presenter = presenter;
     }
 
     @Component
