@@ -32,8 +32,6 @@ import java.util.ResourceBundle;
 public class MainController {
 
     private MainPresenter presenter;
-    @Autowired
-    private MainService mainService;
 
     public void connectGoogleDrive(ActionEvent event) {
         presenter.handleConnectGoogleDrive();
