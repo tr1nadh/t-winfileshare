@@ -1,4 +1,4 @@
-package com.example.twinfileshare.fx.service;
+package com.example.twinfileshare.fx.model;
 
 import com.example.twinfileshare.event.payload.HandleProgressEvent;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Service
-public class MainService {
+public class MainModel {
 
     @Autowired
     private GoogleAuthorizationService googleAuthorizationService;
