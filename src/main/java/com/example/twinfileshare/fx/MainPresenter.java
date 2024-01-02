@@ -76,4 +76,18 @@ public class MainPresenter {
 
         if (selectedFiles != null) controller.showFilesInListView(selectedFiles);
     }
+
+    public void handleRemoveFiles() {
+        var listViewItems = controller.getListViewItems();
+        if (listViewItems.isEmpty()) {
+            fxAlert.informationAlert(
+                    "Cannot remove",
+                    "Add some files to remove"
+            );
+            return;
+        }
+
+        var selectedListViewItems = controller.getSelectedListViewItems();
+        listViewItems.removeAll(selectedListViewItems);
+    }
 }

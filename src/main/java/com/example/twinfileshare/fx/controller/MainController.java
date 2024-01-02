@@ -104,18 +104,16 @@ public class MainController implements Initializable {
         listViewFiles.setItems(fileList);
     }
 
-    public void removeFile(ActionEvent event) {
-        if (listViewFiles.getItems().isEmpty()) {
-            var alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setResizable(false);
-            alert.setTitle("Cannot remove");
-            alert.setHeaderText("Add some files to remove");
-            alert.show();
-            return;
-        }
+    public ObservableList<String> getListViewItems() {
+        return listViewFiles.getItems();
+    }
 
-        var selectedItems = listViewFiles.getSelectionModel().getSelectedItems();
-        listViewFiles.getItems().removeAll(selectedItems);
+    public ObservableList<String> getSelectedListViewItems() {
+        return listViewFiles.getSelectionModel().getSelectedItems();
+    }
+
+    public void removeFile(ActionEvent event) {
+        presenter.handleRemoveFiles();
     }
 
     @FXML
