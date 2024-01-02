@@ -40,7 +40,7 @@ public class MainView {
     @FXML
     private ChoiceBox<String> accountChoiceBox;
     @FXML
-    private ListView<String> filesListView;
+    private ListView<String> fileListView;
     @FXML
     private Button uploadBTN;
     @FXML
@@ -83,7 +83,7 @@ public class MainView {
     }
 
     public void changeFileListViewSelectToMultiple() {
-        filesListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        fileListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
     public void setAccountChoiceBoxValue(String value) {
@@ -103,15 +103,15 @@ public class MainView {
     }
 
     public void addFileNamesToFileListView(List<String> files) {
-        filesListView.getItems().addAll(files);
+        fileListView.getItems().addAll(files);
     }
 
     public ObservableList<String> getFileListViewItems() {
-        return filesListView.getItems();
+        return fileListView.getItems();
     }
 
     public ObservableList<String> getSelectedFileListViewItems() {
-        return filesListView.getSelectionModel().getSelectedItems();
+        return fileListView.getSelectionModel().getSelectedItems();
     }
 
     public String getAccountChoiceBoxValue() {
@@ -147,7 +147,7 @@ public class MainView {
     }
 
     public void disableFilesListView(boolean value) {
-        filesListView.setDisable(value);
+        fileListView.setDisable(value);
     }
 
     public void setMainUploadProgressBarProgress(double value) {
@@ -155,7 +155,7 @@ public class MainView {
     }
 
     public void setListViewItems(ObservableList<String> items) {
-        filesListView.setItems(items);
+        fileListView.setItems(items);
     }
 
     public void setMainPresenter(MainPresenter presenter) {
