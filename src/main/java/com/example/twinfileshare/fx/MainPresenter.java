@@ -7,7 +7,6 @@ import jakarta.annotation.PostConstruct;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,7 +31,7 @@ public class MainPresenter {
     public void init() {
         controller.setMainPresenter(this);
         controller.setAccountChoiceBoxItems(service.getAllEmails());
-        controller.setFileListViewSelectToMultiple();
+        controller.changeFileListViewSelectToMultiple();
         controller.setMainUploadProgressBarVisible(false);
     }
 
@@ -46,12 +45,8 @@ public class MainPresenter {
                 );
     }
 
-    @Autowired
-    private TWinFileShareApplication tWinFileShareApplication;
-
     public void openAuthLinkInDefaultBrowser() {
-        var hostServices = tWinFileShareApplication.getHostServices();
-        hostServices.showDocument(service.getGoogleSignInURL());
+        controller.openURLInDefaultBrowser(service.getGoogleSignInURL());
     }
 
     public void handleDisconnectSelectedAccount() {
@@ -92,13 +87,14 @@ public class MainPresenter {
                 "Select files to upload", event);
 
         if (selectedFiles != null) {
-            controller.showFilesInListView(selectedFiles);
+            controller.addFileNamesToFileListView(
+                    (List<String>) selectedFiles.stream().map(File::getName));
             totalAddedFiles.addAll(selectedFiles);
         }
     }
 
     public void handleRemoveFiles() {
-        var listViewItems = controller.getListViewItems();
+        var listViewItems = controller.getFileListViewItems();
         if (listViewItems.isEmpty()) {
             fxAlert.informationAlert(
                     "Cannot remove",
@@ -107,7 +103,7 @@ public class MainPresenter {
             return;
         }
 
-        var selectedListViewItems = controller.getSelectedListViewItems();
+        var selectedListViewItems = controller.getSelectedFileListViewItems();
         listViewItems.removeAll(selectedListViewItems);
     }
 
@@ -121,7 +117,7 @@ public class MainPresenter {
             );
             return;
         }
-        if (controller.getListViewItems().isEmpty()) {
+        if (controller.getFileListViewItems().isEmpty()) {
             fxAlert.informationAlert(
                     "No files to upload",
                     "Add some files to upload"
@@ -136,7 +132,7 @@ public class MainPresenter {
             return;
         }
 
-        controller.disableRequiredUploadElements();
+        disableRequiredUploadElements();
         controller.setMainUploadProgressBarVisible(true);
         isUploadingActive = true;
         controller.setUploadBTNText("Cancel");
@@ -145,7 +141,7 @@ public class MainPresenter {
         var uploadTask = service.uploadFilesToGoogleDrive(
                 controller.getAccountChoiceBoxValue(),
                 totalAddedFiles,
-                controller.getListViewItems()
+                controller.getFileListViewItems()
         );
 
         uploadTask.thenAcceptAsync(isFinished -> {
@@ -156,20 +152,52 @@ public class MainPresenter {
             isUploadingActive = false;
             Platform.runLater(() -> controller.setUploadBTNText("Upload files"));
             if (!isFinished) {
-                Platform.runLater(controller::showUploadCancelledAlert);
+                Platform.runLater(this::showUploadCancelledAlert);
                 return;
             }
             System.out.println("Upload finished...");
             totalAddedFiles = new ArrayList<>();
-            Platform.runLater(() -> controller.getListViewItems().clear());
-            Platform.runLater(controller::showUploadFinishedAlert);
+            Platform.runLater(() -> controller.getFileListViewItems().clear());
+            Platform.runLater(this::showUploadFinishedAlert);
         });
 
-        controller.enableRequiredUploadElements();
+        enableRequiredUploadElements();
+    }
+
+    private void showUploadCancelledAlert() {
+        fxAlert.informationAlert(
+                "Upload cancelled",
+                "Upload has been cancelled!"
+        );
+    }
+
+    private void showUploadFinishedAlert() {
+        fxAlert.informationAlert(
+                "Upload success",
+                "Successfully files are uploaded!"
+        );
+    }
+
+    private void disableRequiredUploadElements() {
+        controller.disableAccountChoiceBox(true);
+        controller.disableAccountDisconnectBTN(true);
+        controller.disableAddFilesBTN(true);
+        controller.disableRemoveFilesBTN(true);
+        controller.disableClearFilesBTN(true);
+        controller.disableFilesListView(true);
+    }
+
+    private void enableRequiredUploadElements() {
+        controller.disableAccountChoiceBox(false);
+        controller.disableAccountDisconnectBTN(false);
+        controller.disableAddFilesBTN(false);
+        controller.disableRemoveFilesBTN(false);
+        controller.disableClearFilesBTN(false);
+        controller.disableFilesListView(false);
     }
 
     public void handleClearListView() {
-        if (controller.getListViewItems().isEmpty()) {
+        if (controller.getFileListViewItems().isEmpty()) {
             fxAlert.informationAlert(
                     "No files to clear",
                     "Add some files to clear"
