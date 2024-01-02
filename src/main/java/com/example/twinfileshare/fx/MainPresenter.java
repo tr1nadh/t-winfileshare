@@ -49,7 +49,7 @@ public class MainPresenter {
     }
 
     public void handleDisconnectSelectedAccount() {
-        var currentSelectedEmail = view.getCurrentSelectedEmail();
+        var currentSelectedEmail = view.getAccountChoiceBoxValue();
         if (!isEmail(currentSelectedEmail)) {
             fxAlert.informationAlert("Cannot disconnect account",
                     "Select an email");
