@@ -60,7 +60,7 @@ public class MainPresenter {
                 "",
                 () -> {
                     try {
-                        controller.disconnectAccount(currentSelectedEmail);
+                        disconnectAccount(currentSelectedEmail);
                     } catch (GeneralSecurityException | IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -69,6 +69,13 @@ public class MainPresenter {
                 ButtonType.YES, ButtonType.NO
         );
     }
+
+    private void disconnectAccount(String email) throws GeneralSecurityException, IOException {
+        service.disconnectAccount(email);
+        controller.setAccountChoiceBoxValue("Select an email");
+        controller.removeEmailFromAccountChoiceBox(email);
+    }
+
 
     public void handleOpenFileManager(ActionEvent event) {
         var selectedFiles = controller.openMultipleFileChooserWindow(
