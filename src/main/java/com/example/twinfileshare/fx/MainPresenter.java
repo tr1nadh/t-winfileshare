@@ -1,7 +1,7 @@
 package com.example.twinfileshare.fx;
 
-import com.example.twinfileshare.fx.controller.MainController;
-import com.example.twinfileshare.fx.service.MainService;
+import com.example.twinfileshare.fx.view.MainView;
+import com.example.twinfileshare.fx.model.MainModel;
 import jakarta.annotation.PostConstruct;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -20,18 +20,18 @@ import java.util.List;
 public class MainPresenter {
 
     @Autowired
-    private MainController controller;
+    private MainView view;
     @Autowired
-    private MainService service;
+    private MainModel model;
     @Autowired
     private FxAlert fxAlert;
 
     @PostConstruct
     public void init() {
-        controller.setMainPresenter(this);
-        controller.setAccountChoiceBoxItems(service.getAllEmails());
-        controller.changeFileListViewSelectToMultiple();
-        controller.setMainUploadProgressBarVisible(false);
+        view.setMainPresenter(this);
+        view.setAccountChoiceBoxItems(model.getAllEmails());
+        view.changeFileListViewSelectToMultiple();
+        view.setMainUploadProgressBarVisible(false);
     }
 
     public void handleConnectGoogleDrive() {
@@ -45,11 +45,11 @@ public class MainPresenter {
     }
 
     public void openAuthLinkInDefaultBrowser() {
-        controller.openURLInDefaultBrowser(service.getGoogleSignInURL());
+        view.openURLInDefaultBrowser(model.getGoogleSignInURL());
     }
 
     public void handleDisconnectSelectedAccount() {
-        var currentSelectedEmail = controller.getCurrentSelectedEmail();
+        var currentSelectedEmail = view.getCurrentSelectedEmail();
         if (!currentSelectedEmail.contains("@")) {
             fxAlert.informationAlert("Cannot disconnect account",
                     "Select an email");
@@ -74,26 +74,26 @@ public class MainPresenter {
     }
 
     private void disconnectAccount(String email) throws GeneralSecurityException, IOException {
-        service.disconnectAccount(email);
-        controller.setAccountChoiceBoxValue("Select an email");
-        controller.removeEmailFromAccountChoiceBox(email);
+        model.disconnectAccount(email);
+        view.setAccountChoiceBoxValue("Select an email");
+        view.removeEmailFromAccountChoiceBox(email);
     }
 
     private List<File> totalAddedFiles = new ArrayList<>();
 
     public void handleOpenFileManager(ActionEvent event) {
-        var selectedFiles = controller.openMultipleFileChooserWindow(
+        var selectedFiles = view.openMultipleFileChooserWindow(
                 "Select files to upload", event);
 
         if (selectedFiles != null) {
-            controller.addFileNamesToFileListView(
+            view.addFileNamesToFileListView(
                     (List<String>) selectedFiles.stream().map(File::getName));
             totalAddedFiles.addAll(selectedFiles);
         }
     }
 
     public void handleRemoveFiles() {
-        var listViewItems = controller.getFileListViewItems();
+        var listViewItems = view.getFileListViewItems();
         if (listViewItems.isEmpty()) {
             fxAlert.informationAlert(
                     "Cannot remove",
@@ -102,21 +102,21 @@ public class MainPresenter {
             return;
         }
 
-        var selectedListViewItems = controller.getSelectedFileListViewItems();
+        var selectedListViewItems = view.getSelectedFileListViewItems();
         listViewItems.removeAll(selectedListViewItems);
     }
 
     private boolean isUploadingActive;
 
     public void handleUploadFiles() throws IOException, InterruptedException {
-        if (!controller.getAccountChoiceBoxValue().contains("@")) {
+        if (!view.getAccountChoiceBoxValue().contains("@")) {
             fxAlert.informationAlert(
                     "No email selected",
                     "Select an email to upload files"
             );
             return;
         }
-        if (controller.getFileListViewItems().isEmpty()) {
+        if (view.getFileListViewItems().isEmpty()) {
             fxAlert.informationAlert(
                     "No files to upload",
                     "Add some files to upload"
@@ -126,37 +126,37 @@ public class MainPresenter {
 
         if (isUploadingActive) {
             System.out.println("Upload cancelled!");
-            controller.setUploadBTNText("Upload files");
-            service.cancelUploadFiles();
+            view.setUploadBTNText("Upload files");
+            model.cancelUploadFiles();
             return;
         }
 
         disableRequiredUploadElements();
-        controller.setMainUploadProgressBarVisible(true);
+        view.setMainUploadProgressBarVisible(true);
         isUploadingActive = true;
-        controller.setUploadBTNText("Cancel");
+        view.setUploadBTNText("Cancel");
         System.out.println("Uploading.........");
 
-        var uploadTask = service.uploadFilesToGoogleDrive(
-                controller.getAccountChoiceBoxValue(),
+        var uploadTask = model.uploadFilesToGoogleDrive(
+                view.getAccountChoiceBoxValue(),
                 totalAddedFiles,
-                controller.getFileListViewItems()
+                view.getFileListViewItems()
         );
 
         uploadTask.thenAcceptAsync(isFinished -> {
             Platform.runLater(() -> {
-                controller.setMainUploadProgressBarVisible(false);
-                controller.setMainUploadProgressBarProgress(0.0);
+                view.setMainUploadProgressBarVisible(false);
+                view.setMainUploadProgressBarProgress(0.0);
             });
             isUploadingActive = false;
-            Platform.runLater(() -> controller.setUploadBTNText("Upload files"));
+            Platform.runLater(() -> view.setUploadBTNText("Upload files"));
             if (!isFinished) {
                 Platform.runLater(this::showUploadCancelledAlert);
                 return;
             }
             System.out.println("Upload finished...");
             totalAddedFiles = new ArrayList<>();
-            Platform.runLater(() -> controller.getFileListViewItems().clear());
+            Platform.runLater(() -> view.getFileListViewItems().clear());
             Platform.runLater(this::showUploadFinishedAlert);
         });
 
@@ -178,25 +178,25 @@ public class MainPresenter {
     }
 
     private void disableRequiredUploadElements() {
-        controller.disableAccountChoiceBox(true);
-        controller.disableAccountDisconnectBTN(true);
-        controller.disableAddFilesBTN(true);
-        controller.disableRemoveFilesBTN(true);
-        controller.disableClearFilesBTN(true);
-        controller.disableFilesListView(true);
+        view.disableAccountChoiceBox(true);
+        view.disableAccountDisconnectBTN(true);
+        view.disableAddFilesBTN(true);
+        view.disableRemoveFilesBTN(true);
+        view.disableClearFilesBTN(true);
+        view.disableFilesListView(true);
     }
 
     private void enableRequiredUploadElements() {
-        controller.disableAccountChoiceBox(false);
-        controller.disableAccountDisconnectBTN(false);
-        controller.disableAddFilesBTN(false);
-        controller.disableRemoveFilesBTN(false);
-        controller.disableClearFilesBTN(false);
-        controller.disableFilesListView(false);
+        view.disableAccountChoiceBox(false);
+        view.disableAccountDisconnectBTN(false);
+        view.disableAddFilesBTN(false);
+        view.disableRemoveFilesBTN(false);
+        view.disableClearFilesBTN(false);
+        view.disableFilesListView(false);
     }
 
     public void handleClearListView() {
-        if (controller.getFileListViewItems().isEmpty()) {
+        if (view.getFileListViewItems().isEmpty()) {
             fxAlert.informationAlert(
                     "No files to clear",
                     "Add some files to clear"
@@ -204,7 +204,7 @@ public class MainPresenter {
             return;
         }
 
-        controller.setListViewItems(FXCollections.observableArrayList());
+        view.setListViewItems(FXCollections.observableArrayList());
         totalAddedFiles = new ArrayList<>();
     }
 }

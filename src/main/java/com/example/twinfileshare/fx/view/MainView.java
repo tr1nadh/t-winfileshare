@@ -1,4 +1,4 @@
-package com.example.twinfileshare.fx.controller;
+package com.example.twinfileshare.fx.view;
 
 import com.example.twinfileshare.TWinFileShareApplication;
 import com.example.twinfileshare.event.payload.DoubleEmailConnectEvent;
@@ -6,7 +6,7 @@ import com.example.twinfileshare.event.payload.HandleProgressEvent;
 import com.example.twinfileshare.event.payload.NoDriveAccessEvent;
 import com.example.twinfileshare.event.payload.UserConnectedEvent;
 import com.example.twinfileshare.fx.MainPresenter;
-import com.example.twinfileshare.fx.service.MainService;
+import com.example.twinfileshare.fx.model.MainModel;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Controller
-public class MainController {
+public class MainView {
 
     private MainPresenter presenter;
 
@@ -197,7 +197,7 @@ public class MainController {
         @Autowired
         private TWinFileShareApplication tWinFileShareApplication;
         @Autowired
-        private MainService mainService;
+        private MainModel mainModel;
 
         @EventListener
         public void handleNoDriveAccessEvent(NoDriveAccessEvent event) {
@@ -216,7 +216,7 @@ public class MainController {
 
         private void openAuthLinkInDefaultBrowser() {
             var hostServices = tWinFileShareApplication.getHostServices();
-            hostServices.showDocument(mainService.getGoogleSignInURL());
+            hostServices.showDocument(mainModel.getGoogleSignInURL());
         }
 
         @Autowired
