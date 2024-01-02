@@ -25,8 +25,6 @@ import org.springframework.stereotype.Controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.security.GeneralSecurityException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -54,7 +52,7 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         accountChoiceBox.getItems().addAll(mainService.getAllEmails());
-        listViewFiles.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         mainUploadPB.setVisible(false);
     }
 
@@ -75,7 +73,7 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private ListView<String> listViewFiles;
+    private ListView<String> listView;
     private List<File> addedFilesToList;
 
     public void openFileManager(ActionEvent event) {
@@ -97,15 +95,15 @@ public class MainController implements Initializable {
                 fileList.add(file.getName());
             }
         }
-        listViewFiles.setItems(fileList);
+        listView.setItems(fileList);
     }
 
     public ObservableList<String> getListViewItems() {
-        return listViewFiles.getItems();
+        return listView.getItems();
     }
 
     public ObservableList<String> getSelectedListViewItems() {
-        return listViewFiles.getSelectionModel().getSelectedItems();
+        return listView.getSelectionModel().getSelectedItems();
     }
 
     public void removeFile(ActionEvent event) {
@@ -150,7 +148,7 @@ public class MainController implements Initializable {
         addFilesBTN.setDisable(true);
         removeFilesBTN.setDisable(true);
         clearFilesBTN.setDisable(true);
-        listViewFiles.setDisable(true);
+        listView.setDisable(true);
     }
 
     public void enableRequiredUploadElements() {
@@ -159,7 +157,7 @@ public class MainController implements Initializable {
         addFilesBTN.setDisable(false);
         removeFilesBTN.setDisable(false);
         clearFilesBTN.setDisable(false);
-        listViewFiles.setDisable(false);
+        listView.setDisable(false);
     }
 
     public void showUploadCancelledAlert() {
@@ -183,7 +181,7 @@ public class MainController implements Initializable {
     }
 
     public void setListViewItems(ObservableList<String> items) {
-        listViewFiles.setItems(items);
+        listView.setItems(items);
     }
 
     public void clearListView(ActionEvent event) {
