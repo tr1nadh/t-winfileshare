@@ -76,9 +76,6 @@ public class MainController implements Initializable {
 
     @FXML
     private ListView<String> listViewFiles;
-
-    private final ObservableList<String> fileList = FXCollections.observableArrayList();
-
     private List<File> addedFilesToList;
 
     public void openFileManager(ActionEvent event) {
@@ -94,6 +91,7 @@ public class MainController implements Initializable {
     }
 
     public void showFilesInListView(List<File> files) {
+        ObservableList<String> fileList = FXCollections.observableArrayList();
         for (var file : files) {
             if (file != null) {
                 fileList.add(file.getName());
@@ -121,62 +119,20 @@ public class MainController implements Initializable {
     @FXML
     private ProgressBar mainUploadPB;
 
+    public String getAccountChoiceBoxValue() {
+        return accountChoiceBox.getValue();
+    }
+
     public void uploadFiles(ActionEvent event) throws IOException, InterruptedException {
-        if (!accountChoiceBox.getValue().contains("@")) {
-            var alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setResizable(false);
-            alert.setTitle("No email selected");
-            alert.setHeaderText("Select an email to upload files");
-            alert.show();
-            return;
-        }
-        if (listViewFiles.getItems().isEmpty()) {
-            var alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setResizable(false);
-            alert.setTitle("No files to upload");
-            alert.setHeaderText("Add some files to upload");
-            alert.show();
-            return;
-        }
+        presenter.handleUploadFiles();
+    }
 
-        if (isUploadingActive) {
-            System.out.println("Upload cancelled!");
-            uploadBTN.setText("Upload files");
-            mainService.cancelUploadFiles();
-            return;
-        }
+    public void setMainUploadProgressBarVisible(boolean visible) {
+        mainUploadPB.setVisible(visible);
+    }
 
-        disableRequiredUploadElements();
-
-        mainUploadPB.setVisible(true);
-        isUploadingActive = true;
-        uploadBTN.setText("Cancel");
-        System.out.println("Uploading.........");
-
-        var uploadTask = mainService.uploadFilesToGoogleDrive(
-                accountChoiceBox.getValue(),
-                addedFilesToList,
-                listViewFiles.getItems()
-        );
-
-        uploadTask.thenAcceptAsync(isFinished -> {
-            Platform.runLater(() -> {
-                mainUploadPB.setVisible(false);
-                mainUploadPB.setProgress(0.0);
-            });
-            isUploadingActive = false;
-            Platform.runLater(() -> uploadBTN.setText("Upload files"));
-            if (!isFinished) {
-                Platform.runLater(this::showUploadCancelledAlert);
-                return;
-            }
-            System.out.println("Upload finished...");
-            addedFilesToList = new ArrayList<>();
-            Platform.runLater(() -> listViewFiles.getItems().clear());
-            Platform.runLater(this::showUploadFinishedAlert);
-        });
-
-        enableRequiredUploadElements();
+    public void setUploadBTNText(String text) {
+        uploadBTN.setText(text);
     }
 
     @FXML
@@ -188,7 +144,7 @@ public class MainController implements Initializable {
     @FXML
     private Button clearFilesBTN;
 
-    private void disableRequiredUploadElements() {
+    public void disableRequiredUploadElements() {
         accountChoiceBox.setDisable(true);
         accountDisconnectBTN.setDisable(true);
         addFilesBTN.setDisable(true);
@@ -197,7 +153,7 @@ public class MainController implements Initializable {
         listViewFiles.setDisable(true);
     }
 
-    private void enableRequiredUploadElements() {
+    public void enableRequiredUploadElements() {
         accountChoiceBox.setDisable(false);
         accountDisconnectBTN.setDisable(false);
         addFilesBTN.setDisable(false);
@@ -206,7 +162,7 @@ public class MainController implements Initializable {
         listViewFiles.setDisable(false);
     }
 
-    private void showUploadCancelledAlert() {
+    public void showUploadCancelledAlert() {
         var alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setResizable(false);
         alert.setTitle("Upload cancelled");
@@ -214,7 +170,11 @@ public class MainController implements Initializable {
         alert.showAndWait();
     }
 
-    private void showUploadFinishedAlert() {
+    public void setMainUploadProgressBarProgress(double value) {
+        mainUploadPB.setProgress(value);
+    }
+
+    public void showUploadFinishedAlert() {
         var alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setResizable(false);
         alert.setTitle("Upload success");

@@ -4,13 +4,18 @@ import com.example.twinfileshare.TWinFileShareApplication;
 import com.example.twinfileshare.fx.controller.MainController;
 import com.example.twinfileshare.fx.service.MainService;
 import jakarta.annotation.PostConstruct;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class MainPresenter {
@@ -76,12 +81,16 @@ public class MainPresenter {
         controller.removeEmailFromAccountChoiceBox(email);
     }
 
+    private List<File> totalAddedFiles = new ArrayList<>();
 
     public void handleOpenFileManager(ActionEvent event) {
         var selectedFiles = controller.openMultipleFileChooserWindow(
                 "Select files to upload", event);
 
-        if (selectedFiles != null) controller.showFilesInListView(selectedFiles);
+        if (selectedFiles != null) {
+            controller.showFilesInListView(selectedFiles);
+            totalAddedFiles.addAll(selectedFiles);
+        }
     }
 
     public void handleRemoveFiles() {
@@ -96,5 +105,62 @@ public class MainPresenter {
 
         var selectedListViewItems = controller.getSelectedListViewItems();
         listViewItems.removeAll(selectedListViewItems);
+    }
+
+    private boolean isUploadingActive;
+
+    public void handleUploadFiles() throws IOException, InterruptedException {
+        if (!controller.getAccountChoiceBoxValue().contains("@")) {
+            fxAlert.informationAlert(
+                    "No email selected",
+                    "Select an email to upload files"
+            );
+            return;
+        }
+        if (controller.getListViewItems().isEmpty()) {
+            fxAlert.informationAlert(
+                    "No files to upload",
+                    "Add some files to upload"
+            );
+            return;
+        }
+
+        if (isUploadingActive) {
+            System.out.println("Upload cancelled!");
+            controller.setUploadBTNText("Upload files");
+            service.cancelUploadFiles();
+            return;
+        }
+
+        controller.disableRequiredUploadElements();
+        controller.setMainUploadProgressBarVisible(true);
+        isUploadingActive = true;
+        controller.setUploadBTNText("Cancel");
+        System.out.println("Uploading.........");
+
+        var uploadTask = service.uploadFilesToGoogleDrive(
+                controller.getAccountChoiceBoxValue(),
+                totalAddedFiles,
+                controller.getListViewItems()
+        );
+
+        uploadTask.thenAcceptAsync(isFinished -> {
+            Platform.runLater(() -> {
+                controller.setMainUploadProgressBarVisible(false);
+                controller.setMainUploadProgressBarProgress(0.0);
+            });
+            isUploadingActive = false;
+            Platform.runLater(() -> controller.setUploadBTNText("Upload files"));
+            if (!isFinished) {
+                Platform.runLater(controller::showUploadCancelledAlert);
+                return;
+            }
+            System.out.println("Upload finished...");
+            totalAddedFiles = new ArrayList<>();
+            Platform.runLater(() -> controller.getListViewItems().clear());
+            Platform.runLater(controller::showUploadFinishedAlert);
+        });
+
+        controller.enableRequiredUploadElements();
     }
 }
