@@ -74,7 +74,6 @@ public class MainController implements Initializable {
 
     @FXML
     private ListView<String> filesListView;
-    private List<File> addedFilesToList;
 
     public void openFileManager(ActionEvent event) {
         presenter.handleOpenFileManager(event);
