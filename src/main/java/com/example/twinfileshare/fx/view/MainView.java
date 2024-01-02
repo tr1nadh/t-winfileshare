@@ -86,10 +86,6 @@ public class MainView {
         filesListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
-    public String getCurrentSelectedEmail() {
-        return accountChoiceBox.getValue();
-    }
-
     public void setAccountChoiceBoxValue(String value) {
         accountChoiceBox.setValue(value);
     }
