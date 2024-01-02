@@ -31,19 +31,12 @@ import java.util.ResourceBundle;
 @Controller
 public class MainController implements Initializable {
 
-    @Autowired
-    private TWinFileShareApplication tWinFileShareApplication;
     private MainPresenter presenter;
     @Autowired
     private MainService mainService;
 
     public void connectGoogleDrive(ActionEvent event) {
         presenter.handleConnectGoogleDrive();
-    }
-
-    public void openAuthLinkInDefaultBrowser() {
-        var hostServices = tWinFileShareApplication.getHostServices();
-        hostServices.showDocument(mainService.getGoogleSignInURL());
     }
 
     @FXML
@@ -219,6 +212,11 @@ public class MainController implements Initializable {
             });
         }
 
+        @Autowired
+        private TWinFileShareApplication tWinFileShareApplication;
+        @Autowired
+        private MainService mainService;
+
         @EventListener
         public void handleNoDriveAccessEvent(NoDriveAccessEvent event) {
             Platform.runLater( () -> {
@@ -232,6 +230,11 @@ public class MainController implements Initializable {
                         .filter(res -> res == ButtonType.OK)
                         .ifPresent(res -> openAuthLinkInDefaultBrowser());
             });
+        }
+
+        private void openAuthLinkInDefaultBrowser() {
+            var hostServices = tWinFileShareApplication.getHostServices();
+            hostServices.showDocument(mainService.getGoogleSignInURL());
         }
 
         @Autowired
