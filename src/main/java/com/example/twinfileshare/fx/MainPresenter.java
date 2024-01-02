@@ -50,7 +50,7 @@ public class MainPresenter {
 
     public void handleDisconnectSelectedAccount() {
         var currentSelectedEmail = view.getCurrentSelectedEmail();
-        if (!currentSelectedEmail.contains("@")) {
+        if (!isEmail(currentSelectedEmail)) {
             fxAlert.informationAlert("Cannot disconnect account",
                     "Select an email");
             return;
@@ -71,6 +71,10 @@ public class MainPresenter {
                 ButtonType.YES,
                 ButtonType.YES, ButtonType.NO
         );
+    }
+
+    private boolean isEmail(String currentSelectedEmail) {
+        return currentSelectedEmail.contains("@");
     }
 
     private void disconnectAccount(String email) throws GeneralSecurityException, IOException {
@@ -109,7 +113,7 @@ public class MainPresenter {
     private boolean isUploadingActive;
 
     public void handleUploadFiles() throws IOException, InterruptedException {
-        if (!view.getAccountChoiceBoxValue().contains("@")) {
+        if (!isEmail(view.getAccountChoiceBoxValue())) {
             fxAlert.informationAlert(
                     "No email selected",
                     "Select an email to upload files"
