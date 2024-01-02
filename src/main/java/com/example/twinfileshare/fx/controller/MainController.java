@@ -52,7 +52,7 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         accountChoiceBox.getItems().addAll(mainService.getAllEmails());
-        listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        filesListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         mainUploadPB.setVisible(false);
     }
 
@@ -73,7 +73,7 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private ListView<String> listView;
+    private ListView<String> filesListView;
     private List<File> addedFilesToList;
 
     public void openFileManager(ActionEvent event) {
@@ -95,15 +95,15 @@ public class MainController implements Initializable {
                 fileList.add(file.getName());
             }
         }
-        listView.setItems(fileList);
+        filesListView.setItems(fileList);
     }
 
     public ObservableList<String> getListViewItems() {
-        return listView.getItems();
+        return filesListView.getItems();
     }
 
     public ObservableList<String> getSelectedListViewItems() {
-        return listView.getSelectionModel().getSelectedItems();
+        return filesListView.getSelectionModel().getSelectedItems();
     }
 
     public void removeFile(ActionEvent event) {
@@ -148,7 +148,7 @@ public class MainController implements Initializable {
         addFilesBTN.setDisable(true);
         removeFilesBTN.setDisable(true);
         clearFilesBTN.setDisable(true);
-        listView.setDisable(true);
+        filesListView.setDisable(true);
     }
 
     public void enableRequiredUploadElements() {
@@ -157,7 +157,7 @@ public class MainController implements Initializable {
         addFilesBTN.setDisable(false);
         removeFilesBTN.setDisable(false);
         clearFilesBTN.setDisable(false);
-        listView.setDisable(false);
+        filesListView.setDisable(false);
     }
 
     public void showUploadCancelledAlert() {
@@ -181,7 +181,7 @@ public class MainController implements Initializable {
     }
 
     public void setListViewItems(ObservableList<String> items) {
-        listView.setItems(items);
+        filesListView.setItems(items);
     }
 
     public void clearListView(ActionEvent event) {
