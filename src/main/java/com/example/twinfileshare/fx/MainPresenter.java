@@ -31,6 +31,9 @@ public class MainPresenter {
     @PostConstruct
     public void init() {
         controller.setMainPresenter(this);
+        controller.setAccountChoiceBoxItems(service.getAllEmails());
+        controller.setFileListViewSelectToMultiple();
+        controller.setMainUploadProgressBarVisible(false);
     }
 
     public void handleConnectGoogleDrive() {

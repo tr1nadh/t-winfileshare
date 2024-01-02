@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 @Controller
-public class MainController implements Initializable {
+public class MainController {
 
     private MainPresenter presenter;
     @Autowired
@@ -42,11 +42,12 @@ public class MainController implements Initializable {
     @FXML
     private ChoiceBox<String> accountChoiceBox;
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        accountChoiceBox.getItems().addAll(mainService.getAllEmails());
+    public void setAccountChoiceBoxItems(List<String> items) {
+        accountChoiceBox.getItems().addAll(items);
+    }
+
+    public void setFileListViewSelectToMultiple() {
         filesListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        mainUploadPB.setVisible(false);
     }
 
     public String getCurrentSelectedEmail() {
