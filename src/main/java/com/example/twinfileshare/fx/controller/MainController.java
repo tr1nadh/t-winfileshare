@@ -66,14 +66,12 @@ public class MainController implements Initializable {
         presenter.handleDisconnectSelectedAccount();
     }
 
-    public void disconnectAccount(String currentSelectedEmail) throws GeneralSecurityException, IOException {
-        mainService.disconnectAccount(currentSelectedEmail);
-        removeItemFromChoiceBox(currentSelectedEmail);
+    public void setAccountChoiceBoxValue(String value) {
+        accountChoiceBox.setValue(value);
     }
 
-    private void removeItemFromChoiceBox(String currentSelectedEmail) {
-        accountChoiceBox.setValue("Select an email");
-        accountChoiceBox.getItems().remove(currentSelectedEmail);
+    public void removeEmailFromAccountChoiceBox(String email) {
+        accountChoiceBox.getItems().remove(email);
     }
 
     @FXML
