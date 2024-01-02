@@ -1,6 +1,5 @@
 package com.example.twinfileshare.fx;
 
-import com.example.twinfileshare.TWinFileShareApplication;
 import com.example.twinfileshare.fx.controller.MainController;
 import com.example.twinfileshare.fx.service.MainService;
 import jakarta.annotation.PostConstruct;
