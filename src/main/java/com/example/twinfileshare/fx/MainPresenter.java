@@ -4,6 +4,7 @@ import com.example.twinfileshare.TWinFileShareApplication;
 import com.example.twinfileshare.fx.controller.MainController;
 import com.example.twinfileshare.fx.service.MainService;
 import jakarta.annotation.PostConstruct;
+import javafx.event.ActionEvent;
 import javafx.scene.control.ButtonType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -67,5 +68,12 @@ public class MainPresenter {
                 ButtonType.YES,
                 ButtonType.YES, ButtonType.NO
         );
+    }
+
+    public void handleOpenFileManager(ActionEvent event) {
+        var selectedFiles = controller.openMultipleFileChooserWindow(
+                "Select files to upload", event);
+
+        if (selectedFiles != null) controller.showFilesInListView(selectedFiles);
     }
 }

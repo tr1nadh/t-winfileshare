@@ -54,6 +54,7 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         accountChoiceBox.getItems().addAll(mainService.getAllEmails());
+        listViewFiles.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         mainUploadPB.setVisible(false);
     }
 
@@ -83,19 +84,19 @@ public class MainController implements Initializable {
     private List<File> addedFilesToList;
 
     public void openFileManager(ActionEvent event) {
-        listViewFiles.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choose a File");
-
-        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-        addedFilesToList = fileChooser.showOpenMultipleDialog(stage);
-
-        if (addedFilesToList != null) showInListView();
+        presenter.handleOpenFileManager(event);
     }
 
-    private void showInListView() {
-        for (var file : addedFilesToList) {
+    public List<File> openMultipleFileChooserWindow(String windowTitle, ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(windowTitle);
+
+        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+        return fileChooser.showOpenMultipleDialog(stage);
+    }
+
+    public void showFilesInListView(List<File> files) {
+        for (var file : files) {
             if (file != null) {
                 fileList.add(file.getName());
             }
