@@ -1,5 +1,6 @@
 package com.example.twinfileshare.fx;
 
+import com.example.twinfileshare.TWinFileShareApplication;
 import com.example.twinfileshare.fx.controller.MainController;
 import com.example.twinfileshare.fx.service.MainService;
 import jakarta.annotation.PostConstruct;
@@ -31,8 +32,16 @@ public class MainPresenter {
                 "Check the google drive box when giving permissions \n" +
                         " in consent screen to give access.",
                 "Press OK to open the link in default browser.",
-                controller::openAuthLinkInDefaultBrowser
+                this::openAuthLinkInDefaultBrowser
                 );
+    }
+
+    @Autowired
+    private TWinFileShareApplication tWinFileShareApplication;
+
+    public void openAuthLinkInDefaultBrowser() {
+        var hostServices = tWinFileShareApplication.getHostServices();
+        hostServices.showDocument(service.getGoogleSignInURL());
     }
 
     public void handleDisconnectSelectedAccount() {
