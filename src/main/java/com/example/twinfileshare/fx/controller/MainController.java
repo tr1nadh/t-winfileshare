@@ -9,11 +9,9 @@ import com.example.twinfileshare.fx.MainPresenter;
 import com.example.twinfileshare.fx.service.MainService;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -24,36 +22,72 @@ import org.springframework.stereotype.Controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
 
 @Controller
 public class MainController {
 
     private MainPresenter presenter;
 
+    @FXML
+    private Button accountDisconnectBTN;
+    @FXML
+    private Button addFilesBTN;
+    @FXML
+    private Button removeFilesBTN;
+    @FXML
+    private Button clearFilesBTN;
+    @FXML
+    private ChoiceBox<String> accountChoiceBox;
+    @FXML
+    private ListView<String> filesListView;
+    @FXML
+    private Button uploadBTN;
+    @FXML
+    private ProgressBar mainUploadPB;
+
+    @Autowired
+    private TWinFileShareApplication tWinFileShareApplication;
+
     public void connectGoogleDrive(ActionEvent event) {
         presenter.handleConnectGoogleDrive();
     }
 
-    @FXML
-    private ChoiceBox<String> accountChoiceBox;
+    public void openURLInDefaultBrowser(String url) {
+        var hostServices = tWinFileShareApplication.getHostServices();
+        hostServices.showDocument(url);
+    }
+
+    public void disconnectSelectedAccount(ActionEvent event) {
+        presenter.handleDisconnectSelectedAccount();
+    }
+
+    public void openFileManager(ActionEvent event) {
+        presenter.handleOpenFileManager(event);
+    }
+
+    public void removeFile(ActionEvent event) {
+        presenter.handleRemoveFiles();
+    }
+
+    public void clearListView(ActionEvent event) {
+        presenter.handleClearListView();
+    }
+
+    public void uploadFiles(ActionEvent event) throws IOException, InterruptedException {
+        presenter.handleUploadFiles();
+    }
 
     public void setAccountChoiceBoxItems(List<String> items) {
         accountChoiceBox.getItems().addAll(items);
     }
 
-    public void setFileListViewSelectToMultiple() {
+    public void changeFileListViewSelectToMultiple() {
         filesListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
     public String getCurrentSelectedEmail() {
         return accountChoiceBox.getValue();
-    }
-
-    public void disconnectSelectedAccount(ActionEvent event) {
-        presenter.handleDisconnectSelectedAccount();
     }
 
     public void setAccountChoiceBoxValue(String value) {
@@ -64,13 +98,6 @@ public class MainController {
         accountChoiceBox.getItems().remove(email);
     }
 
-    @FXML
-    private ListView<String> filesListView;
-
-    public void openFileManager(ActionEvent event) {
-        presenter.handleOpenFileManager(event);
-    }
-
     public List<File> openMultipleFileChooserWindow(String windowTitle, ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(windowTitle);
@@ -79,41 +106,20 @@ public class MainController {
         return fileChooser.showOpenMultipleDialog(stage);
     }
 
-    public void showFilesInListView(List<File> files) {
-        ObservableList<String> fileList = FXCollections.observableArrayList();
-        for (var file : files) {
-            if (file != null) {
-                fileList.add(file.getName());
-            }
-        }
-        filesListView.setItems(fileList);
+    public void addFileNamesToFileListView(List<String> files) {
+        filesListView.getItems().addAll(files);
     }
 
-    public ObservableList<String> getListViewItems() {
+    public ObservableList<String> getFileListViewItems() {
         return filesListView.getItems();
     }
 
-    public ObservableList<String> getSelectedListViewItems() {
+    public ObservableList<String> getSelectedFileListViewItems() {
         return filesListView.getSelectionModel().getSelectedItems();
     }
 
-    public void removeFile(ActionEvent event) {
-        presenter.handleRemoveFiles();
-    }
-
-    @FXML
-    private Button uploadBTN;
-    private boolean isUploadingActive;
-
-    @FXML
-    private ProgressBar mainUploadPB;
-
     public String getAccountChoiceBoxValue() {
         return accountChoiceBox.getValue();
-    }
-
-    public void uploadFiles(ActionEvent event) throws IOException, InterruptedException {
-        presenter.handleUploadFiles();
     }
 
     public void setMainUploadProgressBarVisible(boolean visible) {
@@ -124,59 +130,36 @@ public class MainController {
         uploadBTN.setText(text);
     }
 
-    @FXML
-    private Button accountDisconnectBTN;
-    @FXML
-    private Button addFilesBTN;
-    @FXML
-    private Button removeFilesBTN;
-    @FXML
-    private Button clearFilesBTN;
-
-    public void disableRequiredUploadElements() {
-        accountChoiceBox.setDisable(true);
-        accountDisconnectBTN.setDisable(true);
-        addFilesBTN.setDisable(true);
-        removeFilesBTN.setDisable(true);
-        clearFilesBTN.setDisable(true);
-        filesListView.setDisable(true);
+    public void disableAccountChoiceBox(boolean value) {
+        accountChoiceBox.setDisable(value);
     }
 
-    public void enableRequiredUploadElements() {
-        accountChoiceBox.setDisable(false);
-        accountDisconnectBTN.setDisable(false);
-        addFilesBTN.setDisable(false);
-        removeFilesBTN.setDisable(false);
-        clearFilesBTN.setDisable(false);
-        filesListView.setDisable(false);
+    public void disableAccountDisconnectBTN(boolean value){
+        accountDisconnectBTN.setDisable(value);
     }
 
-    public void showUploadCancelledAlert() {
-        var alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setResizable(false);
-        alert.setTitle("Upload cancelled");
-        alert.setHeaderText("Upload has been cancelled!");
-        alert.showAndWait();
+    public void disableAddFilesBTN(boolean value) {
+        addFilesBTN.setDisable(value);
+    }
+
+    public void disableRemoveFilesBTN(boolean value) {
+        removeFilesBTN.setDisable(value);
+    }
+
+    public void disableClearFilesBTN(boolean value) {
+        clearFilesBTN.setDisable(value);
+    }
+
+    public void disableFilesListView(boolean value) {
+        filesListView.setDisable(value);
     }
 
     public void setMainUploadProgressBarProgress(double value) {
         mainUploadPB.setProgress(value);
     }
 
-    public void showUploadFinishedAlert() {
-        var alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setResizable(false);
-        alert.setTitle("Upload success");
-        alert.setHeaderText("Successfully files are uploaded!");
-        alert.showAndWait();
-    }
-
     public void setListViewItems(ObservableList<String> items) {
         filesListView.setItems(items);
-    }
-
-    public void clearListView(ActionEvent event) {
-        presenter.handleClearListView();
     }
 
     public void setMainPresenter(MainPresenter presenter) {
