@@ -182,18 +182,12 @@ public class MainController implements Initializable {
         alert.showAndWait();
     }
 
-    public void clearListView(ActionEvent event) {
-        if (listViewFiles.getItems().isEmpty()) {
-            var alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setResizable(false);
-            alert.setTitle("No files to clear");
-            alert.setHeaderText("Add some files to clear");
-            alert.show();
-            return;
-        }
+    public void setListViewItems(ObservableList<String> items) {
+        listViewFiles.setItems(items);
+    }
 
-        listViewFiles.setItems(FXCollections.observableArrayList());
-        addedFilesToList = new ArrayList<>();
+    public void clearListView(ActionEvent event) {
+        presenter.handleClearListView();
     }
 
     public void setMainPresenter(MainPresenter presenter) {

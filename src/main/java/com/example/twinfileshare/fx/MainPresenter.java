@@ -5,6 +5,7 @@ import com.example.twinfileshare.fx.controller.MainController;
 import com.example.twinfileshare.fx.service.MainService;
 import jakarta.annotation.PostConstruct;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -162,5 +163,18 @@ public class MainPresenter {
         });
 
         controller.enableRequiredUploadElements();
+    }
+
+    public void handleClearListView() {
+        if (controller.getListViewItems().isEmpty()) {
+            fxAlert.informationAlert(
+                    "No files to clear",
+                    "Add some files to clear"
+            );
+            return;
+        }
+
+        controller.setListViewItems(FXCollections.observableArrayList());
+        totalAddedFiles = new ArrayList<>();
     }
 }
