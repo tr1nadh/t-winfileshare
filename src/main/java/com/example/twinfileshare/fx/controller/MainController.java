@@ -57,36 +57,15 @@ public class MainController implements Initializable {
         mainUploadPB.setVisible(false);
     }
 
-    public void disconnectSelectedAccount(ActionEvent event) {
-        var currentSelectedEmail = accountChoiceBox.getValue();
-        if (!currentSelectedEmail.contains("@")) {
-            var alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setResizable(false);
-            alert.setTitle("Cannot disconnect account");
-            alert.setHeaderText("Select an email");
-            alert.show();
-            return;
-        }
-
-        var alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Disconnect Account");
-        alert.setHeaderText("Are sure you want to disconnect the google drive \n" +
-                "account with email: " + currentSelectedEmail);
-        alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
-        alert.showAndWait()
-                        .filter(res -> res == ButtonType.YES)
-                .ifPresent(res -> {
-                    try {
-                        disconnectAccount(currentSelectedEmail);
-                    } catch (GeneralSecurityException | IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-        alert.setResizable(false);
-
+    public String getCurrentSelectedEmail() {
+        return accountChoiceBox.getValue();
     }
 
-    private void disconnectAccount(String currentSelectedEmail) throws GeneralSecurityException, IOException {
+    public void disconnectSelectedAccount(ActionEvent event) {
+        presenter.handleDisconnectSelectedAccount();
+    }
+
+    public void disconnectAccount(String currentSelectedEmail) throws GeneralSecurityException, IOException {
         mainService.disconnectAccount(currentSelectedEmail);
         removeItemFromChoiceBox(currentSelectedEmail);
     }
