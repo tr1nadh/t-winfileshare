@@ -94,7 +94,7 @@ public class MainPresenter {
 
         if (selectedFiles != null) {
             view.addFileNamesToFileListView(
-                    (List<String>) selectedFiles.stream().map(File::getName));
+                    selectedFiles.stream().map(File::getName).toList());
             totalAddedFiles.addAll(selectedFiles);
         }
     }
