@@ -27,8 +27,11 @@ public class MainPresenter {
     private FxAlert fxAlert;
 
     @PostConstruct
-    public void init() {
+    public void setView() {
         view.setMainPresenter(this);
+    }
+
+    public void init() {
         view.setAccountChoiceBoxItems(model.getAllEmails());
         view.changeFileListViewSelectToMultiple();
         view.setMainUploadProgressBarVisible(false);
