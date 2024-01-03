@@ -132,17 +132,11 @@ public class MainPresenter {
         }
 
         if (isUploadingActive) {
-            System.out.println("Upload cancelled!");
-            view.setUploadBTNText("Upload files");
-            model.cancelUploadFiles();
+            cancelUpload();
             return;
         }
 
-        disableRequiredUploadElements();
-        view.setMainUploadProgressBarVisible(true);
-        isUploadingActive = true;
-        view.setUploadBTNText("Cancel");
-        System.out.println("Uploading.........");
+        executePreUploadTasks();
 
         var uploadTask = model.uploadFilesToGoogleDrive(
                 view.getAccountChoiceBoxValue(),
@@ -151,23 +145,44 @@ public class MainPresenter {
         );
 
         uploadTask.thenAcceptAsync(isFinished -> {
-            Platform.runLater(() -> {
-                view.setMainUploadProgressBarVisible(false);
-                view.setMainUploadProgressBarProgress(0.0);
-            });
-            isUploadingActive = false;
-            Platform.runLater(() -> view.setUploadBTNText("Upload files"));
+            executePrePostUploadTasks();
             if (!isFinished) {
                 Platform.runLater(this::showUploadCancelledAlert);
                 return;
             }
-            System.out.println("Upload finished...");
-            totalAddedFiles = new ArrayList<>();
-            Platform.runLater(() -> view.getFileListViewItems().clear());
-            Platform.runLater(this::showUploadFinishedAlert);
+            executePostUploadTasks();
         });
+    }
 
-        enableRequiredUploadElements();
+    private void executePostUploadTasks() {
+        System.out.println("Upload finished...");
+        totalAddedFiles = new ArrayList<>();
+        Platform.runLater(() -> view.getFileListViewItems().clear());
+        Platform.runLater(this::showUploadFinishedAlert);
+    }
+
+    private void executePrePostUploadTasks() {
+        isUploadingActive = false;
+        Platform.runLater(() -> {
+            view.setMainUploadProgressBarVisible(false);
+            view.setMainUploadProgressBarProgress(0.0);
+            view.setUploadBTNText("Upload files");
+            enableRequiredUploadElements();
+        });
+    }
+
+    private void executePreUploadTasks() {
+        disableRequiredUploadElements();
+        view.setMainUploadProgressBarVisible(true);
+        isUploadingActive = true;
+        view.setUploadBTNText("Cancel");
+        System.out.println("Uploading.........");
+    }
+
+    private void cancelUpload() {
+        System.out.println("Upload cancelled!");
+        view.setUploadBTNText("Upload files");
+        model.cancelUploadFiles();
     }
 
     private void showUploadCancelledAlert() {
