@@ -34,7 +34,7 @@ public class MainPresenter {
     public void init() {
         view.setAccountChoiceBoxItems(model.getAllEmails());
         view.changeFileListViewSelectToMultiple();
-        view.setMainUploadProgressBarVisible(false);
+        view.setFileUploadProgressBarVisible(false);
     }
 
     public void handleConnectGoogleDrive() {
@@ -88,7 +88,7 @@ public class MainPresenter {
 
     private List<File> totalAddedFiles = new ArrayList<>();
 
-    public void handleOpenFileManager(ActionEvent event) {
+    public void handleAddFilesFilesFromFileManager(ActionEvent event) {
         var selectedFiles = view.openMultipleFileChooserWindow(
                 "Select files to upload", event);
 
@@ -99,7 +99,7 @@ public class MainPresenter {
         }
     }
 
-    public void handleRemoveFiles() {
+    public void handleRemoveFilesFromListView() {
         var listViewItems = view.getFileListViewItems();
         if (listViewItems.isEmpty()) {
             fxAlert.informationAlert(
@@ -164,8 +164,8 @@ public class MainPresenter {
     private void executePrePostUploadTasks() {
         isUploadingActive = false;
         Platform.runLater(() -> {
-            view.setMainUploadProgressBarVisible(false);
-            view.setMainUploadProgressBarProgress(0.0);
+            view.setFileUploadProgressBarVisible(false);
+            view.setFileUploadProgressBar(0.0);
             view.setUploadBTNText("Upload files");
             enableRequiredUploadElements();
         });
@@ -173,7 +173,7 @@ public class MainPresenter {
 
     private void executePreUploadTasks() {
         disableRequiredUploadElements();
-        view.setMainUploadProgressBarVisible(true);
+        view.setFileUploadProgressBarVisible(true);
         isUploadingActive = true;
         view.setUploadBTNText("Cancel");
         System.out.println("Uploading.........");
@@ -226,7 +226,7 @@ public class MainPresenter {
             return;
         }
 
-        view.setListViewItems(FXCollections.observableArrayList());
+        view.setFileListViewItems(FXCollections.observableArrayList());
         totalAddedFiles = new ArrayList<>();
     }
 }
