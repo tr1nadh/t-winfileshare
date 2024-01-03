@@ -62,7 +62,8 @@ public class MainModel {
             if (requiredFileNames.contains(fileName) && !isUploadCancelled) {
                 var itemType = Files.probeContentType(file.toPath());
                 System.out.println("File name: " + file.getName() + " ||| file type: " + itemType);
-                driveService.uploadFile(email, file);
+//                driveService.uploadFile(email, file);
+                Thread.sleep(3_000);
                 publisher.publishEvent(progressEvent.increaseProgress());
             }
             if (isUploadCancelled) {

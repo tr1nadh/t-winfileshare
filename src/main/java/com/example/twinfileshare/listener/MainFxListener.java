@@ -28,9 +28,9 @@ public class MainFxListener {
     public void handleProgressBar(HandleProgressEvent event) {
         Platform.runLater(() -> {
             if (event.shouldIncrease())
-                view.setMainUploadProgressBarProgress(view.getMainUploadProgressBarProgress() + 0.1);
+                view.setFileUploadProgressBar(view.getFileUploadProgressBar() + 0.1);
 
-            if (event.isComplete()) view.setMainUploadProgressBarProgress(1.0);
+            if (event.isComplete()) view.setFileUploadProgressBar(1.0);
         });
     }
 

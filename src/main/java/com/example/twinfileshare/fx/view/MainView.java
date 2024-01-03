@@ -1,14 +1,7 @@
 package com.example.twinfileshare.fx.view;
 
 import com.example.twinfileshare.TWinFileShareApplication;
-import com.example.twinfileshare.event.payload.DoubleEmailConnectEvent;
-import com.example.twinfileshare.event.payload.HandleProgressEvent;
-import com.example.twinfileshare.event.payload.NoDriveAccessEvent;
-import com.example.twinfileshare.event.payload.UserConnectedEvent;
 import com.example.twinfileshare.fx.MainPresenter;
-import com.example.twinfileshare.fx.model.MainModel;
-import com.example.twinfileshare.repository.GoogleUserCREDRepository;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,8 +11,6 @@ import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
 import java.io.File;
@@ -48,7 +39,7 @@ public class MainView implements Initializable {
     @FXML
     private Button uploadBTN;
     @FXML
-    private ProgressBar mainUploadPB;
+    private ProgressBar fileUploadProgressBar;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -71,12 +62,12 @@ public class MainView implements Initializable {
         presenter.handleDisconnectSelectedAccount();
     }
 
-    public void openFileManager(ActionEvent event) {
-        presenter.handleOpenFileManager(event);
+    public void addFilesFilesFromFileManager(ActionEvent event) {
+        presenter.handleAddFilesFilesFromFileManager(event);
     }
 
-    public void removeFile(ActionEvent event) {
-        presenter.handleRemoveFiles();
+    public void removeFilesFromListView(ActionEvent event) {
+        presenter.handleRemoveFilesFromListView();
     }
 
     public void clearListView(ActionEvent event) {
@@ -131,8 +122,8 @@ public class MainView implements Initializable {
         return accountChoiceBox.getItems().stream().toList();
     }
 
-    public void setMainUploadProgressBarVisible(boolean visible) {
-        mainUploadPB.setVisible(visible);
+    public void setFileUploadProgressBarVisible(boolean visible) {
+        fileUploadProgressBar.setVisible(visible);
     }
 
     public void setUploadBTNText(String text) {
@@ -163,15 +154,15 @@ public class MainView implements Initializable {
         fileListView.setDisable(value);
     }
 
-    public void setMainUploadProgressBarProgress(double value) {
-        mainUploadPB.setProgress(value);
+    public void setFileUploadProgressBar(double value) {
+        fileUploadProgressBar.setProgress(value);
     }
 
-    public double getMainUploadProgressBarProgress() {
-        return mainUploadPB.getProgress();
+    public double getFileUploadProgressBar() {
+        return fileUploadProgressBar.getProgress();
     }
 
-    public void setListViewItems(ObservableList<String> items) {
+    public void setFileListViewItems(ObservableList<String> items) {
         fileListView.setItems(items);
     }
 
