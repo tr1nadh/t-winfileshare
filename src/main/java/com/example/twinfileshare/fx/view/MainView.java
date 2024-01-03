@@ -9,9 +9,11 @@ import com.example.twinfileshare.fx.MainPresenter;
 import com.example.twinfileshare.fx.model.MainModel;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -22,10 +24,12 @@ import org.springframework.stereotype.Controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 
 @Controller
-public class MainView {
+public class MainView implements Initializable {
 
     private MainPresenter presenter;
 
@@ -45,6 +49,11 @@ public class MainView {
     private Button uploadBTN;
     @FXML
     private ProgressBar mainUploadPB;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        presenter.init();
+    }
 
     @Autowired
     private TWinFileShareApplication tWinFileShareApplication;
@@ -79,7 +88,7 @@ public class MainView {
     }
 
     public void setAccountChoiceBoxItems(List<String> items) {
-        accountChoiceBox.getItems().addAll(items);
+        accountChoiceBox.setItems(FXCollections.observableArrayList(items));
     }
 
     public void changeFileListViewSelectToMultiple() {
