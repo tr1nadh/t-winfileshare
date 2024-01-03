@@ -1,4 +1,4 @@
-package com.example.twinfileshare.fx.listener;
+package com.example.twinfileshare.listener;
 
 import com.example.twinfileshare.TWinFileShareApplication;
 import com.example.twinfileshare.event.payload.DoubleEmailConnectEvent;
@@ -10,7 +10,6 @@ import com.example.twinfileshare.fx.model.MainModel;
 import com.example.twinfileshare.fx.view.MainView;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import javafx.application.Platform;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
