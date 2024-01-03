@@ -127,6 +127,10 @@ public class MainView implements Initializable {
         return accountChoiceBox.getValue();
     }
 
+    public List<String> getAccountChoiceBoxItems() {
+        return accountChoiceBox.getItems().stream().toList();
+    }
+
     public void setMainUploadProgressBarVisible(boolean visible) {
         mainUploadPB.setVisible(visible);
     }
@@ -163,90 +167,15 @@ public class MainView implements Initializable {
         mainUploadPB.setProgress(value);
     }
 
+    public double getMainUploadProgressBarProgress() {
+        return mainUploadPB.getProgress();
+    }
+
     public void setListViewItems(ObservableList<String> items) {
         fileListView.setItems(items);
     }
 
     public void setMainPresenter(MainPresenter presenter) {
         this.presenter = presenter;
-    }
-
-    @Component
-    public class UserConnectedListener {
-
-        @EventListener
-        public void handleProgressBar(HandleProgressEvent event) {
-            Platform.runLater(() -> {
-                if (event.shouldIncrease())
-                    mainUploadPB.setProgress(mainUploadPB.getProgress() + 0.1);
-
-                if (event.isComplete()) mainUploadPB.setProgress(1.0);
-            });
-        }
-
-        @EventListener
-        public void handleUserConnectedEvent(UserConnectedEvent event) {
-            var email = event.getEmail();
-            if (!accountChoiceBox.getItems().contains(email))
-                accountChoiceBox.getItems().add(email);
-
-            Platform.runLater(() -> {
-                var successAlert = new Alert(Alert.AlertType.INFORMATION);
-                successAlert.setTitle("Authorization successful");
-                successAlert.setResizable(false);
-                successAlert.setHeaderText("Google drive successfully connected");
-                successAlert.showAndWait();
-            });
-        }
-
-        @Autowired
-        private TWinFileShareApplication tWinFileShareApplication;
-        @Autowired
-        private MainModel mainModel;
-
-        @EventListener
-        public void handleNoDriveAccessEvent(NoDriveAccessEvent event) {
-            Platform.runLater( () -> {
-                var noDriveAccessAlert = new Alert(Alert.AlertType.WARNING);
-                noDriveAccessAlert.setTitle("Authorization unsuccessful");
-                noDriveAccessAlert.setResizable(false);
-                noDriveAccessAlert.setHeaderText("Google drive access required!");
-                noDriveAccessAlert.setContentText("Press OK to give google drive access.");
-                noDriveAccessAlert.getButtonTypes().add(ButtonType.CANCEL);
-                noDriveAccessAlert.showAndWait()
-                        .filter(res -> res == ButtonType.OK)
-                        .ifPresent(res -> openAuthLinkInDefaultBrowser());
-            });
-        }
-
-        private void openAuthLinkInDefaultBrowser() {
-            var hostServices = tWinFileShareApplication.getHostServices();
-            hostServices.showDocument(mainModel.getGoogleSignInURL());
-        }
-
-        @Autowired
-        private GoogleUserCREDRepository googleUserCREDRepository;
-
-        @EventListener
-        public void doubleEmailConnectListener(DoubleEmailConnectEvent event) {
-            Platform.runLater(
-                    () -> {
-                        var doubleEmailAlert = new Alert(Alert.AlertType.ERROR);
-                        doubleEmailAlert.setTitle("Double email");
-                        doubleEmailAlert.setResizable(false);
-                        doubleEmailAlert.setHeaderText(event.getMessage());
-                        doubleEmailAlert.setContentText("Do you want to change it to current email: "
-                                + event.getCurrentEmail());
-                        doubleEmailAlert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
-                        doubleEmailAlert.showAndWait()
-                                .filter(res -> res == ButtonType.YES)
-                                .ifPresent(res -> {
-                                    var dbAccount = event.getGoogleUserCRED();
-                                    dbAccount.setEmail(event.getCurrentEmail());
-                                    googleUserCREDRepository.save(dbAccount);
-                                });
-                    }
-            );
-        }
     }
 }
