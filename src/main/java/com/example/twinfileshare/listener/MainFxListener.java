@@ -16,7 +16,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MainListener {
+public class MainFxListener {
 
     @Autowired
     private MainView view;
