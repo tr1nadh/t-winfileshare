@@ -42,4 +42,14 @@ public class FxAlertService implements FxAlert {
         alert.setHeaderText(header);
         alert.show();
     }
+
+    @Override
+    public void errorAlert(String title, String header, String content) {
+        var alert = new Alert(Alert.AlertType.ERROR);
+        alert.setResizable(false);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.show();
+    }
 }
