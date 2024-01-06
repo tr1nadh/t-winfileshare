@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.security.GeneralSecurityException;
 
 @Service
 public class GoogleDriveService {
@@ -24,9 +25,16 @@ public class GoogleDriveService {
     @Autowired
     private GoogleUserCREDRepository googleUserCREDRepository;
 
-    public void uploadFile(String email, java.io.File file) throws IOException {
+    @Autowired
+    private GoogleAuthorizationService authorizationService;
+
+    private int times;
+
+    public void uploadFile(String email, java.io.File file) throws IOException, GeneralSecurityException {
         if (Strings.isNullOrEmpty(email))
             throw new IllegalStateException("Email cannot be empty or null");
+
+        if (times == 3) throw new IllegalStateException("Something went wrong with uploading...");
 
         var cred = googleUserCREDRepository.findByEmail(email).toGoogleCredential();
 
@@ -36,10 +44,22 @@ public class GoogleDriveService {
         var googleFile = new File();
         googleFile.setName(file.getName());
 
-        var uploadedFile = drive.files().create(
-                googleFile,
-                new FileContent(Files.probeContentType(file.toPath()), file)
-        ).setFields("id").execute();
+        var uploadedFile = new File();
+
+        try {
+            uploadedFile = drive.files()
+                    .create(googleFile,
+                            new FileContent(Files.probeContentType(file.toPath()),
+                                    file))
+                    .setFields("id").execute();
+        } catch (Exception ex) {
+            authorizationService.requestNewAccessToken(cred.getRefreshToken());
+            uploadFile(email, file);
+            times++;
+            ex.printStackTrace();
+        }
+
+        times = 0;
 
         System.out.println("Uploaded file Id: " + uploadedFile.getId());
     }
