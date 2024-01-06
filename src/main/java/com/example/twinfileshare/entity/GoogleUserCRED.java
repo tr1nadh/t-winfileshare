@@ -53,7 +53,7 @@ public class GoogleUserCRED {
                         "${google.oauth2.client.id}",
                         "${google.oauth2.client.secret}"
                 ))
-                .setTokenServerUrl(new GenericUrl("https://oauth2.googleapis.com/token"))
+                .setTokenServerUrl(new GenericUrl("https://accounts.google.com/o/oauth2/auth"))
                 .build();
 
         cred.setAccessToken(accessToken);
