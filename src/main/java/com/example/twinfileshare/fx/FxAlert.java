@@ -22,4 +22,10 @@ public interface FxAlert {
             String title,
             String header
     );
+
+    void errorAlert(
+            String title,
+            String header,
+            String content
+    );
 }
