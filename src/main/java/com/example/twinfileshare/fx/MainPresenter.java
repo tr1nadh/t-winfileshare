@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletionStage;
 
 @Component
 public class MainPresenter {
@@ -115,7 +116,7 @@ public class MainPresenter {
 
     private boolean isUploadingActive;
 
-    public void handleUploadFiles() throws IOException, InterruptedException {
+    public void handleUploadFiles() throws IOException, InterruptedException, GeneralSecurityException {
         if (!isEmail(view.getAccountChoiceBoxValue())) {
             fxAlert.informationAlert(
                     "No email selected",
@@ -151,7 +152,23 @@ public class MainPresenter {
                 return;
             }
             executePostUploadTasks();
-        });
+        }).exceptionallyAsync(
+                ex -> {
+                    executePrePostUploadTasks();
+                    Platform.runLater(() -> {
+                        showUploadExceptionAlert(ex.getCause().getMessage());
+                    });
+                    return null;
+                }
+        );
+    }
+
+    private void showUploadExceptionAlert(String message) {
+        fxAlert.errorAlert(
+                "Upload error",
+                "Something went wrong",
+                message
+        );
     }
 
     private void executePostUploadTasks() {
