@@ -47,7 +47,7 @@ public class MainModel {
 
     @Async
     public CompletableFuture<Boolean> uploadFilesToGoogleDrive(String email, List<File> allFiles,
-                                                      List<String> requiredFileNames) throws IOException, InterruptedException {
+                                                      List<String> requiredFileNames) throws IOException, InterruptedException, GeneralSecurityException {
         System.out.println("Uploading to google drive account: " + email);
 
         var progressEvent = HandleProgressEvent.getInstance()
@@ -62,8 +62,7 @@ public class MainModel {
             if (requiredFileNames.contains(fileName) && !isUploadCancelled) {
                 var itemType = Files.probeContentType(file.toPath());
                 System.out.println("File name: " + file.getName() + " ||| file type: " + itemType);
-//                driveService.uploadFile(email, file);
-                Thread.sleep(3_000);
+                driveService.uploadFile(email, file);
                 publisher.publishEvent(progressEvent.increaseProgress());
             }
             if (isUploadCancelled) {
