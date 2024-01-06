@@ -1,11 +1,11 @@
 package com.example.twinfileshare.service;
 
-import com.example.twinfileshare.service.utility.UserScopes;
 import com.example.twinfileshare.entity.GoogleUserCRED;
 import com.example.twinfileshare.event.payload.DoubleEmailConnectEvent;
 import com.example.twinfileshare.event.payload.NoDriveAccessEvent;
 import com.example.twinfileshare.event.payload.UserConnectedEvent;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
+import com.example.twinfileshare.service.utility.UserScopes;
 import com.google.api.client.googleapis.auth.oauth2.*;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.GenericUrl;
@@ -133,5 +133,17 @@ public class GoogleAuthorizationService {
         var statusCode = response.getStatusCode();
         if (statusCode == 200) System.out.println("User with email: " + email + " has been revoked");
         else System.out.println("Error revoking user: " + email + ", status code: " + statusCode);
+    }
+
+    public void requestNewAccessToken(String refreshToken) throws IOException, GeneralSecurityException {
+        var newAccessTokenResponse =
+                new GoogleRefreshTokenRequest(HTTP_TRANSPORT, JSON_FACTORY, refreshToken,
+                "${google.oauth2.client.id}",
+                "${google.oauth2.client.secret}").execute();
+
+        var idTokenPayload = verifyIdToken(newAccessTokenResponse.getIdToken());
+        var googleUserCRED = GoogleUserCRED.apply(newAccessTokenResponse, idTokenPayload);
+
+        googleUserCREDRepository.save(googleUserCRED);
     }
 }
