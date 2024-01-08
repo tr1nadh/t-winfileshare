@@ -119,8 +119,8 @@ public class MainView implements Initializable {
         return accountChoiceBox.getValue();
     }
 
-    public List<String> getAccountChoiceBoxItems() {
-        return accountChoiceBox.getItems().stream().toList();
+    public ObservableList<String> getAccountChoiceBoxItems() {
+        return accountChoiceBox.getItems();
     }
 
     public void setFileUploadProgressBarVisible(boolean visible) {
