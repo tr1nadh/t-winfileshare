@@ -1,5 +1,6 @@
 package com.example.twinfileshare.service;
 
+import com.example.twinfileshare.entity.GoogleUserCRED;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.google.api.client.http.FileContent;
 import com.google.api.client.http.HttpTransport;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.security.GeneralSecurityException;
+import java.util.List;
 
 @Service
 public class GoogleDriveService {
@@ -36,13 +38,15 @@ public class GoogleDriveService {
 
         if (times == 3) throw new IllegalStateException("Something went wrong with uploading...");
 
-        var cred = googleUserCREDRepository.findByEmail(email).toGoogleCredential();
+        var dCred = googleUserCREDRepository.findByEmail(email);
+        var cred = dCred.toGoogleCredential();
 
         var drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, cred)
                 .setApplicationName("${google.oauth2.client.application-name}").build();
 
         var googleFile = new File();
         googleFile.setName(file.getName());
+        googleFile.setParents(List.of(getDefFolderId(dCred, drive)));
 
         var uploadedFile = new File();
 
@@ -62,5 +66,48 @@ public class GoogleDriveService {
         times = 0;
 
         System.out.println("Uploaded file Id: " + uploadedFile.getId());
+    }
+
+    private String getDefFolderId(GoogleUserCRED googleUserCRED, Drive drive) throws IOException {
+        var sharedFolderId = googleUserCRED.getShareFolderId();
+        if (!Strings.isNullOrEmpty(sharedFolderId))
+            return sharedFolderId;
+
+        System.out.println("Querying def folder..." + "${google.drive.def-folder}");
+
+        var defFolder = "${google.drive.def-folder}";
+        var query = "name= " + defFolder + " and mimeType='application/vnd.google-apps.folder'";
+        var queryRequest = drive.files().list().setQ(query);
+
+        var result = queryRequest.execute();
+        var files = result.getFiles();
+
+        if (files != null && !files.isEmpty()) {
+            var folderId = files.get(0).getId();
+            googleUserCRED.setShareFolderId(folderId);
+            googleUserCREDRepository.save(googleUserCRED);
+
+            return folderId;
+        }
+
+        return createDefFolder(googleUserCRED, drive);
+    }
+
+    private String createDefFolder(GoogleUserCRED googleUserCRED, Drive drive) throws IOException {
+        System.out.println("Creating def folder...");
+
+        File folderMetadata = new File();
+        folderMetadata.setName("${google.drive.def-folder}");
+        folderMetadata.setMimeType("application/vnd.google-apps.folder");
+
+        File folder = drive.files().create(folderMetadata)
+                .setFields("id")
+                .execute();
+
+        var folderId = folder.getId();
+        googleUserCRED.setShareFolderId(folderId);
+        googleUserCREDRepository.save(googleUserCRED);
+
+        return folderId;
     }
 }
