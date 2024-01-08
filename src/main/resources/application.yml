@@ -41,3 +41,5 @@ google:
       secret-json: ${GOOGLE_OAUTH2_CLIENT_SECRET_JSON}
       application-name: ${GOOGLE_OAUTH2_CLIENT_APPLICATION_NAME}
     callback-uri: ${GOOGLE_OAUTH2_CALLBACK_URI}
+  drive:
+    def-folder: ${DEF_FOLDER_NAME}
