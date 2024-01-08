@@ -31,6 +31,8 @@ public class GoogleUserCRED {
 
     private String refreshToken;
 
+    private String shareFolderId;
+
     public static GoogleUserCRED apply(GoogleTokenResponse response, GoogleIdToken.Payload idTokenPayload) {
         var googleUserCRED = new GoogleUserCRED();
         googleUserCRED.setAccessToken(response.getAccessToken());
