@@ -15,8 +15,7 @@ class GoogleDriveServiceTest {
 
     @Test
     void uploadFile() {
-        var cred = googleUserCREDRepository.findByEmail("***REMOVED***")
-                .toGoogleCredential();
+        var cred = googleUserCREDRepository.findByEmail("***REMOVED***");
         System.out.println(cred);
     }
 }
