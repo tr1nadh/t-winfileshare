@@ -122,8 +122,6 @@ public class GoogleAuthorizationService {
         var url = "https://oauth2.googleapis.com/revoke";
         Map<String, String> data = new HashMap<>();
         data.put("token", googleUserCREDRepository.findAccessTokenByEmail(email));
-        data.put("client_id", "${google.oauth2.client.id}");
-        data.put("client_secret", "${google.oauth2.client.secret}");
 
         var response = GoogleNetHttpTransport.newTrustedTransport()
                 .createRequestFactory()
