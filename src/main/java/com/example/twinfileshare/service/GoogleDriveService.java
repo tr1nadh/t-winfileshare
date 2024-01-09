@@ -32,6 +32,9 @@ public class GoogleDriveService {
 
     private int times;
 
+    @Value("${google.oauth2.client.application-name}")
+    private String googleClientAppName;
+
     public void uploadFile(String email, java.io.File file) throws IOException, GeneralSecurityException {
         if (Strings.isNullOrEmpty(email))
             throw new IllegalStateException("Email cannot be empty or null");
@@ -42,7 +45,7 @@ public class GoogleDriveService {
         var cred = dCred.toGoogleCredential();
 
         var drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, cred)
-                .setApplicationName("${google.oauth2.client.application-name}").build();
+                .setApplicationName(googleClientAppName).build();
 
         var googleFile = new File();
         googleFile.setName(file.getName());
@@ -67,6 +70,9 @@ public class GoogleDriveService {
 
         System.out.println("Uploaded file Id: " + uploadedFile.getId());
     }
+
+    @Value("${google.drive.def-folder}")
+    private String driveDefFolder;
 
     private String getDefFolderId(GoogleUserCRED googleUserCRED, Drive drive) throws IOException {
         var sharedFolderId = googleUserCRED.getShareFolderId();
@@ -97,7 +103,7 @@ public class GoogleDriveService {
         System.out.println("Creating def folder...");
 
         File folderMetadata = new File();
-        folderMetadata.setName("${google.drive.def-folder}");
+        folderMetadata.setName(driveDefFolder);
         folderMetadata.setMimeType("application/vnd.google-apps.folder");
 
         File folder = drive.files().create(folderMetadata)
