@@ -79,11 +79,13 @@ public class GoogleDriveService {
         if (!Strings.isNullOrEmpty(sharedFolderId))
             return sharedFolderId;
 
-        System.out.println("Querying def folder..." + "${google.drive.def-folder}");
+        System.out.println("Querying def folder..." + driveDefFolder);
 
-        var defFolder = "${google.drive.def-folder}";
-        var query = "name= " + defFolder + " and mimeType='application/vnd.google-apps.folder'";
-        var queryRequest = drive.files().list().setQ(query);
+        var query = "mimeType='application/vnd.google-apps.folder' and name='" + driveDefFolder + "'";
+        var queryRequest = drive.files().list()
+                .setQ(query)
+                .setFields("files(id)")
+                .setSpaces("drive");
 
         var result = queryRequest.execute();
         var files = result.getFiles();
