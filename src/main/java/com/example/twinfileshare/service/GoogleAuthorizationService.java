@@ -6,6 +6,9 @@ import com.example.twinfileshare.event.payload.NoDriveAccessEvent;
 import com.example.twinfileshare.event.payload.UserConnectedEvent;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.example.twinfileshare.service.utility.UserScopes;
+import com.google.api.client.auth.oauth2.BearerToken;
+import com.google.api.client.auth.oauth2.ClientParametersAuthentication;
+import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.*;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.GenericUrl;
@@ -149,5 +152,23 @@ public class GoogleAuthorizationService {
         var googleUserCRED = GoogleUserCRED.apply(newAccessTokenResponse, idTokenPayload);
 
         googleUserCREDRepository.save(googleUserCRED);
+    }
+
+    public Credential toGoogleCredential(GoogleUserCRED googleUserCRED) {
+        var cred = new Credential.Builder(BearerToken.authorizationHeaderAccessMethod())
+                .setJsonFactory(JSON_FACTORY)
+                .setTransport(HTTP_TRANSPORT)
+                .setClientAuthentication(new ClientParametersAuthentication(
+                        googleClientId,
+                        googleClientSecret
+                ))
+                .setTokenServerUrl(new GenericUrl("https://accounts.google.com/o/oauth2/auth"))
+                .build();
+
+        cred.setAccessToken(googleUserCRED.getAccessToken());
+        cred.setExpiresInSeconds(googleUserCRED.getExpires());
+        cred.setRefreshToken(googleUserCRED.getRefreshToken());
+
+        return cred;
     }
 }
