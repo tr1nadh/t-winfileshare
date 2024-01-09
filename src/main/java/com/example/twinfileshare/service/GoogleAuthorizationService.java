@@ -133,11 +133,17 @@ public class GoogleAuthorizationService {
         else System.out.println("Error revoking user: " + email + ", status code: " + statusCode);
     }
 
+    @Value("${google.oauth2.client.id}")
+    private String googleClientId;
+
+    @Value("${google.oauth2.client.secret}")
+    private String googleClientSecret;
+
     public void requestNewAccessToken(String refreshToken) throws IOException, GeneralSecurityException {
         var newAccessTokenResponse =
                 new GoogleRefreshTokenRequest(HTTP_TRANSPORT, JSON_FACTORY, refreshToken,
-                "${google.oauth2.client.id}",
-                "${google.oauth2.client.secret}").execute();
+                googleClientId,
+                googleClientSecret).execute();
 
         var idTokenPayload = verifyIdToken(newAccessTokenResponse.getIdToken());
         var googleUserCRED = GoogleUserCRED.apply(newAccessTokenResponse, idTokenPayload);
