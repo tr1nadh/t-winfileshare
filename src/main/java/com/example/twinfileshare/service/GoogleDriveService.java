@@ -41,15 +41,15 @@ public class GoogleDriveService {
 
         if (times == 3) throw new IllegalStateException("Something went wrong with uploading...");
 
-        var dCred = googleUserCREDRepository.findByEmail(email);
-        var cred = dCred.toGoogleCredential();
+        var googleUserCRED = googleUserCREDRepository.findByEmail(email);
+        var cred = authorizationService.toGoogleCredential(googleUserCRED);
 
         var drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, cred)
                 .setApplicationName(googleClientAppName).build();
 
         var googleFile = new File();
         googleFile.setName(file.getName());
-        googleFile.setParents(List.of(getDefFolderId(dCred, drive)));
+        googleFile.setParents(List.of(getDefFolderId(googleUserCRED, drive)));
 
         var uploadedFile = new File();
 
