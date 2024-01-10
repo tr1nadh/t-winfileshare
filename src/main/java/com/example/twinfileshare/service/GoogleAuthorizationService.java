@@ -4,6 +4,7 @@ import com.example.twinfileshare.entity.GoogleUserCRED;
 import com.example.twinfileshare.event.payload.DoubleEmailConnectEvent;
 import com.example.twinfileshare.event.payload.NoDriveAccessEvent;
 import com.example.twinfileshare.event.payload.UserConnectedEvent;
+import com.example.twinfileshare.listener.RefreshListener;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.example.twinfileshare.service.utility.UserScopes;
 import com.google.api.client.auth.oauth2.BearerToken;
@@ -162,7 +163,8 @@ public class GoogleAuthorizationService {
                         googleClientId,
                         googleClientSecret
                 ))
-                .setTokenServerUrl(new GenericUrl("https://accounts.google.com/o/oauth2/auth"))
+                .setTokenServerUrl(new GenericUrl("https://oauth2.googleapis.com/token"))
+                .addRefreshListener(new RefreshListener(googleUserCRED))
                 .build();
 
         cred.setAccessToken(googleUserCRED.getAccessToken());
