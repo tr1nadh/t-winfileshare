@@ -21,7 +21,7 @@ class GoogleDriveServiceTest {
     private GoogleDriveService service;
 
     @Test
-    void uploadFileWhenAccessTokenIsInvalid() throws GeneralSecurityException, IOException {
+    void uploadFileWhenAccessTokenIsInvalid() throws IOException {
         var cred = googleUserCREDRepository.findByEmail("***REMOVED***");
         System.out.println(cred);
 
