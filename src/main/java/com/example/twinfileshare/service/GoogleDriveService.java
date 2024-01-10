@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.security.GeneralSecurityException;
 import java.util.List;
 
 @Service
@@ -36,7 +35,7 @@ public class GoogleDriveService {
     @Value("${google.oauth2.client.application-name}")
     private String googleClientAppName;
 
-    public void uploadFile(String email, java.io.File file) throws IOException, GeneralSecurityException {
+    public boolean uploadFile(String email, java.io.File file) throws IOException {
         if (Strings.isNullOrEmpty(email))
             throw new IllegalStateException("Email cannot be empty or null");
 
@@ -52,24 +51,13 @@ public class GoogleDriveService {
         googleFile.setName(file.getName());
         googleFile.setParents(List.of(getDefFolderId(googleUserCRED, drive)));
 
-        var uploadedFile = new File();
-
-        try {
-            uploadedFile = drive.files()
-                    .create(googleFile,
-                            new FileContent(Files.probeContentType(file.toPath()),
-                                    file))
-                    .setFields("id").execute();
-        } catch (Exception ex) {
-            authorizationService.requestNewAccessToken(cred.getRefreshToken());
-            uploadFile(email, file);
-            times++;
-            ex.printStackTrace();
-        }
-
-        times = 0;
+        var uploadedFile = drive.files().create(googleFile,
+                        new FileContent(Files.probeContentType(file.toPath()), file))
+                .setFields("id").execute();
 
         System.out.println("Uploaded file Id: " + uploadedFile.getId());
+
+        return uploadedFile.getId() != null;
     }
 
     @Value("${google.drive.def-folder}")
