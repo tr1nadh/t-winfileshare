@@ -5,6 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.File;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -13,9 +17,44 @@ class GoogleDriveServiceTest {
     @Autowired
     private GoogleUserCREDRepository googleUserCREDRepository;
 
+    @Autowired
+    private GoogleDriveService service;
+
     @Test
-    void uploadFile() {
+    void uploadFileWhenAccessTokenIsInvalid() throws GeneralSecurityException, IOException {
         var cred = googleUserCREDRepository.findByEmail("***REMOVED***");
         System.out.println(cred);
+
+        var file = new File("***REMOVED***");
+
+        var isFileUploaded = service.uploadFile("***REMOVED***", file);
+
+        assertTrue(isFileUploaded);
+    }
+
+    @Autowired
+    private GoogleAuthorizationService authorizationService;
+
+    @Test
+    void deleteAllInDb() {
+        googleUserCREDRepository.deleteAll();
+    }
+
+    @Test
+    void refreshAccessToken() {
+        var cred = googleUserCREDRepository.findByEmail("***REMOVED***");
+        var gCred = authorizationService.toGoogleCredential(cred);
+        System.out.println("Previous access token: " + gCred.getAccessToken());
+
+        boolean isAccessTokenRefreshed = false;
+        try {
+            isAccessTokenRefreshed = gCred.refreshToken();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("is Access token refreshed: " + isAccessTokenRefreshed);
+
+        System.out.println("Refreshed access token: " + gCred.getAccessToken());
     }
 }
