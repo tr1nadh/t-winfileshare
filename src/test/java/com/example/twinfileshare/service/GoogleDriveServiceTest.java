@@ -21,11 +21,11 @@ class GoogleDriveServiceTest {
     private GoogleDriveService service;
 
     @Test
-    void uploadFileWhenAccessTokenIsInvalid() throws GeneralSecurityException, IOException {
+    void uploadFileWhenAccessTokenIsInvalid() throws IOException {
         var cred = googleUserCREDRepository.findByEmail("nookadammu2@gmail.com");
         System.out.println(cred);
 
-        var file = new File("C:\\Users\\Trinadh\\IdeaProjects\\t-winfileshare\\pom.xml");
+        var file = new File("C:\\Users\\Trinadh\\IdeaProjects\\t-winfileshare\\mvnw.cmd");
 
         var isFileUploaded = service.uploadFile("nookadammu2@gmail.com", file);
 
