@@ -64,10 +64,13 @@ public class GoogleDriveService {
     private String driveDefFolder;
 
     private String getDefFolderId(GoogleUserCRED googleUserCRED, Drive drive) throws IOException {
-        var sharedFolderId = googleUserCRED.getShareFolderId();
-        if (!Strings.isNullOrEmpty(sharedFolderId))
-            return sharedFolderId;
+        var foundFolderId = findFolder(googleUserCRED, drive);
+        if (foundFolderId != null) return foundFolderId;
 
+        return createDefFolder(googleUserCRED, drive);
+    }
+
+    private String findFolder(GoogleUserCRED googleUserCRED, Drive drive) throws IOException {
         System.out.println("Querying def folder..." + driveDefFolder);
 
         var query = "mimeType='application/vnd.google-apps.folder' and name='" + driveDefFolder + "'";
@@ -87,11 +90,11 @@ public class GoogleDriveService {
             return folderId;
         }
 
-        return createDefFolder(googleUserCRED, drive);
+        return null;
     }
 
     private String createDefFolder(GoogleUserCRED googleUserCRED, Drive drive) throws IOException {
-        System.out.println("Creating def folder...");
+        System.out.println("Creating def folder..." + driveDefFolder);
 
         File folderMetadata = new File();
         folderMetadata.setName(driveDefFolder);
