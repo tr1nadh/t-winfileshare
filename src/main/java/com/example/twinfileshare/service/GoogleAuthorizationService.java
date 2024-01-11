@@ -164,7 +164,7 @@ public class GoogleAuthorizationService {
                         googleClientSecret
                 ))
                 .setTokenServerUrl(new GenericUrl("https://oauth2.googleapis.com/token"))
-                .addRefreshListener(new RefreshListener(googleUserCRED))
+                .addRefreshListener(new RefreshListener(googleUserCREDRepository, googleUserCRED))
                 .build();
 
         cred.setAccessToken(googleUserCRED.getAccessToken());
