@@ -5,7 +5,7 @@ import com.example.twinfileshare.event.payload.DoubleEmailConnectEvent;
 import com.example.twinfileshare.event.payload.HandleProgressEvent;
 import com.example.twinfileshare.event.payload.NoDriveAccessEvent;
 import com.example.twinfileshare.event.payload.UserConnectedEvent;
-import com.example.twinfileshare.fx.FxAlert;
+import com.example.twinfileshare.fx.alert.FxAlert;
 import com.example.twinfileshare.fx.model.MainModel;
 import com.example.twinfileshare.fx.view.MainView;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;

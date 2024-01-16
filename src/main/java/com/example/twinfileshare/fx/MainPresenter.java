@@ -1,5 +1,6 @@
 package com.example.twinfileshare.fx;
 
+import com.example.twinfileshare.fx.alert.FxAlert;
 import com.example.twinfileshare.fx.view.MainView;
 import com.example.twinfileshare.fx.model.MainModel;
 import jakarta.annotation.PostConstruct;
@@ -15,7 +16,6 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletionStage;
 
 @Component
 public class MainPresenter {

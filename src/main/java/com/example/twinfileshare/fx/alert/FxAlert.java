@@ -1,4 +1,4 @@
-package com.example.twinfileshare.fx;
+package com.example.twinfileshare.fx.alert;
 
 import javafx.scene.control.ButtonType;
 
