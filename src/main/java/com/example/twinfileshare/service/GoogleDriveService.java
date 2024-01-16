@@ -30,8 +30,6 @@ public class GoogleDriveService {
     @Autowired
     private GoogleAuthorizationService authorizationService;
 
-    private int times;
-
     @Value("${google.oauth2.client.application-name}")
     private String googleClientAppName;
 
@@ -39,7 +37,8 @@ public class GoogleDriveService {
         if (Strings.isNullOrEmpty(email))
             throw new IllegalStateException("Email cannot be empty or null");
 
-        if (times == 3) throw new IllegalStateException("Something went wrong with uploading...");
+        if (file == null)
+            throw new IllegalStateException("File cannot be null");
 
         var googleUserCRED = googleUserCREDRepository.findByEmail(email);
         var cred = authorizationService.toGoogleCredential(googleUserCRED);
