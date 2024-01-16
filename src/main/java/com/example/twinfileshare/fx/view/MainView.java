@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 @Controller
@@ -169,5 +170,16 @@ public class MainView implements Initializable {
 
     public void setMainPresenter(MainPresenter presenter) {
         this.presenter = presenter;
+    }
+
+    public Optional<String> showTextInputDialog(String placeholderText,
+                                                String title,
+                                                String header) {
+        var text = new TextInputDialog();
+        text.setTitle(title);
+        text.setHeaderText(header);
+        text.getEditor().setPromptText(placeholderText);
+
+        return text.showAndWait();
     }
 }
