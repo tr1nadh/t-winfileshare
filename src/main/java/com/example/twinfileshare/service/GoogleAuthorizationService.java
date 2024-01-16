@@ -75,7 +75,7 @@ public class GoogleAuthorizationService {
         if (StringUtils.isEmptyOrWhitespace(scope))
             throw new IllegalStateException("Invalid scopes");
 
-        if (!hasDriveScope(Arrays.stream(scope.split(" ")).toList())) {
+        if (!hasRequiredScopes(Arrays.stream(scope.split(" ")).toList())) {
             log.warn("User have not given drive access");
             eventPublisher.publishEvent(new NoDriveAccessEvent(this));
             return;
@@ -108,7 +108,7 @@ public class GoogleAuthorizationService {
         return googleUserCRED;
     }
 
-    private boolean hasDriveScope(List<String> scopes) {
+    private boolean hasRequiredScopes(List<String> scopes) {
         return new HashSet<>(scopes).containsAll(SCOPES);
     }
 
