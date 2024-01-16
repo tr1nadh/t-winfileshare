@@ -182,7 +182,7 @@ public class MainPresenter {
         isUploadingActive = false;
         Platform.runLater(() -> {
             view.setFileUploadProgressBarVisible(false);
-            view.setFileUploadProgressBar(0.0);
+            view.updateFileUploadProgressBar(0.0);
             view.setUploadBTNText("Upload files");
             enableRequiredUploadElements();
         });
