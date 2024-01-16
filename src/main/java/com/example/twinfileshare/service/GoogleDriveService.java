@@ -10,6 +10,7 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.Strings;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
+@Log4j2
 @Service
 public class GoogleDriveService {
 
@@ -50,11 +52,13 @@ public class GoogleDriveService {
         googleFile.setName(file.getName());
         googleFile.setParents(List.of(getDefFolderId(googleUserCRED, drive)));
 
+        log.info("Uploading file '" + file.getName() + "' to email '" + email + "'");
+
         var uploadedFile = drive.files().create(googleFile,
                         new FileContent(Files.probeContentType(file.toPath()), file))
                 .setFields("id").execute();
 
-        System.out.println("Uploaded file Id: " + uploadedFile.getId());
+        log.info(file.getName() + ": File uploaded: " + uploadedFile.getId());
 
         return uploadedFile.getId() != null;
     }
@@ -70,7 +74,7 @@ public class GoogleDriveService {
     }
 
     private String findFolder(GoogleUserCRED googleUserCRED, Drive drive) throws IOException {
-        System.out.println("Querying def folder..." + driveDefFolder);
+        log.info("Querying default folder..." + driveDefFolder);
 
         var query = "mimeType='application/vnd.google-apps.folder' and name='" + driveDefFolder + "'";
         var queryRequest = drive.files().list()
@@ -89,11 +93,12 @@ public class GoogleDriveService {
             return folderId;
         }
 
+        log.info("Default folder -> " + driveDefFolder + " not found X");
         return null;
     }
 
     private String createDefFolder(GoogleUserCRED googleUserCRED, Drive drive) throws IOException {
-        System.out.println("Creating def folder..." + driveDefFolder);
+        log.info("Creating default folder..." + driveDefFolder);
 
         File folderMetadata = new File();
         folderMetadata.setName(driveDefFolder);
@@ -107,6 +112,7 @@ public class GoogleDriveService {
         googleUserCRED.setShareFolderId(folderId);
         googleUserCREDRepository.save(googleUserCRED);
 
+        log.info("Default folder -> " + driveDefFolder + " created");
         return folderId;
     }
 }
