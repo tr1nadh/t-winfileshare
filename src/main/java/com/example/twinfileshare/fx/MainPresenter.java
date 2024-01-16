@@ -1,8 +1,8 @@
 package com.example.twinfileshare.fx;
 
 import com.example.twinfileshare.fx.alert.FxAlert;
-import com.example.twinfileshare.fx.view.MainView;
 import com.example.twinfileshare.fx.model.MainModel;
+import com.example.twinfileshare.fx.view.MainView;
 import jakarta.annotation.PostConstruct;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Component
 public class MainPresenter {
@@ -132,6 +133,23 @@ public class MainPresenter {
             return;
         }
 
+        var requiredFileNames = view.getFileListViewItems();
+
+        String zipName = null;
+        if (requiredFileNames.size() > 1) {
+            zipName = getZipName();
+            if (zipName == null) return;
+            if (zipName.isEmpty() || zipName.isBlank()) {
+                fxAlert.errorAlert(
+                        "Zip name error",
+                        "Zip name cannot be null or empty",
+                        ""
+                );
+
+                return;
+            }
+        }
+
         if (isUploadingActive) {
             cancelUpload();
             return;
@@ -139,11 +157,23 @@ public class MainPresenter {
 
         executePreUploadTasks();
 
-        var uploadTask = model.uploadFilesToGoogleDrive(
-                view.getAccountChoiceBoxValue(),
-                totalAddedFiles,
-                view.getFileListViewItems()
-        );
+        var totalFiles = totalAddedFiles;
+        var requiredFiles = new ArrayList<File>();
+        totalFiles.stream().filter(file -> requiredFileNames.contains(file.getName()))
+                .forEach(requiredFiles::add);
+
+        CompletableFuture<Boolean> uploadTask;
+
+        if (zipName == null) {
+            uploadTask = model.uploadFileToGoogleDrive(view.getAccountChoiceBoxValue(),
+                    requiredFiles.getFirst());
+
+        } else {
+            uploadTask = model.uploadFilesToGoogleDrive(
+                    view.getAccountChoiceBoxValue(),
+                    requiredFiles,
+                    zipName);
+        }
 
         uploadTask.thenAcceptAsync(isFinished -> {
             executePrePostUploadTasks();
@@ -161,6 +191,16 @@ public class MainPresenter {
                     return null;
                 }
         );
+    }
+
+    private String getZipName() {
+        var optZipName = view.showTextInputDialog(
+                "zip name",
+                "Name for zipping...",
+                "Enter a name to zip the files"
+        );
+
+        return optZipName.orElse(null);
     }
 
     private void showUploadExceptionAlert(String message) {
@@ -184,7 +224,7 @@ public class MainPresenter {
             view.setFileUploadProgressBarVisible(false);
             view.updateFileUploadProgressBar(0.0);
             view.setUploadBTNText("Upload files");
-            enableRequiredUploadElements();
+            disableRequiredUploadElements();
         });
     }
 
