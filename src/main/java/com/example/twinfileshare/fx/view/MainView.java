@@ -155,7 +155,7 @@ public class MainView implements Initializable {
         fileListView.setDisable(value);
     }
 
-    public void setFileUploadProgressBar(double value) {
+    public void updateFileUploadProgressBar(double value) {
         fileUploadProgressBar.setProgress(value);
     }
 
