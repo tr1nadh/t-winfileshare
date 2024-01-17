@@ -57,6 +57,10 @@ public class MainModel {
         var file = new File(zipName + ".zip");
         driveService.uploadFile(email, file);
 
+        var isUploadedLocalFileDeleted = file.delete();
+        if (isUploadedLocalFileDeleted)
+            System.out.println("Uploaded local file deleted..." + file.getName());
+
         return CompletableFuture.completedFuture(true);
     }
 
