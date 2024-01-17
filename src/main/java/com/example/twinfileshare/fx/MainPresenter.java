@@ -6,6 +6,7 @@ import com.example.twinfileshare.fx.view.MainView;
 import jakarta.annotation.PostConstruct;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ButtonType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,22 +119,23 @@ public class MainPresenter {
     private boolean isUploadingActive;
 
     public void handleUploadFiles() throws IOException, InterruptedException, GeneralSecurityException {
-        if (!isEmail(view.getAccountChoiceBoxValue())) {
+        var selectedEmail = view.getAccountChoiceBoxValue();
+        if (!isEmail(selectedEmail)) {
             fxAlert.informationAlert(
                     "No email selected",
                     "Select an email to upload files"
             );
             return;
         }
-        if (view.getFileListViewItems().isEmpty()) {
+
+        var requiredFileNames = view.getFileListViewItems();
+        if (requiredFileNames.isEmpty()) {
             fxAlert.informationAlert(
                     "No files to upload",
                     "Add some files to upload"
             );
             return;
         }
-
-        var requiredFileNames = view.getFileListViewItems();
 
         String zipName = null;
         if (requiredFileNames.size() > 1) {
@@ -142,12 +144,13 @@ public class MainPresenter {
             if (zipName.isEmpty() || zipName.isBlank()) {
                 fxAlert.errorAlert(
                         "Zip name error",
-                        "Zip name cannot be null or empty",
+                        "Zip name cannot be empty or blank",
                         ""
                 );
 
                 return;
             }
+
         }
 
         if (isUploadingActive) {
@@ -157,50 +160,49 @@ public class MainPresenter {
 
         executePreUploadTasks();
 
+        var requiredFiles = getRequiredFiles(requiredFileNames);
+        CompletableFuture<Boolean> uploadTask =
+                getUploadTask(selectedEmail, requiredFiles, zipName);
+
+        uploadTask.thenAcceptAsync(isFinished -> {
+            executePostUploadTasks();
+            if (isFinished) executeUploadFinishedTasks();
+            else Platform.runLater(this::showUploadCancelledAlert);
+        }).exceptionallyAsync(this::executeUploadTaskException);
+    }
+
+    private CompletableFuture<Boolean> getUploadTask(String selectedEmail, List<File> requiredFiles, String zipName) throws GeneralSecurityException, IOException, InterruptedException {
+        if (requiredFiles.size() > 1)
+            return model.uploadFilesToGoogleDrive(selectedEmail, requiredFiles,
+                    zipName);
+        else
+            return model.uploadFileToGoogleDrive(selectedEmail,
+                    requiredFiles.getFirst());
+    }
+
+    private ArrayList<File> getRequiredFiles(ObservableList<String> requiredFileNames) {
         var totalFiles = totalAddedFiles;
         var requiredFiles = new ArrayList<File>();
         totalFiles.stream().filter(file -> requiredFileNames.contains(file.getName()))
                 .forEach(requiredFiles::add);
 
-        CompletableFuture<Boolean> uploadTask;
+        return requiredFiles;
+    }
 
-        if (zipName == null) {
-            uploadTask = model.uploadFileToGoogleDrive(view.getAccountChoiceBoxValue(),
-                    requiredFiles.getFirst());
-
-        } else {
-            uploadTask = model.uploadFilesToGoogleDrive(
-                    view.getAccountChoiceBoxValue(),
-                    requiredFiles,
-                    zipName);
-        }
-
-        uploadTask.thenAcceptAsync(isFinished -> {
-            executePrePostUploadTasks();
-            if (!isFinished) {
-                Platform.runLater(this::showUploadCancelledAlert);
-                return;
-            }
-            executePostUploadTasks();
-        }).exceptionallyAsync(
-                ex -> {
-                    executePrePostUploadTasks();
-                    Platform.runLater(() -> {
-                        showUploadExceptionAlert(ex.getCause().getMessage());
-                    });
-                    return null;
-                }
-        );
+    private Void executeUploadTaskException(Throwable ex) {
+        executePostUploadTasks();
+        Platform.runLater(() -> {
+            showUploadExceptionAlert(ex.getCause().getMessage());
+        });
+        return null;
     }
 
     private String getZipName() {
-        var optZipName = view.showTextInputDialog(
+        return view.showTextInputDialog(
                 "zip name",
                 "Name for zipping...",
                 "Enter a name to zip the files"
         );
-
-        return optZipName.orElse(null);
     }
 
     private void showUploadExceptionAlert(String message) {
@@ -211,25 +213,27 @@ public class MainPresenter {
         );
     }
 
-    private void executePostUploadTasks() {
+    private void executeUploadFinishedTasks() {
         System.out.println("Upload finished...");
         totalAddedFiles = new ArrayList<>();
-        Platform.runLater(() -> view.getFileListViewItems().clear());
-        Platform.runLater(this::showUploadFinishedAlert);
+        Platform.runLater(() -> {
+            view.clearFileListViewItems();
+            showUploadFinishedAlert();
+        });
     }
 
-    private void executePrePostUploadTasks() {
+    private void executePostUploadTasks() {
         isUploadingActive = false;
         Platform.runLater(() -> {
             view.setFileUploadProgressBarVisible(false);
             view.updateFileUploadProgressBar(0.0);
             view.setUploadBTNText("Upload files");
-            disableRequiredUploadElements();
+            enableRequiredUIElements();
         });
     }
 
     private void executePreUploadTasks() {
-        disableRequiredUploadElements();
+        disableRequiredUIElements();
         view.setFileUploadProgressBarVisible(true);
         isUploadingActive = true;
         view.setUploadBTNText("Cancel");
@@ -256,7 +260,7 @@ public class MainPresenter {
         );
     }
 
-    private void disableRequiredUploadElements() {
+    private void disableRequiredUIElements() {
         view.disableAccountChoiceBox(true);
         view.disableAccountDisconnectBTN(true);
         view.disableAddFilesBTN(true);
@@ -265,7 +269,7 @@ public class MainPresenter {
         view.disableFilesListView(true);
     }
 
-    private void enableRequiredUploadElements() {
+    private void enableRequiredUIElements() {
         view.disableAccountChoiceBox(false);
         view.disableAccountDisconnectBTN(false);
         view.disableAddFilesBTN(false);
