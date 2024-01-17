@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 @Controller
@@ -112,6 +111,10 @@ public class MainView implements Initializable {
         return fileListView.getItems();
     }
 
+    public void clearFileListViewItems() {
+        fileListView.getItems().clear();
+    }
+
     public ObservableList<String> getSelectedFileListViewItems() {
         return fileListView.getSelectionModel().getSelectedItems();
     }
@@ -172,14 +175,14 @@ public class MainView implements Initializable {
         this.presenter = presenter;
     }
 
-    public Optional<String> showTextInputDialog(String placeholderText,
-                                                String title,
-                                                String header) {
+    public String showTextInputDialog(String placeholderText,
+                                      String title,
+                                      String header) {
         var text = new TextInputDialog();
         text.setTitle(title);
         text.setHeaderText(header);
         text.getEditor().setPromptText(placeholderText);
 
-        return text.showAndWait();
+        return text.showAndWait().orElse(null);
     }
 }
