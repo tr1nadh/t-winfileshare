@@ -6,15 +6,17 @@ import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.auth.oauth2.CredentialRefreshListener;
 import com.google.api.client.auth.oauth2.TokenErrorResponse;
 import com.google.api.client.auth.oauth2.TokenResponse;
+import lombok.extern.log4j.Log4j2;
 
 import java.io.IOException;
 
-public class RefreshListener implements CredentialRefreshListener {
+@Log4j2
+public class DriveTokenRefreshListener implements CredentialRefreshListener {
 
     private final GoogleUserCREDRepository repository;
     private final GoogleUserCRED googleUserCRED;
 
-    public RefreshListener(GoogleUserCREDRepository repository, GoogleUserCRED googleUserCRED) {
+    public DriveTokenRefreshListener(GoogleUserCREDRepository repository, GoogleUserCRED googleUserCRED) {
         this.repository = repository;
         this.googleUserCRED = googleUserCRED;
     }
@@ -26,9 +28,12 @@ public class RefreshListener implements CredentialRefreshListener {
 
         var prevRefreshToken = googleUserCRED.getRefreshToken();
         var tokenResponseRefreshToken = credential.getRefreshToken();
-        if (!prevRefreshToken.equals(tokenResponseRefreshToken))
+        if (!prevRefreshToken.equals(tokenResponseRefreshToken)) {
             googleUserCRED.setRefreshToken(tokenResponseRefreshToken);
+            log.info("Drive refresh token refreshed");
+        }
 
+        log.info("Drive access token refreshed");
         repository.save(googleUserCRED);
     }
 
