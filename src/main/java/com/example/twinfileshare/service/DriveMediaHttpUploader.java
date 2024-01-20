@@ -1,19 +1,25 @@
 package com.example.twinfileshare.service;
 
-import com.example.twinfileshare.exception.DriveMediaUploadCancelledException;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.media.MediaHttpUploader;
-import com.google.api.client.googleapis.media.MediaHttpUploaderProgressListener;
 import com.google.api.client.http.*;
+import com.google.api.client.http.json.JsonHttpContent;
 import com.google.api.client.util.Sleeper;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.extern.log4j.Log4j2;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 
 import java.io.IOException;
+import java.util.HashMap;
 
+@Log4j2
 public class DriveMediaHttpUploader {
 
-    private AbstractInputStreamContent mediaContent;
+    private final AbstractInputStreamContent mediaContent;
+    private HashMap<String, String> mediaMetadata;
+
+    @Getter
     private final MediaHttpUploader mediaHttpUploader;
 
     public DriveMediaHttpUploader(@NonNull AbstractInputStreamContent mediaContent,
@@ -33,27 +39,53 @@ public class DriveMediaHttpUploader {
         return this;
     }
 
-    public DriveMediaHttpUploader setMediaMetadata(HttpContent mediaMetadata) {
+    public DriveMediaHttpUploader setMediaMetadata(JsonHttpContent mediaMetadata) {
+        var data = mediaMetadata.getData();
+        this.mediaMetadata = (HashMap<String, String>) data;
+
         mediaHttpUploader.setMetadata(mediaMetadata);
         return this;
     }
 
-    public DriveMediaHttpUploader setProgressListener(MediaHttpUploaderProgressListener progressListener) {
+    private DriveMediaHttpUploaderProgressListener progressListener;
+
+    public DriveMediaHttpUploader setProgressListener(DriveMediaHttpUploaderProgressListener progressListener) {
+        progressListener.setDriveMediaHttpUploader(this);
+        this.progressListener = progressListener;
         mediaHttpUploader.setProgressListener(progressListener);
+
         return this;
     }
 
-    public HttpResponse upload(GenericUrl url) throws IOException {
-        return mediaHttpUploader.upload(url);
+    public HttpResponse upload(GenericUrl url) {
+        var mediaName = mediaMetadata.get("name");
+        log.info("Drive media uploading: " + mediaName);
+
+        try {
+            return mediaHttpUploader.upload(url);
+        } catch (IOException e) {
+            throw new IllegalStateException("Drive media uploading stopped: " + mediaName);
+        }
     }
 
-    public DriveMediaHttpUploader cancelUpload() throws IOException {
-        if (!isUploadCompleted()){
-            IOUtils.closeQuietly(mediaContent.getInputStream());
-            System.out.println("Media '" + mediaHttpUploader.getMetadata().toString() + "'");
+    private boolean isUploadCancelled;
+
+    public void cancelUpload() {
+        if (!isUploadCancelled) {
+            progressListener.cancelProgressUpload();
+            isUploadCancelled = true;
+            return;
         }
 
-        return this;
+        isUploadCancelled = false;
+        if (!isUploadCompleted()) {
+            try {
+                IOUtils.closeQuietly(mediaContent.getInputStream());
+                log.info("Drive media upload cancelled: " + mediaMetadata.get("name"));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     private boolean isUploadCompleted() {
