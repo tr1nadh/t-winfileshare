@@ -43,4 +43,6 @@ module t.winfileshare {
     opens com.example.twinfileshare.fx.view;
     opens com.example.twinfileshare.fx.model;
     opens com.example.twinfileshare.fx.alert;
+    exports com.example.twinfileshare.exception;
+    opens com.example.twinfileshare.exception;
 }
