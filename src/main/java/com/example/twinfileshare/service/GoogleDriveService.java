@@ -110,4 +110,22 @@ public class GoogleDriveService {
         log.info("Default folder -> " + driveDefFolder + " created");
         return folderId;
     }
+
+    private File getDriveFile(java.io.File file, Drive drive) throws IOException {
+        var googleFile = new File();
+        googleFile.setName(file.getName());
+        googleFile.setParents(List.of(findOrCreateDefFolder(drive)));
+        return googleFile;
+    }
+
+    private Drive getDrive(Credential cred) {
+        var drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, cred)
+                .setApplicationName(googleClientAppName).build();
+        return drive;
+    }
+
+    private Credential getCredential(String email) {
+        var googleUserCRED = googleUserCREDRepository.findByEmail(email);
+        return authorizationService.toGoogleCredential(googleUserCRED);
+    }
 }
