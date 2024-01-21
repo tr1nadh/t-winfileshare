@@ -1,22 +1,28 @@
 package com.example.twinfileshare.service;
 
-import com.example.twinfileshare.entity.GoogleUserCRED;
+import com.example.twinfileshare.listener.AppDriveMediaHttpUploaderProgressListener;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
-import com.google.api.client.http.FileContent;
-import com.google.api.client.http.HttpTransport;
+import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.http.*;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.http.json.JsonHttpContent;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.client.util.Sleeper;
 import com.google.api.client.util.Strings;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.List;
 
 @Log4j2
@@ -42,15 +48,11 @@ public class GoogleDriveService {
         if (file == null)
             throw new IllegalStateException("File cannot be null");
 
-        var googleUserCRED = googleUserCREDRepository.findByEmail(email);
-        var cred = authorizationService.toGoogleCredential(googleUserCRED);
+        var cred = getCredential(email);
 
-        var drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, cred)
-                .setApplicationName(googleClientAppName).build();
+        var drive = getDrive(cred);
 
-        var googleFile = new File();
-        googleFile.setName(file.getName());
-        googleFile.setParents(List.of(getDefFolderId(googleUserCRED, drive)));
+        var googleFile = getDriveFile(file, drive);
 
         log.info("Uploading file '" + file.getName() + "' to email '" + email + "'");
 
@@ -66,14 +68,14 @@ public class GoogleDriveService {
     @Value("${google.drive.def-folder}")
     private String driveDefFolder;
 
-    private String getDefFolderId(GoogleUserCRED googleUserCRED, Drive drive) throws IOException {
-        var foundFolderId = findFolder(googleUserCRED, drive);
+    private String findOrCreateDefFolder(Drive drive) throws IOException {
+        var foundFolderId = findFolder(drive);
         if (foundFolderId != null) return foundFolderId;
 
-        return createDefFolder(googleUserCRED, drive);
+        return createDefFolder(drive);
     }
 
-    private String findFolder(GoogleUserCRED googleUserCRED, Drive drive) throws IOException {
+    private String findFolder(Drive drive) throws IOException {
         log.info("Querying default folder..." + driveDefFolder);
 
         var query = "mimeType='application/vnd.google-apps.folder' and name='" + driveDefFolder + "'";
@@ -85,19 +87,14 @@ public class GoogleDriveService {
         var result = queryRequest.execute();
         var files = result.getFiles();
 
-        if (files != null && !files.isEmpty()) {
-            var folderId = files.get(0).getId();
-            googleUserCRED.setShareFolderId(folderId);
-            googleUserCREDRepository.save(googleUserCRED);
-
-            return folderId;
-        }
+        if (files != null && !files.isEmpty())
+            return files.get(0).getId();
 
         log.info("Default folder -> " + driveDefFolder + " not found X");
         return null;
     }
 
-    private String createDefFolder(GoogleUserCRED googleUserCRED, Drive drive) throws IOException {
+    private String createDefFolder(Drive drive) throws IOException {
         log.info("Creating default folder..." + driveDefFolder);
 
         File folderMetadata = new File();
@@ -109,8 +106,6 @@ public class GoogleDriveService {
                 .execute();
 
         var folderId = folder.getId();
-        googleUserCRED.setShareFolderId(folderId);
-        googleUserCREDRepository.save(googleUserCRED);
 
         log.info("Default folder -> " + driveDefFolder + " created");
         return folderId;
