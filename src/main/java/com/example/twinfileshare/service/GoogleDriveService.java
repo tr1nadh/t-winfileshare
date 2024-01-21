@@ -54,13 +54,13 @@ public class GoogleDriveService {
 
         var googleFile = getDriveFile(file, drive);
 
-        log.info("Uploading file '" + file.getName() + "' to email '" + email + "'");
+        log.info("Uploading file '" + file.getName() + "' to drive account '" + email + "'");
 
         var uploadedFile = drive.files().create(googleFile,
                         new FileContent(Files.probeContentType(file.toPath()), file))
                 .setFields("id").execute();
 
-        log.info(file.getName() + ": File uploaded: " + uploadedFile.getId());
+        log.info("File successfully uploaded '" + file.getName() + "' id -> " + uploadedFile.getId());
 
         return uploadedFile.getId() != null;
     }
