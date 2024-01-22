@@ -75,6 +75,23 @@ public class GoogleDriveService {
         return CompletableFuture.completedFuture(response.getStatusCode() == 200);
     }
 
+    private File getDriveFile(java.io.File file, Drive drive) throws IOException {
+        var googleFile = new File();
+        googleFile.setName(file.getName());
+        googleFile.setParents(List.of(findOrCreateDefFolder(drive)));
+        return googleFile;
+    }
+
+    private Drive getDrive(Credential cred) {
+        return new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, cred)
+                .setApplicationName(googleClientAppName).build();
+    }
+
+    private Credential getCredential(String email) {
+        var googleUserCRED = googleUserCREDRepository.findByEmail(email);
+        return authorizationService.toGoogleCredential(googleUserCRED);
+    }
+
     public void cancelUpload() {
         IOUtils.closeQuietly(mediaContent.getInputStream());
         log.info("Drive media upload cancelled");
@@ -124,23 +141,5 @@ public class GoogleDriveService {
 
         log.info("Default folder -> " + driveDefFolder + " created");
         return folderId;
-    }
-
-    private File getDriveFile(java.io.File file, Drive drive) throws IOException {
-        var googleFile = new File();
-        googleFile.setName(file.getName());
-        googleFile.setParents(List.of(findOrCreateDefFolder(drive)));
-        return googleFile;
-    }
-
-    private Drive getDrive(Credential cred) {
-        var drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, cred)
-                .setApplicationName(googleClientAppName).build();
-        return drive;
-    }
-
-    private Credential getCredential(String email) {
-        var googleUserCRED = googleUserCREDRepository.findByEmail(email);
-        return authorizationService.toGoogleCredential(googleUserCRED);
     }
 }
