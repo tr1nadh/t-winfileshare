@@ -5,6 +5,7 @@ import com.example.twinfileshare.event.payload.DoubleEmailConnectEvent;
 import com.example.twinfileshare.event.payload.HandleProgressEvent;
 import com.example.twinfileshare.event.payload.NoDriveAccessEvent;
 import com.example.twinfileshare.event.payload.UserConnectedEvent;
+import com.example.twinfileshare.fx.MainPresenter;
 import com.example.twinfileshare.fx.alert.FxAlert;
 import com.example.twinfileshare.fx.model.MainModel;
 import com.example.twinfileshare.fx.view.MainView;
@@ -22,15 +23,15 @@ public class MainFxListener {
     private MainView view;
 
     @Autowired
+    private MainPresenter presenter;
+
+    @Autowired
     private FxAlert fxAlert;
 
     @EventListener
     public void handleProgressBar(HandleProgressEvent event) {
         Platform.runLater(() -> {
-            if (event.shouldIncrease())
-                view.updateFileUploadProgressBar(view.getFileUploadProgressBar() + 0.1);
-
-            if (event.isComplete()) view.updateFileUploadProgressBar(1.0);
+            presenter.updateProgressBar(event.getProgress());
         });
     }
 
