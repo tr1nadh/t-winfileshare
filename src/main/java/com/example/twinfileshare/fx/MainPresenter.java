@@ -290,4 +290,9 @@ public class MainPresenter {
         view.setFileListViewItems(FXCollections.observableArrayList());
         totalAddedFiles = new ArrayList<>();
     }
+
+    public void updateProgressBar(double value) {
+        if (isUploadingActive)
+            view.updateFileUploadProgressBar(value);
+    }
 }
