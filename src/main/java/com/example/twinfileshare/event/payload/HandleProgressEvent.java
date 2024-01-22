@@ -1,6 +1,7 @@
 package com.example.twinfileshare.event.payload;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.context.ApplicationEvent;
 
 @Getter
@@ -17,9 +18,12 @@ public class HandleProgressEvent extends ApplicationEvent {
 
     private static HandleProgressEvent handleProgressEvent;
 
-    private HandleProgressEvent(Object source) {
+    public HandleProgressEvent(Object source) {
         super(source);
     }
+
+    @Getter @Setter
+    private double progress;
 
     public static HandleProgressEvent getInstance() {
         if (handleProgressEvent == null)
