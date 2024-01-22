@@ -14,6 +14,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +43,9 @@ public class GoogleDriveService {
 
     private InputStreamContent mediaContent;
 
+    @Autowired
+    private ApplicationEventPublisher publisher;
+
     @Async
     public CompletableFuture<Boolean> uploadFile(String email, java.io.File file) throws IOException {
         if (Strings.isNullOrEmpty(email))
@@ -66,7 +70,7 @@ public class GoogleDriveService {
                 .setFields("id");
 
         var mediaHttpUploader = createRequest.getMediaHttpUploader();
-        mediaHttpUploader.setProgressListener(new AppMediaHttpUploaderProgressListener());
+        mediaHttpUploader.setProgressListener(new AppMediaHttpUploaderProgressListener(publisher));
 
         var response = mediaHttpUploader.upload(new GenericUrl("https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable"));
 
