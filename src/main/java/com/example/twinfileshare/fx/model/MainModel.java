@@ -91,7 +91,7 @@ public class MainModel {
     }
 
     public void cancelUploadFiles() {
-        if (!isUploadingActive) {
+        if (isUploadingActive) {
             driveService.cancelUpload();
             return;
         }
