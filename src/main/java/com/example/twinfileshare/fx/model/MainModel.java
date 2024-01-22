@@ -55,7 +55,7 @@ public class MainModel {
         if (isUploadingActive)
             throw new IllegalStateException("An upload is active. Cancel the previous upload to start new.");
 
-        System.out.println("Uploading to google drive account: " + email);
+        log.info("Uploading to google drive account: " + email);
 
         zipper.zipFiles(requiredFiles, zipName);
 
@@ -78,7 +78,7 @@ public class MainModel {
         if (isUploadingActive)
             throw new IllegalStateException("An upload is active. Cancel the previous upload to start new.");
 
-        System.out.println("Uploading to google drive account: " + email);
+        log.info("Uploading to google drive account: " + email);
 
         isUploadingActive = true;
 
