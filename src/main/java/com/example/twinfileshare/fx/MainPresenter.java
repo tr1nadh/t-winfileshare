@@ -137,6 +137,11 @@ public class MainPresenter {
             return;
         }
 
+        if (isUploadingActive) {
+            cancelUpload();
+            return;
+        }
+
         String zipName = null;
         if (requiredFileNames.size() > 1) {
             zipName = getZipName();
@@ -151,11 +156,6 @@ public class MainPresenter {
                 return;
             }
 
-        }
-
-        if (isUploadingActive) {
-            cancelUpload();
-            return;
         }
 
         executePreUploadTasks();
