@@ -8,8 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.concurrent.ExecutionException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 class GoogleDriveServiceTest {
@@ -56,5 +57,13 @@ class GoogleDriveServiceTest {
         System.out.println("is Access token refreshed: " + isAccessTokenRefreshed);
 
         System.out.println("Refreshed access token: " + gCred.getAccessToken());
+    }
+
+    @Test
+    void uploadingFile() throws IOException, InterruptedException {
+        var file = new File("test-file");
+        service.uploadFile("test-email", file);
+        Thread.sleep(6_000);
+        service.cancelUpload();
     }
 }
