@@ -1,18 +1,17 @@
 package com.example.twinfileshare.service;
 
-import com.example.twinfileshare.listener.AppDriveMediaHttpUploaderProgressListener;
+import com.example.twinfileshare.listener.AppMediaHttpUploaderProgressListener;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.http.*;
 import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.http.json.JsonHttpContent;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.client.util.Sleeper;
 import com.google.api.client.util.Strings;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import lombok.extern.log4j.Log4j2;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -22,8 +21,8 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Log4j2
 @Service
@@ -41,7 +40,10 @@ public class GoogleDriveService {
     @Value("${google.oauth2.client.application-name}")
     private String googleClientAppName;
 
-    public boolean uploadFile(String email, java.io.File file) throws IOException {
+    private InputStreamContent mediaContent;
+
+    @Async
+    public CompletableFuture<Boolean> uploadFile(String email, java.io.File file) throws IOException {
         if (Strings.isNullOrEmpty(email))
             throw new IllegalStateException("Email cannot be empty or null");
 
@@ -54,15 +56,28 @@ public class GoogleDriveService {
 
         var googleFile = getDriveFile(file, drive);
 
+        mediaContent = new InputStreamContent(Files.probeContentType(file.toPath()),
+                new BufferedInputStream(new FileInputStream(file)));
+        mediaContent.setLength(file.length());
+
         log.info("Uploading file '" + file.getName() + "' to drive account '" + email + "'");
 
-        var uploadedFile = drive.files().create(googleFile,
-                        new FileContent(Files.probeContentType(file.toPath()), file))
-                .setFields("id").execute();
+        var createRequest = drive.files().create(googleFile, mediaContent)
+                .setFields("id");
 
-        log.info("File successfully uploaded '" + file.getName() + "' id -> " + uploadedFile.getId());
+        var mediaHttpUploader = createRequest.getMediaHttpUploader();
+        mediaHttpUploader.setProgressListener(new AppMediaHttpUploaderProgressListener());
 
-        return uploadedFile.getId() != null;
+        var response = mediaHttpUploader.upload(new GenericUrl("https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable"));
+
+        log.info("File '" + file.getName() + "' successfully uploaded to drive account '" + email + "'");
+
+        return CompletableFuture.completedFuture(response.getStatusCode() == 200);
+    }
+
+    public void cancelUpload() {
+        IOUtils.closeQuietly(mediaContent.getInputStream());
+        log.info("Drive media upload cancelled");
     }
 
     @Value("${google.drive.def-folder}")
