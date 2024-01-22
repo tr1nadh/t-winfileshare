@@ -21,7 +21,7 @@ class GoogleDriveServiceTest {
     private GoogleDriveService service;
 
     @Test
-    void uploadFileWhenAccessTokenIsInvalid() throws IOException {
+    void uploadFileWhenAccessTokenIsInvalid() throws IOException, ExecutionException, InterruptedException {
         var cred = googleUserCREDRepository.findByEmail("nookadammu2@gmail.com");
         System.out.println(cred);
 
@@ -29,7 +29,7 @@ class GoogleDriveServiceTest {
 
         var isFileUploaded = service.uploadFile("nookadammu2@gmail.com", file);
 
-        assertTrue(isFileUploaded);
+        assertTrue(isFileUploaded.get());
     }
 
     @Autowired
