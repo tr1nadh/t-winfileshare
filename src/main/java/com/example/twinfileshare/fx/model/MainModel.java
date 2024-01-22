@@ -7,7 +7,6 @@ import com.example.twinfileshare.service.utility.Zipper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -49,7 +48,6 @@ public class MainModel {
     @Autowired
     private Zipper zipper;
 
-    @Async
     public CompletableFuture<Boolean> uploadFilesToGoogleDrive(String email, List<File> requiredFiles,
                                                                String zipName) throws IOException {
         if (isUploadingActive)
@@ -62,18 +60,21 @@ public class MainModel {
         isUploadingActive = true;
 
         var file = new File(zipName + ".zip");
-        driveService.uploadFile(email, file);
+        var uploadFuture = driveService.uploadFile(email, file);
 
         isUploadingActive = false;
 
+        uploadFuture.thenAcceptAsync(isFinished -> deleteUploadedZipFile(file));
+
+        return uploadFuture;
+    }
+
+    private void deleteUploadedZipFile(File file) {
         var isUploadedLocalFileDeleted = file.delete();
         if (isUploadedLocalFileDeleted)
             System.out.println("Uploaded local file deleted..." + file.getName());
-
-        return CompletableFuture.completedFuture(true);
     }
 
-    @Async
     public CompletableFuture<Boolean> uploadFileToGoogleDrive(String email, File file) throws IOException, InterruptedException, GeneralSecurityException {
         if (isUploadingActive)
             throw new IllegalStateException("An upload is active. Cancel the previous upload to start new.");
@@ -82,11 +83,11 @@ public class MainModel {
 
         isUploadingActive = true;
 
-        driveService.uploadFile(email, file);
+        var uploadFuture = driveService.uploadFile(email, file);
 
         isUploadingActive = false;
 
-        return CompletableFuture.completedFuture(true);
+        return uploadFuture;
     }
 
     public void cancelUploadFiles() {
