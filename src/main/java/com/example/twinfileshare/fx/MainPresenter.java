@@ -3,12 +3,15 @@ package com.example.twinfileshare.fx;
 import com.example.twinfileshare.fx.alert.FxAlert;
 import com.example.twinfileshare.fx.model.MainModel;
 import com.example.twinfileshare.fx.view.MainView;
+import com.example.twinfileshare.service.DriveUploadResponse;
 import jakarta.annotation.PostConstruct;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ButtonType;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -161,17 +164,18 @@ public class MainPresenter {
         executePreUploadTasks();
 
         var requiredFiles = getRequiredFiles(requiredFileNames);
-        CompletableFuture<Boolean> uploadTask =
+        CompletableFuture<DriveUploadResponse> uploadTask =
                 getUploadTask(selectedEmail, requiredFiles, zipName);
 
-        uploadTask.thenAcceptAsync(isFinished -> {
+        uploadTask.thenAcceptAsync(driveUploadResponse -> {
             executePostUploadTasks();
-            if (isFinished) executeUploadFinishedTasks();
+            if (driveUploadResponse.isUploadSuccess())
+                executeUploadFinishedTasks(driveUploadResponse.getSharableLink());
             else Platform.runLater(this::showUploadCancelledAlert);
         }).exceptionallyAsync(this::executeUploadTaskException);
     }
 
-    private CompletableFuture<Boolean> getUploadTask(String selectedEmail, List<File> requiredFiles, String zipName) throws GeneralSecurityException, IOException, InterruptedException {
+    private CompletableFuture<DriveUploadResponse> getUploadTask(String selectedEmail, List<File> requiredFiles, String zipName) throws IOException {
         if (requiredFiles.size() > 1)
             return model.uploadFilesToGoogleDrive(selectedEmail, requiredFiles,
                     zipName);
@@ -213,12 +217,12 @@ public class MainPresenter {
         );
     }
 
-    private void executeUploadFinishedTasks() {
+    private void executeUploadFinishedTasks(String link) {
         System.out.println("Upload finished...");
         totalAddedFiles = new ArrayList<>();
         Platform.runLater(() -> {
             view.clearFileListViewItems();
-            showUploadFinishedAlert();
+            showUploadFinishedAlert(link);
         });
     }
 
@@ -252,11 +256,22 @@ public class MainPresenter {
         );
     }
 
-    private void showUploadFinishedAlert() {
-        fxAlert.informationAlert(
-                "Upload success",
-                "Successfully files are uploaded!"
+    private void showUploadFinishedAlert(String link) {
+        var copyButton = new ButtonType("Copy");
+        fxAlert.confirmationAlert(
+                "Successfully files are uploaded!",
+                "By default files are uploaded to a default folder \n" +
+                        " and sharable to anyone with viewer access via link.",
+                "Copy the below link: " + link,
+                () -> {copyToClipBoard(link);},
+                copyButton, copyButton, ButtonType.OK
         );
+    }
+
+    private void copyToClipBoard(String link) {
+        var clipBoardContent = new ClipboardContent();
+        clipBoardContent.putString(link);
+        Clipboard.getSystemClipboard().setContent(clipBoardContent);
     }
 
     private void disableRequiredUIElements() {
