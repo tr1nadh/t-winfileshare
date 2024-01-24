@@ -241,7 +241,6 @@ public class MainPresenter {
     }
 
     private void cancelUpload() {
-        System.out.println("Upload cancelled!");
         view.setUploadBTNText("Upload files");
         model.cancelUploadFiles();
     }
