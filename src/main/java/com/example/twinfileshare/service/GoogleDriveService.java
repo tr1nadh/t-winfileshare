@@ -12,10 +12,12 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.Strings;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
+import com.google.api.services.drive.model.Permission;
 import lombok.extern.log4j.Log4j2;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.json.GsonJsonParser;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -51,7 +53,7 @@ public class GoogleDriveService {
     private AppMediaHttpUploaderProgressListener progressListener;
 
     @Async
-    public CompletableFuture<Boolean> uploadFile(String email, java.io.File file) throws IOException {
+    public CompletableFuture<DriveUploadResponse> uploadFile(String email, java.io.File file) throws IOException {
         if (Strings.isNullOrEmpty(email))
             throw new IllegalStateException("Email cannot be empty or null");
 
@@ -70,6 +72,10 @@ public class GoogleDriveService {
 
         log.info("Uploading file '" + file.getName() + "' to drive account '" + email + "'");
 
+        var permissions = new Permission();
+        permissions.setType("anyone");
+        permissions.setRole("reader");
+
         var createRequest = drive.files().create(googleFile, mediaContent)
                 .setFields("id");
 
@@ -79,9 +85,17 @@ public class GoogleDriveService {
 
         var response = mediaHttpUploader.upload(new GenericUrl("https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable"));
 
-        log.info("File '" + file.getName() + "' successfully uploaded to drive account '" + email + "'");
+        if (response.getStatusCode() == 200) {
+            log.info("File '" + file.getName() + "' successfully uploaded to drive account '" + email + "'");
+            var responseMap = new GsonJsonParser().parseMap(response.parseAsString());
+            var id = responseMap.get("id").toString();
+            drive.permissions().create(id, permissions).execute();
+            var fileMetadata = drive.files().get(id).setFields("webViewLink").execute();
+            var link = fileMetadata.getWebViewLink();
+            return CompletableFuture.completedFuture(new DriveUploadResponse(response.getStatusCode() == 200, link));
+        }
 
-        return CompletableFuture.completedFuture(response.getStatusCode() == 200);
+        return CompletableFuture.completedFuture(new DriveUploadResponse(false, null));
     }
 
     private File getDriveFile(java.io.File file, Drive drive) throws IOException {
