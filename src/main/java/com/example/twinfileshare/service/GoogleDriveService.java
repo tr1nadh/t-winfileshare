@@ -3,7 +3,9 @@ package com.example.twinfileshare.service;
 import com.example.twinfileshare.listener.AppMediaHttpUploaderProgressListener;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.http.*;
+import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.InputStreamContent;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
@@ -46,6 +48,8 @@ public class GoogleDriveService {
     @Autowired
     private ApplicationEventPublisher publisher;
 
+    private AppMediaHttpUploaderProgressListener progressListener;
+
     @Async
     public CompletableFuture<Boolean> uploadFile(String email, java.io.File file) throws IOException {
         if (Strings.isNullOrEmpty(email))
@@ -70,7 +74,8 @@ public class GoogleDriveService {
                 .setFields("id");
 
         var mediaHttpUploader = createRequest.getMediaHttpUploader();
-        mediaHttpUploader.setProgressListener(new AppMediaHttpUploaderProgressListener(publisher));
+        progressListener = new AppMediaHttpUploaderProgressListener(publisher, this);
+        mediaHttpUploader.setProgressListener(progressListener);
 
         var response = mediaHttpUploader.upload(new GenericUrl("https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable"));
 
@@ -94,6 +99,10 @@ public class GoogleDriveService {
     private Credential getCredential(String email) {
         var googleUserCRED = googleUserCREDRepository.findByEmail(email);
         return authorizationService.toGoogleCredential(googleUserCRED);
+    }
+
+    public void triggerCancelUpload() {
+        progressListener.cancelUpload();
     }
 
     public void cancelUpload() {
