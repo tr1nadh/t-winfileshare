@@ -101,13 +101,18 @@ public class GoogleDriveService {
         return authorizationService.toGoogleCredential(googleUserCRED);
     }
 
-    public void triggerCancelUpload() {
-        progressListener.cancelUpload();
-    }
+    private boolean isUploadCancelled;
 
     public void cancelUpload() {
+        if (!isUploadCancelled) {
+            progressListener.cancelUpload();
+            isUploadCancelled = true;
+            return;
+        }
+
         IOUtils.closeQuietly(mediaContent.getInputStream());
         log.info("Drive media upload cancelled");
+        isUploadCancelled = false;
     }
 
     @Value("${google.drive.def-folder}")
