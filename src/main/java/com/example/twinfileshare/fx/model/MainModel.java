@@ -50,19 +50,12 @@ public class MainModel {
 
     public CompletableFuture<Boolean> uploadFilesToGoogleDrive(String email, List<File> requiredFiles,
                                                                String zipName) throws IOException {
-        if (isUploadingActive)
-            throw new IllegalStateException("An upload is active. Cancel the previous upload to start new.");
-
         log.info("Uploading to google drive account: " + email);
 
         zipper.zipFiles(requiredFiles, zipName);
 
-        isUploadingActive = true;
-
         var file = new File(zipName + ".zip");
         var uploadFuture = driveService.uploadFile(email, file);
-
-        isUploadingActive = false;
 
         uploadFuture.thenAcceptAsync(isFinished -> deleteUploadedZipFile(file));
 
@@ -75,27 +68,16 @@ public class MainModel {
             System.out.println("Uploaded local file deleted..." + file.getName());
     }
 
-    public CompletableFuture<Boolean> uploadFileToGoogleDrive(String email, File file) throws IOException, InterruptedException, GeneralSecurityException {
-        if (isUploadingActive)
-            throw new IllegalStateException("An upload is active. Cancel the previous upload to start new.");
+    public CompletableFuture<Boolean> uploadFileToGoogleDrive(String email, File file) throws IOException {
 
         log.info("Uploading to google drive account: " + email);
 
-        isUploadingActive = true;
-
         var uploadFuture = driveService.uploadFile(email, file);
-
-        isUploadingActive = false;
 
         return uploadFuture;
     }
 
     public void cancelUploadFiles() {
-        if (isUploadingActive) {
-            driveService.cancelUpload();
-            return;
-        }
-
-       log.error("No upload to cancel.");
+        driveService.cancelUpload();
     }
 }
