@@ -16,6 +16,7 @@ public class TWFSFxApplication {
         FXMLLoader loader = new FXMLLoader(TWFSFxApplication.class.getResource("/templates/fx/Main.fxml"));
         loader.setControllerFactory(TWinFileShareApplication.getApplicationContext()::getBean);
         Parent root = loader.load();
+        stage.setTitle("T-WinFileShare-v1-alpha");
         stage.setScene(new Scene(root));
         stage.setResizable(false);
         stage.show();
