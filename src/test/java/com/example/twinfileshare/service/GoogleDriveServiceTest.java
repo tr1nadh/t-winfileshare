@@ -29,7 +29,7 @@ class GoogleDriveServiceTest {
 
         var isFileUploaded = service.uploadFile("nookadammu2@gmail.com", file);
 
-        assertTrue(isFileUploaded.get());
+        assertTrue(isFileUploaded.get().isUploadSuccess());
     }
 
     @Autowired
