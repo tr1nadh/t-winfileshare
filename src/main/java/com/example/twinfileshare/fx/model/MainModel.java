@@ -1,6 +1,7 @@
 package com.example.twinfileshare.fx.model;
 
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
+import com.example.twinfileshare.service.DriveUploadResponse;
 import com.example.twinfileshare.service.GoogleAuthorizationService;
 import com.example.twinfileshare.service.GoogleDriveService;
 import com.example.twinfileshare.service.utility.Zipper;
@@ -48,8 +49,8 @@ public class MainModel {
     @Autowired
     private Zipper zipper;
 
-    public CompletableFuture<Boolean> uploadFilesToGoogleDrive(String email, List<File> requiredFiles,
-                                                               String zipName) throws IOException {
+    public CompletableFuture<DriveUploadResponse> uploadFilesToGoogleDrive(String email, List<File> requiredFiles,
+                                                                           String zipName) throws IOException {
         log.info("Uploading to google drive account: " + email);
 
         zipper.zipFiles(requiredFiles, zipName);
@@ -68,7 +69,7 @@ public class MainModel {
             System.out.println("Uploaded local file deleted..." + file.getName());
     }
 
-    public CompletableFuture<Boolean> uploadFileToGoogleDrive(String email, File file) throws IOException {
+    public CompletableFuture<DriveUploadResponse> uploadFileToGoogleDrive(String email, File file) throws IOException {
 
         log.info("Uploading to google drive account: " + email);
 
