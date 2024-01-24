@@ -4,6 +4,7 @@ import com.example.twinfileshare.listener.AppMediaHttpUploaderProgressListener;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.InputStreamContent;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -27,6 +28,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 @Log4j2
@@ -72,10 +74,6 @@ public class GoogleDriveService {
 
         log.info("Uploading file '" + file.getName() + "' to drive account '" + email + "'");
 
-        var permissions = new Permission();
-        permissions.setType("anyone");
-        permissions.setRole("reader");
-
         var createRequest = drive.files().create(googleFile, mediaContent)
                 .setFields("id");
 
@@ -85,17 +83,42 @@ public class GoogleDriveService {
 
         var response = mediaHttpUploader.upload(new GenericUrl("https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable"));
 
-        if (response.getStatusCode() == 200) {
-            log.info("File '" + file.getName() + "' successfully uploaded to drive account '" + email + "'");
-            var responseMap = new GsonJsonParser().parseMap(response.parseAsString());
-            var id = responseMap.get("id").toString();
-            drive.permissions().create(id, permissions).execute();
-            var fileMetadata = drive.files().get(id).setFields("webViewLink").execute();
-            var link = fileMetadata.getWebViewLink();
-            return CompletableFuture.completedFuture(new DriveUploadResponse(response.getStatusCode() == 200, link));
+        if (isUploadSuccess(response)) {
+            var filename = file.getName();
+            log.info("File '" + filename + "' successfully uploaded to drive account '" + email + "'");
+            var responseMap = getStringObjectMap(response);
+            var id = executeShareAnyonePermission(responseMap, drive, filename);
+            var link = getSharableLink(drive, id, filename);
+            return CompletableFuture.completedFuture(new DriveUploadResponse(isUploadSuccess(response), link));
         }
 
         return CompletableFuture.completedFuture(new DriveUploadResponse(false, null));
+    }
+
+    private String getSharableLink(Drive drive, String id, String filename) throws IOException {
+        log.info("Getting... anyone sharable link for the file: " + filename);
+        var fileMetadata = drive.files().get(id).setFields("webViewLink").execute();
+        return fileMetadata.getWebViewLink();
+    }
+
+    private String executeShareAnyonePermission(Map<String, Object> responseMap, Drive drive, String filename) throws IOException {
+        var permissions = new Permission();
+        permissions.setType("anyone");
+        permissions.setRole("reader");
+
+        log.info("Adding... permissions to view anyone via sharable link to file: " + filename);
+
+        var id = responseMap.get("id").toString();
+        drive.permissions().create(id, permissions).execute();
+        return id;
+    }
+
+    private boolean isUploadSuccess(HttpResponse response) {
+        return response.getStatusCode() == 200;
+    }
+
+    private Map<String, Object> getStringObjectMap(HttpResponse response) throws IOException {
+        return new GsonJsonParser().parseMap(response.parseAsString());
     }
 
     private File getDriveFile(java.io.File file, Drive drive) throws IOException {
