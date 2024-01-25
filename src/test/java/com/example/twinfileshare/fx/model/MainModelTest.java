@@ -34,6 +34,6 @@ class MainModelTest {
 
         var res = result.get();
 
-        assertTrue(res);
+        assertTrue(res.isUploadSuccess());
     }
 }
