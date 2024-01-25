@@ -3,6 +3,7 @@ package com.example.twinfileshare.service;
 import com.example.twinfileshare.listener.AppMediaHttpUploaderProgressListener;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.googleapis.media.MediaHttpUploader;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
@@ -77,9 +78,7 @@ public class GoogleDriveService {
         var createRequest = drive.files().create(googleFile, mediaContent)
                 .setFields("id");
 
-        var mediaHttpUploader = createRequest.getMediaHttpUploader();
-        progressListener = new AppMediaHttpUploaderProgressListener(publisher, this);
-        mediaHttpUploader.setProgressListener(progressListener);
+        var mediaHttpUploader = getMediaHttpUploader(createRequest);
 
         var response = mediaHttpUploader.upload(new GenericUrl("https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable"));
 
@@ -93,6 +92,13 @@ public class GoogleDriveService {
         }
 
         return CompletableFuture.completedFuture(new DriveUploadResponse(false, null));
+    }
+
+    private MediaHttpUploader getMediaHttpUploader(Drive.Files.Create createRequest) {
+        var mediaHttpUploader = createRequest.getMediaHttpUploader();
+        progressListener = new AppMediaHttpUploaderProgressListener(publisher, this);
+        mediaHttpUploader.setProgressListener(progressListener);
+        return mediaHttpUploader;
     }
 
     private String getSharableLink(Drive drive, String id, String filename) throws IOException {
