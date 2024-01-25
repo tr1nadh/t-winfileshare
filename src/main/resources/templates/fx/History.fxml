@@ -8,7 +8,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.twinfileshare.fx.view.HistoryView">
    <children>
-      <ListView fx:id="histroyListView" layoutX="46.0" layoutY="117.0" prefHeight="253.0" prefWidth="491.0" />
+      <ListView fx:id="historyListView" layoutX="46.0" layoutY="117.0" prefHeight="253.0" prefWidth="491.0" />
       <Label layoutX="248.0" layoutY="21.0" text="History">
          <font>
             <Font name="Copperplate Gothic Light" size="25.0" />
