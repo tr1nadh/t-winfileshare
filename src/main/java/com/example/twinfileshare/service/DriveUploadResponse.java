@@ -1,12 +1,14 @@
 package com.example.twinfileshare.service;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
-@AllArgsConstructor
+@Builder
 @Getter
 public class DriveUploadResponse {
 
+    private String id;
+    private String filename;
     private boolean isUploadSuccess;
     private String sharableLink;
 }
