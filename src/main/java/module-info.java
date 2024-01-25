@@ -45,4 +45,5 @@ module t.winfileshare {
     opens com.example.twinfileshare.fx.alert;
     exports com.example.twinfileshare.exception;
     opens com.example.twinfileshare.exception;
+    exports com.example.twinfileshare.entity;
 }
