@@ -82,16 +82,21 @@ public class GoogleDriveService {
 
         var response = mediaHttpUploader.upload(new GenericUrl("https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable"));
 
+        var filename = file.getName();
+        var responseMap = getStringObjectMap(response);
+
         if (isUploadSuccess(response)) {
-            var filename = file.getName();
             log.info("File '" + filename + "' successfully uploaded to drive account '" + email + "'");
-            var responseMap = getStringObjectMap(response);
             var id = executeShareAnyonePermission(responseMap, drive, filename);
             var link = getSharableLink(drive, id, filename);
-            return CompletableFuture.completedFuture(new DriveUploadResponse(isUploadSuccess(response), link));
+            return CompletableFuture.completedFuture(getDriveUploadResponse(id, filename, response, link));
         }
 
-        return CompletableFuture.completedFuture(new DriveUploadResponse(false, null));
+        return CompletableFuture.completedFuture(DriveUploadResponse.builder().id(responseMap.get("id").toString()).filename(filename).build());
+    }
+
+    private DriveUploadResponse getDriveUploadResponse(String id, String filename, HttpResponse response, String link) {
+        return DriveUploadResponse.builder().id(id).filename(filename).isUploadSuccess(isUploadSuccess(response)).sharableLink(link).build();
     }
 
     private MediaHttpUploader getMediaHttpUploader(Drive.Files.Create createRequest) {
