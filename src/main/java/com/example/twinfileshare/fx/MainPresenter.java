@@ -1,5 +1,6 @@
 package com.example.twinfileshare.fx;
 
+import com.example.twinfileshare.event.payload.FileUploadSuccessEvent;
 import com.example.twinfileshare.fx.alert.FxAlert;
 import com.example.twinfileshare.fx.model.MainModel;
 import com.example.twinfileshare.fx.view.MainView;
@@ -13,6 +14,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -170,7 +172,7 @@ public class MainPresenter {
         uploadTask.thenAcceptAsync(driveUploadResponse -> {
             executePostUploadTasks();
             if (driveUploadResponse.isUploadSuccess())
-                executeUploadFinishedTasks(driveUploadResponse.getSharableLink());
+                executeUploadFinishedTasks(driveUploadResponse);
             else Platform.runLater(this::showUploadCancelledAlert);
         }).exceptionallyAsync(this::executeUploadTaskException);
     }
@@ -217,12 +219,16 @@ public class MainPresenter {
         );
     }
 
-    private void executeUploadFinishedTasks(String link) {
+    @Autowired
+    private ApplicationEventPublisher publisher;
+
+    private void executeUploadFinishedTasks(DriveUploadResponse driveUploadResponse) {
         System.out.println("Upload finished...");
+        publisher.publishEvent(new FileUploadSuccessEvent(this, driveUploadResponse));
         totalAddedFiles = new ArrayList<>();
         Platform.runLater(() -> {
             view.clearFileListViewItems();
-            showUploadFinishedAlert(link);
+            showUploadFinishedAlert(driveUploadResponse.getSharableLink());
         });
     }
 
