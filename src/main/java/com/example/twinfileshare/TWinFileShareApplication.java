@@ -34,6 +34,6 @@ public class TWinFileShareApplication extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		TWFSFxApplication.loadView(stage);
+		TWFSFxApplication.loadPrimaryView(stage);
 	}
 }
