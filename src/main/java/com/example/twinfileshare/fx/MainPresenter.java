@@ -309,4 +309,8 @@ public class MainPresenter {
         if (isUploadingActive)
             view.updateFileUploadProgressBar(value);
     }
+
+    public void handleChangeToHistoryScene() throws IOException {
+        TWFSFxApplication.loadScene("/templates/fx/History.fxml");
+    }
 }

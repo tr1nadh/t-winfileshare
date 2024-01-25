@@ -75,6 +75,10 @@ public class MainView implements Initializable {
         presenter.handleClearListView();
     }
 
+    public void changeToHistoryScene(ActionEvent event) throws IOException {
+        presenter.handleChangeToHistoryScene();
+    }
+
     public void uploadFiles(ActionEvent event) throws IOException, InterruptedException, GeneralSecurityException {
         presenter.handleUploadFiles();
     }
