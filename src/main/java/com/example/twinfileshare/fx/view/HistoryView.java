@@ -39,4 +39,8 @@ public class HistoryView implements Initializable {
     public void addFilesToListView(List<HistoryFile> historyFiles) {
         historyListView.getItems().addAll(historyFiles);
     }
+
+    public void setHistoryPresenter(HistoryPresenter presenter) {
+        this.presenter = presenter;
+    }
 }
