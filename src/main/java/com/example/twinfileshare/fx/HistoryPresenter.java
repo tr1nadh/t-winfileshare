@@ -24,7 +24,7 @@ public class HistoryPresenter {
     private HistoryRepository repository;
 
     public void init() {
-        view.addFilesToListView(repository.findAll());
+        view.addFilesToListView(repository.findAll().reversed());
     }
 
     public void HandleChangeToMainScene() throws IOException {
