@@ -1,7 +1,7 @@
 package com.example.twinfileshare.fx;
 
-import com.example.twinfileshare.fx.view.HistoryView;
 import com.example.twinfileshare.entity.HistoryFile;
+import com.example.twinfileshare.fx.view.HistoryView;
 import com.example.twinfileshare.repository.HistoryRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class HistoryPresenter {
 
     @PostConstruct
     public void setHistoryView() {
-        view.setPresenter(this);
+        view.setHistoryPresenter(this);
     }
 
     @Autowired
