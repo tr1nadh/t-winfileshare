@@ -26,6 +26,7 @@ module t.winfileshare {
     requires org.hibernate.orm.core;
     requires spring.aop;
     requires spring.boot.starter.aop;
+    requires org.controlsfx.controls;
 
     exports com.example.twinfileshare;
     exports com.example.twinfileshare.service;
