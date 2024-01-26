@@ -5,6 +5,7 @@ import com.example.twinfileshare.fx.HistoryPresenter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import org.springframework.stereotype.Controller;
 
@@ -27,12 +28,16 @@ public class HistoryView implements Initializable {
         presenter.init();
     }
 
-    public void copyLinkToClipboard(ActionEvent event) {
-        System.out.println("Link copied to clipboard");
+    public void copyLinkToClipboard(ActionEvent event) throws InterruptedException {
+        presenter.handleCopyLinkToClipboard(event);
     }
 
     @FXML
     private ListView<HistoryFile> historyListView = new ListView<>();
+
+    public HistoryFile getSelectedHistoryFile() {
+        return historyListView.getSelectionModel().getSelectedItem();
+    }
 
     public void addFileToListView(HistoryFile historyFile) {
         historyListView.getItems().add(historyFile);
