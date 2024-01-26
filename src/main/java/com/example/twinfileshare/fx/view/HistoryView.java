@@ -6,7 +6,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
-import lombok.Setter;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
@@ -17,7 +16,6 @@ import java.util.ResourceBundle;
 @Controller
 public class HistoryView implements Initializable {
 
-    @Setter
     private HistoryPresenter presenter;
 
     public void changeToMainScene(ActionEvent event) throws IOException {
@@ -27,6 +25,10 @@ public class HistoryView implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         presenter.init();
+    }
+
+    public void copyLinkToClipboard(ActionEvent event) {
+        System.out.println("Link copied to clipboard");
     }
 
     @FXML
