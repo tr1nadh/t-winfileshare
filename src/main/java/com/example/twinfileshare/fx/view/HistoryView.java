@@ -30,7 +30,7 @@ public class HistoryView implements Initializable {
     }
 
     @FXML
-    private ListView<HistoryFile> historyListView;
+    private ListView<HistoryFile> historyListView = new ListView<>();
 
     public void addFileToListView(HistoryFile historyFile) {
         historyListView.getItems().add(historyFile);
