@@ -3,6 +3,7 @@ package com.example.twinfileshare.fx;
 import com.example.twinfileshare.entity.HistoryFile;
 import com.example.twinfileshare.fx.view.HistoryView;
 import com.example.twinfileshare.repository.HistoryRepository;
+import com.example.twinfileshare.service.GoogleDriveService;
 import jakarta.annotation.PostConstruct;
 import javafx.event.ActionEvent;
 import javafx.scene.input.Clipboard;
@@ -48,5 +49,13 @@ public class HistoryPresenter {
                 .text("Sharable link copied to clipboard!")
                 .owner(event.getSource())
                 .showInformation();
+    }
+
+    @Autowired
+    private GoogleDriveService driveService;
+
+    public void handleStopFileSharing() throws IOException {
+        var selectedHistoryFile = view.getSelectedHistoryFile();
+        driveService.deleteFilePermissions(selectedHistoryFile.getEmail(), selectedHistoryFile.getId());
     }
 }

@@ -5,7 +5,6 @@ import com.example.twinfileshare.fx.HistoryPresenter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import org.springframework.stereotype.Controller;
 
@@ -30,6 +29,10 @@ public class HistoryView implements Initializable {
 
     public void copyLinkToClipboard(ActionEvent event) throws InterruptedException {
         presenter.handleCopyLinkToClipboard(event);
+    }
+
+    public void stopFileSharing(ActionEvent event) throws IOException {
+        presenter.handleStopFileSharing();
     }
 
     @FXML
