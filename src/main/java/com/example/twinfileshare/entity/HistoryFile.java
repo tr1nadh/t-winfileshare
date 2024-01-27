@@ -16,6 +16,7 @@ public class HistoryFile {
     private String id;
     private String filename;
     private String sharableLink;
+    private String email;
 
     @Override
     public String toString() {

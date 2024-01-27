@@ -89,14 +89,14 @@ public class GoogleDriveService {
             log.info("File '" + filename + "' successfully uploaded to drive account '" + email + "'");
             var id = executeShareAnyonePermission(responseMap, drive, filename);
             var link = getSharableLink(drive, id, filename);
-            return CompletableFuture.completedFuture(getDriveUploadResponse(id, filename, response, link));
+            return CompletableFuture.completedFuture(getDriveUploadResponse(id, filename, response, link, email));
         }
 
         return CompletableFuture.completedFuture(DriveUploadResponse.builder().id(responseMap.get("id").toString()).filename(filename).build());
     }
 
-    private DriveUploadResponse getDriveUploadResponse(String id, String filename, HttpResponse response, String link) {
-        return DriveUploadResponse.builder().id(id).filename(filename).isUploadSuccess(isUploadSuccess(response)).sharableLink(link).build();
+    private DriveUploadResponse getDriveUploadResponse(String id, String filename, HttpResponse response, String link, String email) {
+        return DriveUploadResponse.builder().id(id).filename(filename).isUploadSuccess(isUploadSuccess(response)).sharableLink(link).email(email).build();
     }
 
     private MediaHttpUploader getMediaHttpUploader(Drive.Files.Create createRequest) {
@@ -190,6 +190,22 @@ public class GoogleDriveService {
 
         log.info("Default folder -> " + driveDefFolder + " not found X");
         return null;
+    }
+
+    public void deleteFilePermissions(String email, String fileId) throws IOException {
+        if (Strings.isNullOrEmpty(email))
+            throw new IllegalStateException("Email cannot be empty or null");
+
+        if (Strings.isNullOrEmpty(fileId))
+            throw new IllegalStateException("FileId cannot be empty or null");
+
+        var cred = getCredential(email);
+
+        var drive = getDrive(cred);
+
+        drive.permissions().delete(fileId, "anyoneWithLink").execute();
+        var list = drive.permissions().list(fileId).execute();
+        System.out.println(list);
     }
 
     private String createDefFolder(Drive drive) throws IOException {
