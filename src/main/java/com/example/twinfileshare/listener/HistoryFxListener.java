@@ -26,7 +26,8 @@ public class HistoryFxListener {
         var filename = driveResponse.getFilename();
         var id = driveResponse.getId();
         var link = driveResponse.getSharableLink();
-        var history = new HistoryFile(id, filename, link);
+        var email = driveResponse.getEmail();
+        var history = new HistoryFile(id, filename, link, email);
         Platform.runLater( () -> historyPresenter.addFile(history));
         log.info("File '" + filename + "' has been added to history");
         historyRepository.save(history);
