@@ -42,6 +42,14 @@ public class HistoryPresenter {
 
     public void handleCopyLinkToClipboard(ActionEvent event) {
         var selectedHistoryFile = view.getSelectedHistoryFile();
+        if (selectedHistoryFile == null) {
+            Notifications.create()
+                    .text("Select a file to copy sharable link")
+                    .owner(event.getSource())
+                    .showInformation();
+            return;
+        }
+
         var clipBoardContent = new ClipboardContent();
         clipBoardContent.putString(selectedHistoryFile.getSharableLink());
         Clipboard.getSystemClipboard().setContent(clipBoardContent);
