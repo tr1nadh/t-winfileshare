@@ -73,5 +73,10 @@ public class HistoryPresenter {
         }
 
         driveService.deleteFilePermissions(selectedHistoryFile.getEmail(), selectedHistoryFile.getId());
+
+        Notifications.create()
+                .text("File sharing has been stopped")
+                .owner(event.getSource())
+                .showInformation();
     }
 }
