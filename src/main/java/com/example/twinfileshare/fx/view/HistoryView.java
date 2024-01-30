@@ -35,6 +35,10 @@ public class HistoryView implements Initializable {
         presenter.handleStopFileSharing(event);
     }
 
+    public void startFileSharing(ActionEvent event) throws IOException {
+        presenter.handleStartFileSharing(event);
+    }
+
     @FXML
     private ListView<HistoryFile> historyListView = new ListView<>();
 
