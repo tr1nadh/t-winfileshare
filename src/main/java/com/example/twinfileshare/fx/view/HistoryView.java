@@ -32,7 +32,7 @@ public class HistoryView implements Initializable {
     }
 
     public void stopFileSharing(ActionEvent event) throws IOException {
-        presenter.handleStopFileSharing();
+        presenter.handleStopFileSharing(event);
     }
 
     @FXML
