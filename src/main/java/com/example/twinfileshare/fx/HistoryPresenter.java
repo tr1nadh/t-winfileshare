@@ -79,4 +79,25 @@ public class HistoryPresenter {
                 .owner(event.getSource())
                 .showInformation();
     }
+
+    public void handleStartFileSharing(ActionEvent event) throws IOException {
+        var selectedHistoryFile = view.getSelectedHistoryFile();
+        if (selectedHistoryFile == null) {
+            Notifications.create()
+                    .text("Select a file to start file sharing with anyone")
+                    .owner(event.getSource())
+                    .showInformation();
+            return;
+        }
+
+        driveService.fileShareWithAnyone(
+                selectedHistoryFile.getId(),
+                selectedHistoryFile.getEmail(),
+                selectedHistoryFile.getFilename());
+
+        Notifications.create()
+                .text("File sharing has been started")
+                .owner(event.getSource())
+                .showInformation();
+    }
 }
