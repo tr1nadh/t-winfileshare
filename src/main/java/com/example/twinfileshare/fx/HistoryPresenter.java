@@ -100,4 +100,22 @@ public class HistoryPresenter {
                 .owner(event.getSource())
                 .showInformation();
     }
+
+    public void handleDeleteFile(ActionEvent event) throws IOException {
+        var selectedHistoryFile = view.getSelectedHistoryFile();
+        if (selectedHistoryFile == null) {
+            Notifications.create()
+                    .text("Select a file to delete")
+                    .owner(event.getSource())
+                    .showInformation();
+            return;
+        }
+
+        driveService.deleteFile(selectedHistoryFile.getEmail(), selectedHistoryFile.getId());
+
+        Notifications.create()
+                .text("File has been deleted")
+                .owner(event.getSource())
+                .showInformation();
+    }
 }
