@@ -204,8 +204,7 @@ public class GoogleDriveService {
         var drive = getDrive(cred);
 
         drive.permissions().delete(fileId, "anyoneWithLink").execute();
-        var list = drive.permissions().list(fileId).execute();
-        System.out.println(list);
+        log.info("Anyone with link permission has been removed to the file id: " + fileId);
     }
 
     private String createDefFolder(Drive drive) throws IOException {
