@@ -128,6 +128,11 @@ public class GoogleDriveService {
         executeShareAnyonePermission(fileId, filename, drive);
     }
 
+    public void deleteFile(String email, String fileId) throws IOException {
+        var drive = getDrive(getCredential(email));
+        drive.files().delete(fileId).execute();
+    }
+
     private boolean isUploadSuccess(HttpResponse response) {
         return response.getStatusCode() == 200;
     }
