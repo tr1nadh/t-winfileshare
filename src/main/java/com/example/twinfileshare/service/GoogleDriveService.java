@@ -123,6 +123,11 @@ public class GoogleDriveService {
         drive.permissions().create(fileId, permissions).execute();
     }
 
+    public void fileShareWithAnyone(String fileId, String email, String filename) throws IOException {
+        var drive = getDrive(getCredential(email));
+        executeShareAnyonePermission(fileId, filename, drive);
+    }
+
     private boolean isUploadSuccess(HttpResponse response) {
         return response.getStatusCode() == 200;
     }
