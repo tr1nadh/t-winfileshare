@@ -87,9 +87,10 @@ public class GoogleDriveService {
 
         if (isUploadSuccess(response)) {
             log.info("File '" + filename + "' successfully uploaded to drive account '" + email + "'");
-            var id = executeShareAnyonePermission(responseMap, drive, filename);
-            var link = getSharableLink(drive, id, filename);
-            return CompletableFuture.completedFuture(getDriveUploadResponse(id, filename, response, link, email));
+            var fileId = responseMap.get("id").toString();
+            executeShareAnyonePermission(fileId, filename, drive);
+            var link = getSharableLink(drive, fileId, filename);
+            return CompletableFuture.completedFuture(getDriveUploadResponse(fileId, filename, response, link, email));
         }
 
         return CompletableFuture.completedFuture(DriveUploadResponse.builder().id(responseMap.get("id").toString()).filename(filename).build());
@@ -112,16 +113,14 @@ public class GoogleDriveService {
         return fileMetadata.getWebViewLink();
     }
 
-    private String executeShareAnyonePermission(Map<String, Object> responseMap, Drive drive, String filename) throws IOException {
+    private void executeShareAnyonePermission(String fileId, String filename, Drive drive) throws IOException {
         var permissions = new Permission();
         permissions.setType("anyone");
         permissions.setRole("reader");
 
         log.info("Adding... permissions to view anyone via sharable link to file: " + filename);
 
-        var id = responseMap.get("id").toString();
-        drive.permissions().create(id, permissions).execute();
-        return id;
+        drive.permissions().create(fileId, permissions).execute();
     }
 
     private boolean isUploadSuccess(HttpResponse response) {
