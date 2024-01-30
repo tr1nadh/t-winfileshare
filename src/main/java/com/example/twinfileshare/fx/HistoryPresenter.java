@@ -62,8 +62,16 @@ public class HistoryPresenter {
     @Autowired
     private GoogleDriveService driveService;
 
-    public void handleStopFileSharing() throws IOException {
+    public void handleStopFileSharing(ActionEvent event) throws IOException {
         var selectedHistoryFile = view.getSelectedHistoryFile();
+        if (selectedHistoryFile == null) {
+            Notifications.create()
+                    .text("Select a file to stop file sharing")
+                    .owner(event.getSource())
+                    .showInformation();
+            return;
+        }
+
         driveService.deleteFilePermissions(selectedHistoryFile.getEmail(), selectedHistoryFile.getId());
     }
 }
