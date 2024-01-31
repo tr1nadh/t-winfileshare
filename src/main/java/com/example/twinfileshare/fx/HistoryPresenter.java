@@ -109,6 +109,14 @@ public class HistoryPresenter {
             return;
         }
 
+        if (!Strings.isNullOrEmpty(selectedHistoryFile.getSharableLink())) {
+            Notifications.create()
+                    .text("Selected file already is in sharing")
+                    .owner(event.getSource())
+                    .showInformation();
+            return;
+        }
+
         driveService.fileShareWithAnyone(
                 selectedHistoryFile.getId(),
                 selectedHistoryFile.getEmail(),
