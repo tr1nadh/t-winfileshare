@@ -4,6 +4,7 @@ import com.example.twinfileshare.entity.HistoryFile;
 import com.example.twinfileshare.fx.view.HistoryView;
 import com.example.twinfileshare.repository.HistoryRepository;
 import com.example.twinfileshare.service.GoogleDriveService;
+import com.google.api.client.util.Strings;
 import jakarta.annotation.PostConstruct;
 import javafx.event.ActionEvent;
 import javafx.scene.input.Clipboard;
@@ -45,6 +46,14 @@ public class HistoryPresenter {
         if (selectedHistoryFile == null) {
             Notifications.create()
                     .text("Select a file to copy sharable link")
+                    .owner(event.getSource())
+                    .showInformation();
+            return;
+        }
+
+        if (Strings.isNullOrEmpty(selectedHistoryFile.getSharableLink())) {
+            Notifications.create()
+                    .text("Sharing not enabled in selected file")
                     .owner(event.getSource())
                     .showInformation();
             return;
