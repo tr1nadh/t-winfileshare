@@ -1,6 +1,7 @@
 package com.example.twinfileshare.fx;
 
 import com.example.twinfileshare.entity.HistoryFile;
+import com.example.twinfileshare.fx.alert.FxAlert;
 import com.example.twinfileshare.fx.view.HistoryView;
 import com.example.twinfileshare.repository.HistoryRepository;
 import com.example.twinfileshare.service.GoogleDriveService;
@@ -128,6 +129,9 @@ public class HistoryPresenter {
                 .showInformation();
     }
 
+    @Autowired
+    private FxAlert fxAlert;
+
     public void handleDeleteFile(ActionEvent event) throws IOException {
         var selectedHistoryFile = view.getSelectedHistoryFile();
         if (selectedHistoryFile == null) {
@@ -138,6 +142,21 @@ public class HistoryPresenter {
             return;
         }
 
+        fxAlert.confirmationAlert(
+                "Delete history file",
+                "Are you sure, you want to delete '" + selectedHistoryFile.getFilename() + "' ?",
+                "Deleting file here, will also delete in the cloud",
+                () -> {
+                    try {
+                        deleteHistoryFile(selectedHistoryFile, event);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+        );
+    }
+
+    private void deleteHistoryFile(HistoryFile selectedHistoryFile, ActionEvent event) throws IOException {
         driveService.deleteFile(selectedHistoryFile.getEmail(), selectedHistoryFile.getId());
         view.deleteFileFromListView(selectedHistoryFile);
         repository.delete(selectedHistoryFile);
@@ -147,4 +166,5 @@ public class HistoryPresenter {
                 .owner(event.getSource())
                 .showInformation();
     }
+
 }
