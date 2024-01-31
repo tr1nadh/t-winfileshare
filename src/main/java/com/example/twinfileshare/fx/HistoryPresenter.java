@@ -81,7 +81,17 @@ public class HistoryPresenter {
             return;
         }
 
+        if (Strings.isNullOrEmpty(selectedHistoryFile.getSharableLink())) {
+            Notifications.create()
+                    .text("File sharing has been stopped")
+                    .owner(event.getSource())
+                    .showInformation();
+            return;
+        }
+
         driveService.deleteFilePermissions(selectedHistoryFile.getEmail(), selectedHistoryFile.getId());
+        selectedHistoryFile.setSharableLink(null);
+        repository.save(selectedHistoryFile);
 
         Notifications.create()
                 .text("File sharing has been stopped")
