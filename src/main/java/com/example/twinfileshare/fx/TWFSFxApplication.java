@@ -21,7 +21,7 @@ public class TWFSFxApplication {
     }
 
     private static Stage getStageWithProperties(Stage stage) {
-        stage.setTitle("T-WinFileShare-v1-alpha");
+        stage.setTitle("T-WinFileShare-v1-beta");
         stage.setResizable(false);
         return stage;
     }
