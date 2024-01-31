@@ -128,9 +128,6 @@ public class HistoryPresenter {
                 .showInformation();
     }
 
-    @Autowired
-    private HistoryRepository historyRepository;
-
     public void handleDeleteFile(ActionEvent event) throws IOException {
         var selectedHistoryFile = view.getSelectedHistoryFile();
         if (selectedHistoryFile == null) {
@@ -143,7 +140,7 @@ public class HistoryPresenter {
 
         driveService.deleteFile(selectedHistoryFile.getEmail(), selectedHistoryFile.getId());
         view.deleteFileFromListView(selectedHistoryFile);
-        historyRepository.delete(selectedHistoryFile);
+        repository.delete(selectedHistoryFile);
 
         Notifications.create()
                 .text("File has been deleted")
