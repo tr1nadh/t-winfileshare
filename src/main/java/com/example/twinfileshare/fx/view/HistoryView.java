@@ -58,6 +58,10 @@ public class HistoryView implements Initializable {
         historyListView.getItems().addAll(historyFiles);
     }
 
+    public void deleteFileFromListView(HistoryFile historyFile) {
+        historyListView.getItems().remove(historyFile);
+    }
+
     public void setHistoryPresenter(HistoryPresenter presenter) {
         this.presenter = presenter;
     }
