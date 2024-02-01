@@ -11,11 +11,14 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
+        final String web_panel = "/web/panel";
         registry.addViewController("/dev")
-                .setViewName("/web/panel/dev-panel.html");
+                .setViewName(web_panel + "/dev-panel.html");
         registry.addViewController("/dev/user")
-                .setViewName("/web/panel/user-panel.html");
-        registry.addViewController("/").setViewName("/web/index.html");
-        registry.addViewController("/error").setViewName("/web/error.html");
+                .setViewName(web_panel + "/user-panel.html");
+
+        final String web = "/web";
+        registry.addViewController("/").setViewName(web + "/index.html");
+        registry.addViewController("/error").setViewName(web + "/error.html");
     }
 }
