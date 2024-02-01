@@ -9,6 +9,7 @@ import lombok.*;
 @Builder
 @Entity
 @Getter
+@Setter
 public class HistoryFile {
 
     @Id
