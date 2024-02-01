@@ -14,15 +14,10 @@ public class GoogleUserCRED {
 
     @Id
     private String id;
-
     private String email;
-
     private String accessToken;
-
     private Long expires;
-
     private String refreshToken;
-
     private String shareFolderId;
 
     public static GoogleUserCRED apply(GoogleTokenResponse response, GoogleIdToken.Payload idTokenPayload) {
