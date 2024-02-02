@@ -1,7 +1,7 @@
 package com.example.twinfileshare.fx.view;
 
 import com.example.twinfileshare.entity.HistoryFile;
-import com.example.twinfileshare.fx.HistoryPresenter;
+import com.example.twinfileshare.fx.presenter.HistoryPresenter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

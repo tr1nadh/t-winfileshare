@@ -1,7 +1,7 @@
 package com.example.twinfileshare.fx.view;
 
 import com.example.twinfileshare.TWinFileShareApplication;
-import com.example.twinfileshare.fx.MainPresenter;
+import com.example.twinfileshare.fx.presenter.MainPresenter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
