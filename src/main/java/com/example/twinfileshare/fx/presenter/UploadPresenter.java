@@ -1,5 +1,6 @@
 package com.example.twinfileshare.fx.presenter;
 
+import com.example.twinfileshare.TWinFileShareApplication;
 import com.example.twinfileshare.event.payload.FileUploadSuccessEvent;
 import com.example.twinfileshare.fx.TWFSFxApplication;
 import com.example.twinfileshare.fx.alert.FxAlert;
@@ -12,6 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +39,12 @@ public class UploadPresenter {
 
     @PostConstruct
     public void setView() {
-        uploadView.setMainPresenter(this);
+        uploadView.setUploadPresenter(this);
     }
 
     public void init() {
         uploadView.setAccountChoiceBoxItems(uploadModel.getAllEmails());
-        uploadView.changeFileListViewSelectToMultiple();
+        uploadView.setFileListViewSelectionMode(SelectionMode.MULTIPLE);
         uploadView.setFileUploadProgressBarVisible(false);
     }
 
@@ -56,8 +58,12 @@ public class UploadPresenter {
                 );
     }
 
-    public void openAuthLinkInDefaultBrowser() {
-        uploadView.openURLInDefaultBrowser(uploadModel.getGoogleSignInURL());
+    @Autowired
+    private TWinFileShareApplication tWinFileShareApplication;
+
+    private void openAuthLinkInDefaultBrowser() {
+        var hostServices = tWinFileShareApplication.getHostServices();
+        hostServices.showDocument(uploadModel.getGoogleSignInURL());
     }
 
     public void handleDisconnectSelectedAccount() {
@@ -92,7 +98,7 @@ public class UploadPresenter {
     private void disconnectAccount(String email) throws GeneralSecurityException, IOException {
         uploadModel.disconnectAccount(email);
         uploadView.setAccountChoiceBoxValue("Select an email");
-        uploadView.removeEmailFromAccountChoiceBox(email);
+        uploadView.removeItemFromAccountChoiceBox(email);
     }
 
     private List<File> totalAddedFiles = new ArrayList<>();
@@ -102,7 +108,7 @@ public class UploadPresenter {
                 "Select files to upload", event);
 
         if (selectedFiles != null) {
-            uploadView.addFileNamesToFileListView(
+            uploadView.addItemsToFileListView(
                     selectedFiles.stream().map(File::getName).toList());
             totalAddedFiles.addAll(selectedFiles);
         }
@@ -287,7 +293,7 @@ public class UploadPresenter {
         uploadView.disableAddFilesBTN(true);
         uploadView.disableRemoveFilesBTN(true);
         uploadView.disableClearFilesBTN(true);
-        uploadView.disableFilesListView(true);
+        uploadView.disableFileListView(true);
     }
 
     private void enableRequiredUIElements() {
@@ -296,7 +302,7 @@ public class UploadPresenter {
         uploadView.disableAddFilesBTN(false);
         uploadView.disableRemoveFilesBTN(false);
         uploadView.disableClearFilesBTN(false);
-        uploadView.disableFilesListView(false);
+        uploadView.disableFileListView(false);
     }
 
     public void handleClearListView() {

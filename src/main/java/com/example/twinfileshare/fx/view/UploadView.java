@@ -1,16 +1,13 @@
 package com.example.twinfileshare.fx.view;
 
-import com.example.twinfileshare.TWinFileShareApplication;
 import com.example.twinfileshare.fx.presenter.UploadPresenter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.io.File;
@@ -21,7 +18,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 @Controller
-public class UploadView implements Initializable {
+public class UploadView implements IUploadView {
 
     private UploadPresenter presenter;
 
@@ -47,67 +44,56 @@ public class UploadView implements Initializable {
         presenter.init();
     }
 
-    @Autowired
-    private TWinFileShareApplication tWinFileShareApplication;
-
-    public void connectGoogleDrive(ActionEvent event) {
-        presenter.handleConnectGoogleDrive();
-    }
-
-    public void openURLInDefaultBrowser(String url) {
-        var hostServices = tWinFileShareApplication.getHostServices();
-        hostServices.showDocument(url);
-    }
-
-    public void disconnectSelectedAccount(ActionEvent event) {
-        presenter.handleDisconnectSelectedAccount();
-    }
-
-    public void addFilesFilesFromFileManager(ActionEvent event) {
-        presenter.handleAddFilesFilesFromFileManager(event);
-    }
-
-    public void removeFilesFromListView(ActionEvent event) {
-        presenter.handleRemoveFilesFromListView();
-    }
-
-    public void clearListView(ActionEvent event) {
-        presenter.handleClearListView();
-    }
-
-    public void changeToHistoryScene(ActionEvent event) throws IOException {
-        presenter.handleChangeToHistoryScene();
-    }
-
-    public void uploadFiles(ActionEvent event) throws IOException, InterruptedException, GeneralSecurityException {
-        presenter.handleUploadFiles();
-    }
-
     public void setAccountChoiceBoxItems(List<String> items) {
         accountChoiceBox.setItems(FXCollections.observableArrayList(items));
-    }
-
-    public void changeFileListViewSelectToMultiple() {
-        fileListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
     public void setAccountChoiceBoxValue(String value) {
         accountChoiceBox.setValue(value);
     }
 
-    public void removeEmailFromAccountChoiceBox(String email) {
-        accountChoiceBox.getItems().remove(email);
+    public void removeItemFromAccountChoiceBox(String item) {
+        accountChoiceBox.getItems().remove(item);
     }
 
-    public List<File> openMultipleFileChooserWindow(String windowTitle, ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle(windowTitle);
-
-        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-        return fileChooser.showOpenMultipleDialog(stage);
+    public String getAccountChoiceBoxValue() {
+        return accountChoiceBox.getValue();
     }
 
-    public void addFileNamesToFileListView(List<String> files) {
+    public void disableAccountChoiceBox(boolean disable) {
+        accountChoiceBox.setDisable(disable);
+    }
+
+    public ObservableList<String> getAccountChoiceBoxItems() {
+        return accountChoiceBox.getItems();
+    }
+
+    public void disableAccountDisconnectBTN(boolean disable){
+        accountDisconnectBTN.setDisable(disable);
+    }
+
+    public void disableAddFilesBTN(boolean disable) {
+        addFilesBTN.setDisable(disable);
+    }
+
+    public void disableRemoveFilesBTN(boolean disable) {
+        removeFilesBTN.setDisable(disable);
+    }
+
+    public void disableClearFilesBTN(boolean disable) {
+        clearFilesBTN.setDisable(disable);
+    }
+
+    @Override
+    public void disableHistoryBTN(boolean disable) {
+
+    }
+
+    public void setFileListViewSelectionMode(SelectionMode selectionMode) {
+        fileListView.getSelectionModel().setSelectionMode(selectionMode);
+    }
+
+    public void addItemsToFileListView(List<String> files) {
         fileListView.getItems().addAll(files);
     }
 
@@ -123,60 +109,32 @@ public class UploadView implements Initializable {
         return fileListView.getSelectionModel().getSelectedItems();
     }
 
-    public String getAccountChoiceBoxValue() {
-        return accountChoiceBox.getValue();
-    }
-
-    public ObservableList<String> getAccountChoiceBoxItems() {
-        return accountChoiceBox.getItems();
-    }
-
-    public void setFileUploadProgressBarVisible(boolean visible) {
-        fileUploadProgressBar.setVisible(visible);
-    }
-
-    public void setUploadBTNText(String text) {
-        uploadBTN.setText(text);
-    }
-
-    public void disableAccountChoiceBox(boolean value) {
-        accountChoiceBox.setDisable(value);
-    }
-
-    public void disableAccountDisconnectBTN(boolean value){
-        accountDisconnectBTN.setDisable(value);
-    }
-
-    public void disableAddFilesBTN(boolean value) {
-        addFilesBTN.setDisable(value);
-    }
-
-    public void disableRemoveFilesBTN(boolean value) {
-        removeFilesBTN.setDisable(value);
-    }
-
-    public void disableClearFilesBTN(boolean value) {
-        clearFilesBTN.setDisable(value);
-    }
-
-    public void disableFilesListView(boolean value) {
-        fileListView.setDisable(value);
-    }
-
-    public void updateFileUploadProgressBar(double value) {
-        fileUploadProgressBar.setProgress(value);
-    }
-
-    public double getFileUploadProgressBar() {
-        return fileUploadProgressBar.getProgress();
+    public void disableFileListView(boolean disable) {
+        fileListView.setDisable(disable);
     }
 
     public void setFileListViewItems(ObservableList<String> items) {
         fileListView.setItems(items);
     }
 
-    public void setMainPresenter(UploadPresenter presenter) {
-        this.presenter = presenter;
+    public void setFileUploadProgressBarVisible(boolean visible) {
+        fileUploadProgressBar.setVisible(visible);
+    }
+
+    public void updateFileUploadProgressBar(double value) {
+        fileUploadProgressBar.setProgress(value);
+    }
+
+    public void setUploadBTNText(String text) {
+        uploadBTN.setText(text);
+    }
+
+    public List<File> openMultipleFileChooserWindow(String windowTitle, ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(windowTitle);
+
+        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+        return fileChooser.showOpenMultipleDialog(stage);
     }
 
     public String showTextInputDialog(String placeholderText,
@@ -188,5 +146,37 @@ public class UploadView implements Initializable {
         text.getEditor().setPromptText(placeholderText);
 
         return text.showAndWait().orElse(null);
+    }
+
+    public void setUploadPresenter(UploadPresenter presenter) {
+        this.presenter = presenter;
+    }
+
+    public void connectGoogleDrive(ActionEvent event) {
+        presenter.handleConnectGoogleDrive();
+    }
+
+    public void disconnectSelectedAccount(ActionEvent event) {
+        presenter.handleDisconnectSelectedAccount();
+    }
+
+    public void addFilesFromFileManager(ActionEvent event) {
+        presenter.handleAddFilesFilesFromFileManager(event);
+    }
+
+    public void removeFilesFromFileListView(ActionEvent event) {
+        presenter.handleRemoveFilesFromListView();
+    }
+
+    public void clearFileListView(ActionEvent event) {
+        presenter.handleClearListView();
+    }
+
+    public void changeToHistoryScene(ActionEvent event) throws IOException {
+        presenter.handleChangeToHistoryScene();
+    }
+
+    public void uploadFiles(ActionEvent event) throws IOException, InterruptedException, GeneralSecurityException {
+        presenter.handleUploadFiles();
     }
 }
