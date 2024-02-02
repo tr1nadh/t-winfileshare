@@ -293,6 +293,7 @@ public class UploadPresenter {
         uploadView.disableAddFilesBTN(true);
         uploadView.disableRemoveFilesBTN(true);
         uploadView.disableClearFilesBTN(true);
+        uploadView.disableHistoryBTN(true);
         uploadView.disableFileListView(true);
     }
 
@@ -302,6 +303,7 @@ public class UploadPresenter {
         uploadView.disableAddFilesBTN(false);
         uploadView.disableRemoveFilesBTN(false);
         uploadView.disableClearFilesBTN(false);
+        uploadView.disableHistoryBTN(false);
         uploadView.disableFileListView(false);
     }
 
