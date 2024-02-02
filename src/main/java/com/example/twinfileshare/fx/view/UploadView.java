@@ -38,6 +38,8 @@ public class UploadView implements IUploadView {
     private Button uploadBTN;
     @FXML
     private ProgressBar fileUploadProgressBar;
+    @FXML
+    private Button historyBTN;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -91,7 +93,7 @@ public class UploadView implements IUploadView {
 
     @Override
     public void disableHistoryBTN(boolean disable) {
-
+        historyBTN.setDisable(disable);
     }
 
     public void setFileListViewSelectionMode(SelectionMode selectionMode) {
