@@ -3,8 +3,8 @@ package com.example.twinfileshare.fx.presenter;
 import com.example.twinfileshare.event.payload.FileUploadSuccessEvent;
 import com.example.twinfileshare.fx.TWFSFxApplication;
 import com.example.twinfileshare.fx.alert.FxAlert;
-import com.example.twinfileshare.fx.model.MainModel;
-import com.example.twinfileshare.fx.view.MainView;
+import com.example.twinfileshare.fx.model.UploadModel;
+import com.example.twinfileshare.fx.view.UploadView;
 import com.example.twinfileshare.service.DriveUploadResponse;
 import jakarta.annotation.PostConstruct;
 import javafx.application.Platform;
@@ -26,24 +26,24 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Component
-public class MainPresenter {
+public class UploadPresenter {
 
     @Autowired
-    private MainView view;
+    private UploadView uploadView;
     @Autowired
-    private MainModel model;
+    private UploadModel uploadModel;
     @Autowired
     private FxAlert fxAlert;
 
     @PostConstruct
     public void setView() {
-        view.setMainPresenter(this);
+        uploadView.setMainPresenter(this);
     }
 
     public void init() {
-        view.setAccountChoiceBoxItems(model.getAllEmails());
-        view.changeFileListViewSelectToMultiple();
-        view.setFileUploadProgressBarVisible(false);
+        uploadView.setAccountChoiceBoxItems(uploadModel.getAllEmails());
+        uploadView.changeFileListViewSelectToMultiple();
+        uploadView.setFileUploadProgressBarVisible(false);
     }
 
     public void handleConnectGoogleDrive() {
@@ -57,11 +57,11 @@ public class MainPresenter {
     }
 
     public void openAuthLinkInDefaultBrowser() {
-        view.openURLInDefaultBrowser(model.getGoogleSignInURL());
+        uploadView.openURLInDefaultBrowser(uploadModel.getGoogleSignInURL());
     }
 
     public void handleDisconnectSelectedAccount() {
-        var currentSelectedEmail = view.getAccountChoiceBoxValue();
+        var currentSelectedEmail = uploadView.getAccountChoiceBoxValue();
         if (!isEmail(currentSelectedEmail)) {
             fxAlert.informationAlert("Cannot disconnect account",
                     "Select an email");
@@ -90,26 +90,26 @@ public class MainPresenter {
     }
 
     private void disconnectAccount(String email) throws GeneralSecurityException, IOException {
-        model.disconnectAccount(email);
-        view.setAccountChoiceBoxValue("Select an email");
-        view.removeEmailFromAccountChoiceBox(email);
+        uploadModel.disconnectAccount(email);
+        uploadView.setAccountChoiceBoxValue("Select an email");
+        uploadView.removeEmailFromAccountChoiceBox(email);
     }
 
     private List<File> totalAddedFiles = new ArrayList<>();
 
     public void handleAddFilesFilesFromFileManager(ActionEvent event) {
-        var selectedFiles = view.openMultipleFileChooserWindow(
+        var selectedFiles = uploadView.openMultipleFileChooserWindow(
                 "Select files to upload", event);
 
         if (selectedFiles != null) {
-            view.addFileNamesToFileListView(
+            uploadView.addFileNamesToFileListView(
                     selectedFiles.stream().map(File::getName).toList());
             totalAddedFiles.addAll(selectedFiles);
         }
     }
 
     public void handleRemoveFilesFromListView() {
-        var listViewItems = view.getFileListViewItems();
+        var listViewItems = uploadView.getFileListViewItems();
         if (listViewItems.isEmpty()) {
             fxAlert.informationAlert(
                     "Cannot remove",
@@ -118,14 +118,14 @@ public class MainPresenter {
             return;
         }
 
-        var selectedListViewItems = view.getSelectedFileListViewItems();
+        var selectedListViewItems = uploadView.getSelectedFileListViewItems();
         listViewItems.removeAll(selectedListViewItems);
     }
 
     private boolean isUploadingActive;
 
     public void handleUploadFiles() throws IOException, InterruptedException, GeneralSecurityException {
-        var selectedEmail = view.getAccountChoiceBoxValue();
+        var selectedEmail = uploadView.getAccountChoiceBoxValue();
         if (!isEmail(selectedEmail)) {
             fxAlert.informationAlert(
                     "No email selected",
@@ -134,7 +134,7 @@ public class MainPresenter {
             return;
         }
 
-        var requiredFileNames = view.getFileListViewItems();
+        var requiredFileNames = uploadView.getFileListViewItems();
         if (requiredFileNames.isEmpty()) {
             fxAlert.informationAlert(
                     "No files to upload",
@@ -180,10 +180,10 @@ public class MainPresenter {
 
     private CompletableFuture<DriveUploadResponse> getUploadTask(String selectedEmail, List<File> requiredFiles, String zipName) throws IOException {
         if (requiredFiles.size() > 1)
-            return model.uploadFilesToGoogleDrive(selectedEmail, requiredFiles,
+            return uploadModel.uploadFilesToGoogleDrive(selectedEmail, requiredFiles,
                     zipName);
         else
-            return model.uploadFileToGoogleDrive(selectedEmail,
+            return uploadModel.uploadFileToGoogleDrive(selectedEmail,
                     requiredFiles.getFirst());
     }
 
@@ -205,7 +205,7 @@ public class MainPresenter {
     }
 
     private String getZipName() {
-        return view.showTextInputDialog(
+        return uploadView.showTextInputDialog(
                 "zip name",
                 "Name for zipping...",
                 "Enter a name to zip the files"
@@ -228,7 +228,7 @@ public class MainPresenter {
         publisher.publishEvent(new FileUploadSuccessEvent(this, driveUploadResponse));
         totalAddedFiles = new ArrayList<>();
         Platform.runLater(() -> {
-            view.clearFileListViewItems();
+            uploadView.clearFileListViewItems();
             showUploadFinishedAlert(driveUploadResponse.getSharableLink());
         });
     }
@@ -236,24 +236,24 @@ public class MainPresenter {
     private void executePostUploadTasks() {
         isUploadingActive = false;
         Platform.runLater(() -> {
-            view.setFileUploadProgressBarVisible(false);
-            view.updateFileUploadProgressBar(0.0);
-            view.setUploadBTNText("Upload files");
+            uploadView.setFileUploadProgressBarVisible(false);
+            uploadView.updateFileUploadProgressBar(0.0);
+            uploadView.setUploadBTNText("Upload files");
             enableRequiredUIElements();
         });
     }
 
     private void executePreUploadTasks() {
         disableRequiredUIElements();
-        view.setFileUploadProgressBarVisible(true);
+        uploadView.setFileUploadProgressBarVisible(true);
         isUploadingActive = true;
-        view.setUploadBTNText("Cancel");
+        uploadView.setUploadBTNText("Cancel");
         System.out.println("Uploading.........");
     }
 
     private void cancelUpload() {
-        view.setUploadBTNText("Upload files");
-        model.cancelUploadFiles();
+        uploadView.setUploadBTNText("Upload files");
+        uploadModel.cancelUploadFiles();
     }
 
     private void showUploadCancelledAlert() {
@@ -282,25 +282,25 @@ public class MainPresenter {
     }
 
     private void disableRequiredUIElements() {
-        view.disableAccountChoiceBox(true);
-        view.disableAccountDisconnectBTN(true);
-        view.disableAddFilesBTN(true);
-        view.disableRemoveFilesBTN(true);
-        view.disableClearFilesBTN(true);
-        view.disableFilesListView(true);
+        uploadView.disableAccountChoiceBox(true);
+        uploadView.disableAccountDisconnectBTN(true);
+        uploadView.disableAddFilesBTN(true);
+        uploadView.disableRemoveFilesBTN(true);
+        uploadView.disableClearFilesBTN(true);
+        uploadView.disableFilesListView(true);
     }
 
     private void enableRequiredUIElements() {
-        view.disableAccountChoiceBox(false);
-        view.disableAccountDisconnectBTN(false);
-        view.disableAddFilesBTN(false);
-        view.disableRemoveFilesBTN(false);
-        view.disableClearFilesBTN(false);
-        view.disableFilesListView(false);
+        uploadView.disableAccountChoiceBox(false);
+        uploadView.disableAccountDisconnectBTN(false);
+        uploadView.disableAddFilesBTN(false);
+        uploadView.disableRemoveFilesBTN(false);
+        uploadView.disableClearFilesBTN(false);
+        uploadView.disableFilesListView(false);
     }
 
     public void handleClearListView() {
-        if (view.getFileListViewItems().isEmpty()) {
+        if (uploadView.getFileListViewItems().isEmpty()) {
             fxAlert.informationAlert(
                     "No files to clear",
                     "Add some files to clear"
@@ -308,13 +308,13 @@ public class MainPresenter {
             return;
         }
 
-        view.setFileListViewItems(FXCollections.observableArrayList());
+        uploadView.setFileListViewItems(FXCollections.observableArrayList());
         totalAddedFiles = new ArrayList<>();
     }
 
     public void updateProgressBar(double value) {
         if (isUploadingActive)
-            view.updateFileUploadProgressBar(value);
+            uploadView.updateFileUploadProgressBar(value);
     }
 
     public void handleChangeToHistoryScene() throws IOException {

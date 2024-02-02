@@ -1,7 +1,7 @@
 package com.example.twinfileshare.fx.view;
 
 import com.example.twinfileshare.TWinFileShareApplication;
-import com.example.twinfileshare.fx.presenter.MainPresenter;
+import com.example.twinfileshare.fx.presenter.UploadPresenter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,9 +21,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 @Controller
-public class MainView implements Initializable {
+public class UploadView implements Initializable {
 
-    private MainPresenter presenter;
+    private UploadPresenter presenter;
 
     @FXML
     private Button accountDisconnectBTN;
@@ -175,7 +175,7 @@ public class MainView implements Initializable {
         fileListView.setItems(items);
     }
 
-    public void setMainPresenter(MainPresenter presenter) {
+    public void setMainPresenter(UploadPresenter presenter) {
         this.presenter = presenter;
     }
 
