@@ -50,3 +50,4 @@ google:
 # TWFS configuration
 twfs:
   Window-name: ${TWFS_WINDOW_NAME}
+  feedback-url: ${TWFS_FEEDBACK_URL}
