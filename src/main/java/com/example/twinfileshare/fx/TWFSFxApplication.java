@@ -5,11 +5,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
 @Configuration
+@Component
 public class TWFSFxApplication {
 
     private static Stage mainStage;
@@ -20,8 +23,15 @@ public class TWFSFxApplication {
         mainStage.show();
     }
 
+    private static String appWindowName;
+
+    @Value("${twfs.Window-name}")
+    private void setWindowName(String windowName) {
+        appWindowName = windowName;
+    }
+
     private static Stage getStageWithProperties(Stage stage) {
-        stage.setTitle("T-WinFileShare-v1-beta");
+        stage.setTitle(appWindowName);
         stage.setResizable(false);
         return stage;
     }
