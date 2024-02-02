@@ -18,7 +18,6 @@ public class GoogleUserCRED {
     private String accessToken;
     private Long expires;
     private String refreshToken;
-    private String shareFolderId;
 
     public static GoogleUserCRED apply(GoogleTokenResponse response, GoogleIdToken.Payload idTokenPayload) {
         var googleUserCRED = new GoogleUserCRED();
