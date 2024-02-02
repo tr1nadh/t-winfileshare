@@ -5,7 +5,7 @@ import com.example.twinfileshare.event.payload.FileUploadSuccessEvent;
 import com.example.twinfileshare.fx.TWFSFxApplication;
 import com.example.twinfileshare.fx.alert.FxAlert;
 import com.example.twinfileshare.fx.model.UploadModel;
-import com.example.twinfileshare.fx.view.UploadView;
+import com.example.twinfileshare.fx.view.IUploadView;
 import com.example.twinfileshare.service.DriveUploadResponse;
 import jakarta.annotation.PostConstruct;
 import javafx.application.Platform;
@@ -31,7 +31,7 @@ import java.util.concurrent.CompletableFuture;
 public class UploadPresenter {
 
     @Autowired
-    private UploadView uploadView;
+    private IUploadView uploadView;
     @Autowired
     private UploadModel uploadModel;
     @Autowired
