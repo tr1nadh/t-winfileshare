@@ -191,4 +191,8 @@ public class UploadView implements IUploadView {
     public void uploadFiles(ActionEvent event) throws IOException, InterruptedException, GeneralSecurityException {
         presenter.handleUploadFiles();
     }
+
+    public void openFeedback(ActionEvent event) {
+        presenter.handleOpenFeedback();
+    }
 }
