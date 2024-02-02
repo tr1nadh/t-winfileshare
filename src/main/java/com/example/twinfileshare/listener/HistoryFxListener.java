@@ -2,7 +2,7 @@ package com.example.twinfileshare.listener;
 
 import com.example.twinfileshare.entity.HistoryFile;
 import com.example.twinfileshare.event.payload.FileUploadSuccessEvent;
-import com.example.twinfileshare.fx.HistoryPresenter;
+import com.example.twinfileshare.fx.presenter.HistoryPresenter;
 import com.example.twinfileshare.repository.HistoryRepository;
 import javafx.application.Platform;
 import lombok.extern.log4j.Log4j2;

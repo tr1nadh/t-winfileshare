@@ -1,6 +1,7 @@
-package com.example.twinfileshare.fx;
+package com.example.twinfileshare.fx.presenter;
 
 import com.example.twinfileshare.event.payload.FileUploadSuccessEvent;
+import com.example.twinfileshare.fx.TWFSFxApplication;
 import com.example.twinfileshare.fx.alert.FxAlert;
 import com.example.twinfileshare.fx.model.MainModel;
 import com.example.twinfileshare.fx.view.MainView;
