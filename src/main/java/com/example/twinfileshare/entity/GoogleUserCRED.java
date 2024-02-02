@@ -30,4 +30,9 @@ public class GoogleUserCRED {
 
         return googleUserCRED;
     }
+
+    @Override
+    public String toString() {
+        return email;
+    }
 }
