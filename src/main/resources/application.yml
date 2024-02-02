@@ -49,5 +49,7 @@ google:
 
 # TWFS configuration
 twfs:
-  Window-name: ${TWFS_WINDOW_NAME}
+  window:
+    name: ${TWFS_WINDOW_NAME}
+    icon: ${TWFS_WINDOW_ICON}
   feedback-url: ${TWFS_FEEDBACK_URL}
