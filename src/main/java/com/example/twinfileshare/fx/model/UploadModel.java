@@ -18,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Log4j2
 @Service
-public class MainModel {
+public class UploadModel {
 
     @Autowired
     private GoogleAuthorizationService googleAuthorizationService;

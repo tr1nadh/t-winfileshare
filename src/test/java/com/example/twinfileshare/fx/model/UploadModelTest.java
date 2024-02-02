@@ -13,10 +13,10 @@ import java.util.concurrent.ExecutionException;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class MainModelTest {
+class UploadModelTest {
 
     @Autowired
-    private MainModel mainModel;
+    private UploadModel uploadModel;
 
     @Test
     void uploadFilesToGoogleDrive() throws GeneralSecurityException, IOException, InterruptedException, ExecutionException {
@@ -26,7 +26,7 @@ class MainModelTest {
                 new File("test-file")
         );
 
-        var result = mainModel.uploadFilesToGoogleDrive(
+        var result = uploadModel.uploadFilesToGoogleDrive(
                 "test-email",
                 requiredFiles,
                 "something"
