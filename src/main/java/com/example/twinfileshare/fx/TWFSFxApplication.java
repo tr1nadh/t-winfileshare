@@ -4,6 +4,7 @@ import com.example.twinfileshare.TWinFileShareApplication;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -25,13 +26,21 @@ public class TWFSFxApplication {
 
     private static String appWindowName;
 
-    @Value("${twfs.Window-name}")
+    @Value("${twfs.window.name}")
     private void setWindowName(String windowName) {
         appWindowName = windowName;
     }
 
+    private static String appIcon;
+
+    @Value("${twfs.window.icon}")
+    private void setAppIcon(String icon) {
+        appIcon = icon;
+    }
+
     private static Stage getStageWithProperties(Stage stage) {
         stage.setTitle(appWindowName);
+        stage.getIcons().add(new Image(appIcon));
         stage.setResizable(false);
         return stage;
     }
