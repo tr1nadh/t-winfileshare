@@ -38,9 +38,8 @@ public class MainFxListener {
     @EventListener
     public void handleUserConnectedEvent(UserConnectedEvent event) {
         var email = event.getEmail();
-        var accountChoiceBoxItems = view.getAccountChoiceBoxItems();
-        if (!accountChoiceBoxItems.contains(email))
-            accountChoiceBoxItems.add(email);
+        if (!view.accountChoiceBoxContains(email))
+            view.addAccountChoiceBoxItem(email);
 
         Platform.runLater(() -> {
             fxAlert.informationAlert(

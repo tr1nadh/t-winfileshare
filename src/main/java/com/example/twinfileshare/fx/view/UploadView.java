@@ -48,6 +48,11 @@ public class UploadView implements IUploadView {
         accountChoiceBox.setItems(FXCollections.observableArrayList(items));
     }
 
+    @Override
+    public void addAccountChoiceBoxItem(String item) {
+        accountChoiceBox.getItems().add(item);
+    }
+
     public void setAccountChoiceBoxValue(String value) {
         accountChoiceBox.setValue(value);
     }
@@ -64,8 +69,8 @@ public class UploadView implements IUploadView {
         accountChoiceBox.setDisable(disable);
     }
 
-    public ObservableList<String> getAccountChoiceBoxItems() {
-        return accountChoiceBox.getItems();
+    public boolean accountChoiceBoxContains(String item) {
+        return accountChoiceBox.getItems().contains(item);
     }
 
     public void disableAccountDisconnectBTN(boolean disable){
