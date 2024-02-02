@@ -306,7 +306,7 @@ public class UploadPresenter {
     }
 
     public void handleClearListView() {
-        if (uploadView.getFileListViewItems().isEmpty()) {
+        if (uploadView.isFileListViewEmpty()) {
             fxAlert.informationAlert(
                     "No files to clear",
                     "Add some files to clear"
