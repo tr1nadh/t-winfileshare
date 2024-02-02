@@ -17,6 +17,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
@@ -327,5 +328,13 @@ public class UploadPresenter {
 
     public void handleChangeToHistoryScene() throws IOException {
         TWFSFxApplication.loadScene("/templates/fx/History.fxml");
+    }
+
+    @Value("${twfs.feedback-url}")
+    private String feedbackUrl;
+
+    public void handleOpenFeedback() {
+        var hostServices = tWinFileShareApplication.getHostServices();
+        hostServices.showDocument(feedbackUrl);
     }
 }
