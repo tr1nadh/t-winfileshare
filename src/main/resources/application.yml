@@ -46,3 +46,7 @@ google:
     callback-uri: ${GOOGLE_OAUTH2_CALLBACK_URI}
   drive:
     def-folder: ${DEF_FOLDER_NAME}
+
+# TWFS configuration
+twfs:
+  Window-name: ${TWFS_WINDOW_NAME}
