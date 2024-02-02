@@ -1,9 +1,11 @@
 package com.example.twinfileshare.fx.presenter;
 
+import com.example.twinfileshare.entity.GoogleUserCRED;
 import com.example.twinfileshare.entity.HistoryFile;
 import com.example.twinfileshare.fx.TWFSFxApplication;
 import com.example.twinfileshare.fx.alert.FxAlert;
 import com.example.twinfileshare.fx.view.HistoryView;
+import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.example.twinfileshare.repository.HistoryRepository;
 import com.example.twinfileshare.service.GoogleDriveService;
 import com.google.api.client.util.Strings;
@@ -73,11 +75,23 @@ public class HistoryPresenter {
     @Autowired
     private GoogleDriveService driveService;
 
+    @Autowired
+    private GoogleUserCREDRepository userCREDRepository;
+
     public void handleStopFileSharing(ActionEvent event) throws IOException {
         var selectedHistoryFile = view.getSelectedHistoryFile();
         if (selectedHistoryFile == null) {
             Notifications.create()
                     .text("Select a file to stop file sharing")
+                    .owner(event.getSource())
+                    .showInformation();
+            return;
+        }
+
+        var email = selectedHistoryFile.getEmail();
+        if (getGoogleUserCRED(email) == null) {
+            Notifications.create()
+                    .text("Account '" + email + "' is disconnected, cannot stop file sharing.")
                     .owner(event.getSource())
                     .showInformation();
             return;
@@ -101,11 +115,24 @@ public class HistoryPresenter {
                 .showInformation();
     }
 
+    private GoogleUserCRED getGoogleUserCRED(String email) {
+        return userCREDRepository.findByEmail(email);
+    }
+
     public void handleStartFileSharing(ActionEvent event) throws IOException {
         var selectedHistoryFile = view.getSelectedHistoryFile();
         if (selectedHistoryFile == null) {
             Notifications.create()
                     .text("Select a file to start file sharing with anyone")
+                    .owner(event.getSource())
+                    .showInformation();
+            return;
+        }
+
+        var email = selectedHistoryFile.getEmail();
+        if (getGoogleUserCRED(email) == null) {
+            Notifications.create()
+                    .text("Account '" + email + "' is disconnected, cannot start file sharing.")
                     .owner(event.getSource())
                     .showInformation();
             return;
@@ -138,6 +165,15 @@ public class HistoryPresenter {
         if (selectedHistoryFile == null) {
             Notifications.create()
                     .text("Select a file to delete")
+                    .owner(event.getSource())
+                    .showInformation();
+            return;
+        }
+
+        var email = selectedHistoryFile.getEmail();
+        if (getGoogleUserCRED(email) == null) {
+            Notifications.create()
+                    .text("Account '" + email + "' is disconnected, cannot delete file.")
                     .owner(event.getSource())
                     .showInformation();
             return;
