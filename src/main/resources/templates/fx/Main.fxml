@@ -27,5 +27,6 @@
       <ProgressBar fx:id="fileUploadProgressBar" layoutX="113.0" layoutY="329.0" prefHeight="9.0" prefWidth="375.0" progress="0.0" />
       <Button fx:id="clearFilesBTN" layoutX="294.0" layoutY="121.0" mnemonicParsing="false" onAction="#clearFileListView" prefHeight="31.0" prefWidth="69.0" text="Clear" />
       <Button fx:id="historyBTN" layoutX="374.0" layoutY="121.0" mnemonicParsing="false" onAction="#changeToHistoryScene" prefHeight="31.0" prefWidth="113.0" text="History" />
+      <Button layoutX="509.0" layoutY="353.0" mnemonicParsing="false" onAction="#openFeedback" text="Feedback" />
    </children>
 </AnchorPane>
