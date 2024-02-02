@@ -62,13 +62,9 @@ public class MainFxListener {
                     "Authorization unsuccessful",
                     "Google drive access required!",
                     "Press OK to give google drive access.",
-                    this::openAuthLinkInDefaultBrowser
+                    presenter::openAuthLinkInDefaultBrowser
             );
         });
-    }
-
-    private void openAuthLinkInDefaultBrowser() {
-        view.openURLInDefaultBrowser(uploadModel.getGoogleSignInURL());
     }
 
     @Autowired

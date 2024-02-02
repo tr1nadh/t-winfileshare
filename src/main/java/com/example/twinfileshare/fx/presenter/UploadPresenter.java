@@ -61,7 +61,7 @@ public class UploadPresenter {
     @Autowired
     private TWinFileShareApplication tWinFileShareApplication;
 
-    private void openAuthLinkInDefaultBrowser() {
+    public void openAuthLinkInDefaultBrowser() {
         var hostServices = tWinFileShareApplication.getHostServices();
         hostServices.showDocument(uploadModel.getGoogleSignInURL());
     }
