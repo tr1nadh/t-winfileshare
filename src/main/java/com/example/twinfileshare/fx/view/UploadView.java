@@ -106,6 +106,11 @@ public class UploadView implements IUploadView {
         return fileListView.getItems();
     }
 
+    @Override
+    public boolean isFileListViewEmpty() {
+        return fileListView.getItems().isEmpty();
+    }
+
     public void clearFileListViewItems() {
         fileListView.getItems().clear();
     }

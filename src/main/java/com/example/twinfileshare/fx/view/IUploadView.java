@@ -29,6 +29,7 @@ public interface IUploadView extends Initializable {
     void setFileListViewSelectionMode(SelectionMode selectionMode);
     void addItemsToFileListView(List<String> items);
     ObservableList<String> getFileListViewItems();
+    boolean isFileListViewEmpty();
     void clearFileListViewItems();
     ObservableList<String> getSelectedFileListViewItems();
     void disableFileListView(boolean disable);
