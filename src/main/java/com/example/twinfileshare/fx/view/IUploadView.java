@@ -15,11 +15,12 @@ import java.util.List;
 @Component
 public interface IUploadView extends Initializable {
     void setAccountChoiceBoxItems(List<String> items);
+    void addAccountChoiceBoxItem(String item);
     void setAccountChoiceBoxValue(String value);
     void removeItemFromAccountChoiceBox(String item);
     String getAccountChoiceBoxValue();
     void disableAccountChoiceBox(boolean disable);
-    ObservableList<String> getAccountChoiceBoxItems();
+    boolean accountChoiceBoxContains(String item);
     void disableAccountDisconnectBTN(boolean disable);
     void disableAddFilesBTN(boolean disable);
     void disableRemoveFilesBTN(boolean disable);
