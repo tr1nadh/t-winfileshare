@@ -25,7 +25,7 @@ class GoogleDriveServiceTest {
         var cred = googleUserCREDRepository.findByEmail("test-email");
         System.out.println(cred);
 
-        var file = new File("***REMOVED***");
+        var file = new File("test-file");
 
         var isFileUploaded = service.uploadFile("test-email", file);
 
