@@ -20,7 +20,7 @@ public class TWFSFxApplication {
 
     public static void loadPrimaryView(Stage stage) throws IOException {
         mainStage = getStageWithProperties(stage);
-        mainStage.setScene(generateScene("/templates/fx/Main.fxml"));
+        mainStage.setScene(generateScene("/templates/fx/Link.fxml"));
         mainStage.show();
     }
 

@@ -38,7 +38,7 @@ public class HistoryPresenter {
     }
 
     public void HandleChangeToMainScene() throws IOException {
-        TWFSFxApplication.loadScene("/templates/fx/Main.fxml");
+        TWFSFxApplication.loadScene("/templates/fx/Link.fxml");
     }
 
     public void addFile(HistoryFile historyFile) {
