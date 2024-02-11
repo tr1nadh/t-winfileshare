@@ -22,12 +22,12 @@ class GoogleDriveServiceTest {
 
     @Test
     void uploadFileWhenAccessTokenIsInvalid() throws IOException, ExecutionException, InterruptedException {
-        var cred = googleUserCREDRepository.findByEmail("***REMOVED***");
+        var cred = googleUserCREDRepository.findByEmail("test-email");
         System.out.println(cred);
 
         var file = new File("***REMOVED***");
 
-        var isFileUploaded = service.uploadFile("***REMOVED***", file);
+        var isFileUploaded = service.uploadFile("test-email", file);
 
         assertTrue(isFileUploaded.get().isUploadSuccess());
     }
@@ -42,7 +42,7 @@ class GoogleDriveServiceTest {
 
     @Test
     void refreshAccessToken() {
-        var cred = googleUserCREDRepository.findByEmail("***REMOVED***");
+        var cred = googleUserCREDRepository.findByEmail("test-email");
         var gCred = authorizationService.toGoogleCredential(cred);
         System.out.println("Previous access token: " + gCred.getAccessToken());
 
