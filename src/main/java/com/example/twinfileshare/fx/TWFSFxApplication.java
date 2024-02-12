@@ -47,7 +47,7 @@ public class TWFSFxApplication {
         return stage;
     }
 
-    private static Scene generateScene(String resource) throws IOException {
+    public static Scene generateScene(String resource) throws IOException {
         FXMLLoader loader = new FXMLLoader(TWFSFxApplication.class.getResource(resource));
         loader.setControllerFactory(TWinFileShareApplication.getApplicationContext()::getBean);
         Parent root = loader.load();
