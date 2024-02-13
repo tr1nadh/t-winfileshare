@@ -327,7 +327,7 @@ public class UploadPresenter {
     }
 
     public void handleChangeToHistoryScene() throws IOException {
-        TWFSFxApplication.loadScene("/templates/fx/History.fxml");
+        TWFSFxApplication.loadScene("/templates/fx/Manage.fxml");
     }
 
     @Value("${twfs.feedback-url}")
