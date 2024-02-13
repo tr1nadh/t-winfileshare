@@ -27,6 +27,7 @@ module t.winfileshare {
     requires spring.aop;
     requires spring.boot.starter.aop;
     requires org.controlsfx.controls;
+    requires spring.boot.starter.web;
 
     exports com.example.twinfileshare;
     exports com.example.twinfileshare.service;
