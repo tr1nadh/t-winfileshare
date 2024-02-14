@@ -1,6 +1,6 @@
 package com.example.twinfileshare.fx.view;
 
-import com.example.twinfileshare.entity.HistoryFile;
+import com.example.twinfileshare.entity.SharedFile;
 import com.example.twinfileshare.fx.presenter.ManagePresenter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -44,22 +44,22 @@ public class ManageView implements Initializable {
     }
 
     @FXML
-    private ListView<HistoryFile> historyListView = new ListView<>();
+    private ListView<SharedFile> historyListView = new ListView<>();
 
-    public HistoryFile getSelectedHistoryFile() {
+    public SharedFile getSelectedHistoryFile() {
         return historyListView.getSelectionModel().getSelectedItem();
     }
 
-    public void addFileToListView(HistoryFile historyFile) {
-        historyListView.getItems().add(historyFile);
+    public void addFileToListView(SharedFile sharedFile) {
+        historyListView.getItems().add(sharedFile);
     }
 
-    public void addFilesToListView(List<HistoryFile> historyFiles) {
-        historyListView.getItems().addAll(historyFiles);
+    public void addFilesToListView(List<SharedFile> sharedFiles) {
+        historyListView.getItems().addAll(sharedFiles);
     }
 
-    public void deleteFileFromListView(HistoryFile historyFile) {
-        historyListView.getItems().remove(historyFile);
+    public void deleteFileFromListView(SharedFile sharedFile) {
+        historyListView.getItems().remove(sharedFile);
     }
 
     public void setHistoryPresenter(ManagePresenter presenter) {

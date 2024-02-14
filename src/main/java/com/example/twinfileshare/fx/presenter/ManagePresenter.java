@@ -1,7 +1,7 @@
 package com.example.twinfileshare.fx.presenter;
 
 import com.example.twinfileshare.entity.GoogleUserCRED;
-import com.example.twinfileshare.entity.HistoryFile;
+import com.example.twinfileshare.entity.SharedFile;
 import com.example.twinfileshare.fx.TWFSFxApplication;
 import com.example.twinfileshare.fx.alert.FxAlert;
 import com.example.twinfileshare.fx.view.ManageView;
@@ -41,8 +41,8 @@ public class ManagePresenter {
         TWFSFxApplication.loadScene("/templates/fx/LinkShare.fxml");
     }
 
-    public void addFile(HistoryFile historyFile) {
-        view.addFileToListView(historyFile);
+    public void addFile(SharedFile sharedFile) {
+        view.addFileToListView(sharedFile);
     }
 
     public void handleCopyLinkToClipboard(ActionEvent event) {
@@ -193,10 +193,10 @@ public class ManagePresenter {
         );
     }
 
-    private void deleteHistoryFile(HistoryFile selectedHistoryFile, ActionEvent event) throws IOException {
-        driveService.deleteFile(selectedHistoryFile.getEmail(), selectedHistoryFile.getId());
-        view.deleteFileFromListView(selectedHistoryFile);
-        repository.delete(selectedHistoryFile);
+    private void deleteHistoryFile(SharedFile selectedSharedFile, ActionEvent event) throws IOException {
+        driveService.deleteFile(selectedSharedFile.getEmail(), selectedSharedFile.getId());
+        view.deleteFileFromListView(selectedSharedFile);
+        repository.delete(selectedSharedFile);
 
         Notifications.create()
                 .text("File has been deleted")

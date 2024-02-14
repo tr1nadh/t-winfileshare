@@ -10,7 +10,7 @@ import lombok.*;
 @Entity
 @Getter
 @Setter
-public class HistoryFile {
+public class SharedFile {
 
     @Id
     private String id;
