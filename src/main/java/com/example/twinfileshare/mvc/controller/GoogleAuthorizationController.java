@@ -1,6 +1,7 @@
 package com.example.twinfileshare.mvc.controller;
 
 import com.example.twinfileshare.service.GoogleAuthorizationService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,9 +16,9 @@ public class GoogleAuthorizationController {
     private GoogleAuthorizationService googleAuthorizationService;
 
     @GetMapping("/callback")
-    public String callback(String code, String scope) throws IOException, GeneralSecurityException {
+    public void callback(String code, String scope, HttpServletResponse res) throws IOException, GeneralSecurityException {
         googleAuthorizationService.checkAndSaveToken(code, scope);
 
-        return "/web/callback.html";
+        res.getWriter().println("Account successfully connected!! you can close the tab now.");
     }
 }
