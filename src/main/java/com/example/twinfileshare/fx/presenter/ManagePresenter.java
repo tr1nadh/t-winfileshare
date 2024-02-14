@@ -6,7 +6,7 @@ import com.example.twinfileshare.fx.TWFSFxApplication;
 import com.example.twinfileshare.fx.alert.FxAlert;
 import com.example.twinfileshare.fx.view.ManageView;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
-import com.example.twinfileshare.repository.HistoryRepository;
+import com.example.twinfileshare.repository.ManageRepository;
 import com.example.twinfileshare.service.GoogleDriveService;
 import com.google.api.client.util.Strings;
 import jakarta.annotation.PostConstruct;
@@ -31,7 +31,7 @@ public class ManagePresenter {
     }
 
     @Autowired
-    private HistoryRepository repository;
+    private ManageRepository repository;
 
     public void init() {
         view.addFilesToListView(repository.findAll().reversed());

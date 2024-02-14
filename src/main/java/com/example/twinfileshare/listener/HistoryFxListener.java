@@ -3,7 +3,7 @@ package com.example.twinfileshare.listener;
 import com.example.twinfileshare.entity.SharedFile;
 import com.example.twinfileshare.event.payload.FileUploadSuccessEvent;
 import com.example.twinfileshare.fx.presenter.ManagePresenter;
-import com.example.twinfileshare.repository.HistoryRepository;
+import com.example.twinfileshare.repository.ManageRepository;
 import javafx.application.Platform;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class HistoryFxListener {
     private ManagePresenter managePresenter;
 
     @Autowired
-    private HistoryRepository historyRepository;
+    private ManageRepository manageRepository;
 
     @EventListener
     public void HandFileUploadSuccess(FileUploadSuccessEvent event) {
@@ -30,6 +30,6 @@ public class HistoryFxListener {
         var history = new SharedFile(id, filename, link, email);
         Platform.runLater( () -> managePresenter.addFile(history));
         log.info("File '" + filename + "' has been added to history");
-        historyRepository.save(history);
+        manageRepository.save(history);
     }
 }
