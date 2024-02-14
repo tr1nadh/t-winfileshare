@@ -42,7 +42,7 @@ public class TWFSFxApplication {
         stage.setTitle(appWindowName);
         stage.getIcons().add(new Image(appIcon));
         stage.setResizable(false);
-        stage.setWidth(800);
+        stage.setWidth(600);
         stage.setHeight(600);
         return stage;
     }
