@@ -8,9 +8,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 
-<FlowPane columnHalignment="CENTER" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.twinfileshare.fx.view.MainView">
+<FlowPane columnHalignment="CENTER" minHeight="0.0" minWidth="0.0" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.twinfileshare.fx.view.MainView">
    <children>
-      <MenuBar prefHeight="25.0" prefWidth="800.0">
+      <MenuBar prefHeight="25.0" prefWidth="601.0">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
@@ -22,18 +22,14 @@
               <MenuItem mnemonicParsing="false" text="About" />
             </items>
           </Menu>
-            <Menu mnemonicParsing="false" text="Feedback">
-              <items>
-                <MenuItem mnemonicParsing="false" text="Action 1" />
-              </items>
-            </Menu>
+            <Menu mnemonicParsing="false" text="Feedback" />
         </menus>
       </MenuBar>
-      <TabPane fx:id="naviTabPane" prefHeight="600.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id="naviTabPane" prefHeight="475.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab fx:id="shareVLinkTab" text="Share via Link">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="295.0" prefWidth="600.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="477.0" prefWidth="600.0" />
             </content>
           </Tab>
           <Tab fx:id="shareVEmailTab" text="Share via Email">
