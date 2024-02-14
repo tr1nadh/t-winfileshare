@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Log4j2
-public class HistoryFxListener {
+public class ManageFxListener {
 
     @Autowired
     private ManagePresenter managePresenter;
