@@ -1,6 +1,6 @@
 package com.example.twinfileshare.fx.view;
 
-import com.example.twinfileshare.fx.presenter.UploadPresenter;
+import com.example.twinfileshare.fx.presenter.LinkSharePresenter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,9 +18,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 @Controller
-public class UploadView implements IUploadView {
+public class LinkShareView implements ILinkShareView {
 
-    private UploadPresenter presenter;
+    private LinkSharePresenter presenter;
 
     @FXML
     private Button accountDisconnectBTN;
@@ -160,7 +160,7 @@ public class UploadView implements IUploadView {
         return text.showAndWait().orElse(null);
     }
 
-    public void setUploadPresenter(UploadPresenter presenter) {
+    public void setUploadPresenter(LinkSharePresenter presenter) {
         this.presenter = presenter;
     }
 

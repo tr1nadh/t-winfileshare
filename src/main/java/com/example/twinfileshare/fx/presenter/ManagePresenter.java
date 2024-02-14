@@ -4,7 +4,7 @@ import com.example.twinfileshare.entity.GoogleUserCRED;
 import com.example.twinfileshare.entity.HistoryFile;
 import com.example.twinfileshare.fx.TWFSFxApplication;
 import com.example.twinfileshare.fx.alert.FxAlert;
-import com.example.twinfileshare.fx.view.HistoryView;
+import com.example.twinfileshare.fx.view.ManageView;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.example.twinfileshare.repository.HistoryRepository;
 import com.example.twinfileshare.service.GoogleDriveService;
@@ -20,10 +20,10 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
-public class HistoryPresenter {
+public class ManagePresenter {
 
     @Autowired
-    private HistoryView view;
+    private ManageView view;
 
     @PostConstruct
     public void setHistoryView() {

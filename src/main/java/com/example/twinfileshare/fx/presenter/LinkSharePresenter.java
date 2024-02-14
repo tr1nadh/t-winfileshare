@@ -4,8 +4,8 @@ import com.example.twinfileshare.TWinFileShareApplication;
 import com.example.twinfileshare.event.payload.FileUploadSuccessEvent;
 import com.example.twinfileshare.fx.TWFSFxApplication;
 import com.example.twinfileshare.fx.alert.FxAlert;
-import com.example.twinfileshare.fx.model.UploadModel;
-import com.example.twinfileshare.fx.view.IUploadView;
+import com.example.twinfileshare.fx.model.LinkShareModel;
+import com.example.twinfileshare.fx.view.ILinkShareView;
 import com.example.twinfileshare.service.DriveUploadResponse;
 import jakarta.annotation.PostConstruct;
 import javafx.application.Platform;
@@ -29,12 +29,12 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Component
-public class UploadPresenter {
+public class LinkSharePresenter {
 
     @Autowired
-    private IUploadView uploadView;
+    private ILinkShareView uploadView;
     @Autowired
-    private UploadModel uploadModel;
+    private LinkShareModel linkShareModel;
     @Autowired
     private FxAlert fxAlert;
 
@@ -44,7 +44,7 @@ public class UploadPresenter {
     }
 
     public void init() {
-        uploadView.setAccountChoiceBoxItems(uploadModel.getAllEmails());
+        uploadView.setAccountChoiceBoxItems(linkShareModel.getAllEmails());
         uploadView.setFileListViewSelectionMode(SelectionMode.MULTIPLE);
         uploadView.setFileUploadProgressBarVisible(false);
     }
@@ -64,7 +64,7 @@ public class UploadPresenter {
 
     public void openAuthLinkInDefaultBrowser() {
         var hostServices = tWinFileShareApplication.getHostServices();
-        hostServices.showDocument(uploadModel.getGoogleSignInURL());
+        hostServices.showDocument(linkShareModel.getGoogleSignInURL());
     }
 
     public void handleDisconnectSelectedAccount() {
@@ -97,7 +97,7 @@ public class UploadPresenter {
     }
 
     private void disconnectAccount(String email) throws GeneralSecurityException, IOException {
-        uploadModel.disconnectAccount(email);
+        linkShareModel.disconnectAccount(email);
         uploadView.setAccountChoiceBoxValue("Select an email");
         uploadView.removeItemFromAccountChoiceBox(email);
     }
@@ -187,10 +187,10 @@ public class UploadPresenter {
 
     private CompletableFuture<DriveUploadResponse> getUploadTask(String selectedEmail, List<File> requiredFiles, String zipName) throws IOException {
         if (requiredFiles.size() > 1)
-            return uploadModel.uploadFilesToGoogleDrive(selectedEmail, requiredFiles,
+            return linkShareModel.uploadFilesToGoogleDrive(selectedEmail, requiredFiles,
                     zipName);
         else
-            return uploadModel.uploadFileToGoogleDrive(selectedEmail,
+            return linkShareModel.uploadFileToGoogleDrive(selectedEmail,
                     requiredFiles.getFirst());
     }
 
@@ -260,7 +260,7 @@ public class UploadPresenter {
 
     private void cancelUpload() {
         uploadView.setUploadBTNText("Upload files");
-        uploadModel.cancelUploadFiles();
+        linkShareModel.cancelUploadFiles();
     }
 
     private void showUploadCancelledAlert() {

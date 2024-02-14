@@ -1,7 +1,7 @@
 package com.example.twinfileshare.fx.view;
 
 import com.example.twinfileshare.entity.HistoryFile;
-import com.example.twinfileshare.fx.presenter.HistoryPresenter;
+import com.example.twinfileshare.fx.presenter.ManagePresenter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 @Controller
-public class HistoryView implements Initializable {
+public class ManageView implements Initializable {
 
-    private HistoryPresenter presenter;
+    private ManagePresenter presenter;
 
     public void changeToMainScene(ActionEvent event) throws IOException {
         presenter.HandleChangeToMainScene();
@@ -62,7 +62,7 @@ public class HistoryView implements Initializable {
         historyListView.getItems().remove(historyFile);
     }
 
-    public void setHistoryPresenter(HistoryPresenter presenter) {
+    public void setHistoryPresenter(ManagePresenter presenter) {
         this.presenter = presenter;
     }
 }
