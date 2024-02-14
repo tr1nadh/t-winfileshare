@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.twinfileshare.fx.view.HistoryView">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.twinfileshare.fx.view.ManageView">
    <children>
       <ListView fx:id="historyListView" layoutX="46.0" layoutY="117.0" prefHeight="253.0" prefWidth="491.0" />
       <Label layoutX="248.0" layoutY="21.0" text="Manage">
@@ -14,10 +14,9 @@
             <Font name="Copperplate Gothic Light" size="25.0" />
          </font>
       </Label>
-      <Button layoutX="210.0" layoutY="79.0" mnemonicParsing="false" onAction="#stopFileSharing" prefHeight="29.0" prefWidth="97.0" text="Stop sharing" />
-      <Button layoutX="46.0" layoutY="79.0" mnemonicParsing="false" onAction="#changeToMainScene" prefHeight="29.0" prefWidth="68.0" text="Upload" />
-      <Button layoutX="124.0" layoutY="79.0" mnemonicParsing="false" onAction="#copyLinkToClipboard" prefHeight="29.0" prefWidth="77.0" text="Copy link" />
-      <Button layoutX="315.0" layoutY="79.0" mnemonicParsing="false" onAction="#startFileSharing" prefHeight="29.0" prefWidth="97.0" text="Start sharing" />
-      <Button layoutX="425.0" layoutY="79.0" mnemonicParsing="false" onAction="#deleteFile" prefHeight="29.0" prefWidth="59.0" text="Delete" />
+      <Button layoutX="132.0" layoutY="79.0" mnemonicParsing="false" onAction="#stopFileSharing" prefHeight="29.0" prefWidth="97.0" text="Stop sharing" />
+      <Button layoutX="46.0" layoutY="79.0" mnemonicParsing="false" onAction="#copyLinkToClipboard" prefHeight="29.0" prefWidth="77.0" text="Copy link" />
+      <Button layoutX="237.0" layoutY="79.0" mnemonicParsing="false" onAction="#startFileSharing" prefHeight="29.0" prefWidth="97.0" text="Start sharing" />
+      <Button layoutX="347.0" layoutY="79.0" mnemonicParsing="false" onAction="#deleteFile" prefHeight="29.0" prefWidth="59.0" text="Delete" />
    </children>
 </AnchorPane>

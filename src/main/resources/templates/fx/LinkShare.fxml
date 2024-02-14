@@ -7,26 +7,24 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.twinfileshare.fx.view.UploadView">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.twinfileshare.fx.view.LinkShareView">
    <children>
-      <Button layoutX="113.0" layoutY="24.0" mnemonicParsing="false" onAction="#connectGoogleDrive" prefHeight="39.0" prefWidth="374.0" text="Connect google drive account">
+      <Button layoutX="100.0" layoutY="25.0" mnemonicParsing="false" onAction="#connectGoogleDrive" prefHeight="39.0" prefWidth="399.0" text="Connect google drive account">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <ChoiceBox fx:id="accountChoiceBox" layoutX="113.0" layoutY="75.0" prefHeight="31.0" prefWidth="293.0" value="Select an email" />
-      <Button fx:id="accountDisconnectBTN" layoutX="411.0" layoutY="75.0" mnemonicParsing="false" onAction="#disconnectSelectedAccount" prefHeight="31.0" prefWidth="76.0" text="Disconnect" />
-      <Button fx:id="addFilesBTN" layoutX="113.0" layoutY="121.0" mnemonicParsing="false" onAction="#addFilesFromFileManager" prefHeight="31.0" prefWidth="89.0" text="Add files" />
-      <ListView fx:id="fileListView" layoutX="113.0" layoutY="160.0" prefHeight="166.0" prefWidth="374.0" />
-      <Button fx:id="removeFilesBTN" layoutX="212.0" layoutY="121.0" mnemonicParsing="false" onAction="#removeFilesFromFileListView" prefHeight="31.0" prefWidth="69.0" text="Remove" />
-      <Button fx:id="uploadBTN" layoutX="113.0" layoutY="339.0" mnemonicParsing="false" onAction="#uploadFiles" prefHeight="39.0" prefWidth="374.0" text="Upload files">
+      <ChoiceBox fx:id="accountChoiceBox" layoutX="101.0" layoutY="72.0" prefHeight="31.0" prefWidth="313.0" value="Select an email" />
+      <Button fx:id="accountDisconnectBTN" layoutX="424.0" layoutY="72.0" mnemonicParsing="false" onAction="#disconnectSelectedAccount" prefHeight="31.0" prefWidth="76.0" text="Disconnect" />
+      <Button fx:id="addFilesBTN" layoutX="101.0" layoutY="113.0" mnemonicParsing="false" onAction="#addFilesFromFileManager" prefHeight="31.0" prefWidth="89.0" text="Add files" />
+      <ListView fx:id="fileListView" layoutX="100.0" layoutY="150.0" prefHeight="166.0" prefWidth="399.0" />
+      <Button fx:id="removeFilesBTN" layoutX="200.0" layoutY="113.0" mnemonicParsing="false" onAction="#removeFilesFromFileListView" prefHeight="31.0" prefWidth="69.0" text="Remove" />
+      <Button fx:id="uploadBTN" layoutX="100.0" layoutY="336.0" mnemonicParsing="false" onAction="#uploadFiles" prefHeight="39.0" prefWidth="399.0" text="Upload files">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <ProgressBar fx:id="fileUploadProgressBar" layoutX="113.0" layoutY="329.0" prefHeight="9.0" prefWidth="375.0" progress="0.0" />
-      <Button fx:id="clearFilesBTN" layoutX="294.0" layoutY="121.0" mnemonicParsing="false" onAction="#clearFileListView" prefHeight="31.0" prefWidth="69.0" text="Clear" />
-      <Button fx:id="historyBTN" layoutX="374.0" layoutY="121.0" mnemonicParsing="false" onAction="#changeToHistoryScene" prefHeight="31.0" prefWidth="113.0" text="History" />
-      <Button layoutX="509.0" layoutY="353.0" mnemonicParsing="false" onAction="#openFeedback" text="Feedback" />
+      <ProgressBar fx:id="fileUploadProgressBar" layoutX="100.0" layoutY="326.0" prefHeight="9.0" prefWidth="399.0" progress="0.0" />
+      <Button fx:id="clearFilesBTN" layoutX="282.0" layoutY="113.0" mnemonicParsing="false" onAction="#clearFileListView" prefHeight="31.0" prefWidth="69.0" text="Clear" />
    </children>
 </AnchorPane>

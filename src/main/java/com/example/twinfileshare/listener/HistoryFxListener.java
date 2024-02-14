@@ -2,7 +2,7 @@ package com.example.twinfileshare.listener;
 
 import com.example.twinfileshare.entity.HistoryFile;
 import com.example.twinfileshare.event.payload.FileUploadSuccessEvent;
-import com.example.twinfileshare.fx.presenter.HistoryPresenter;
+import com.example.twinfileshare.fx.presenter.ManagePresenter;
 import com.example.twinfileshare.repository.HistoryRepository;
 import javafx.application.Platform;
 import lombok.extern.log4j.Log4j2;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class HistoryFxListener {
 
     @Autowired
-    private HistoryPresenter historyPresenter;
+    private ManagePresenter managePresenter;
 
     @Autowired
     private HistoryRepository historyRepository;
@@ -28,7 +28,7 @@ public class HistoryFxListener {
         var link = driveResponse.getSharableLink();
         var email = driveResponse.getEmail();
         var history = new HistoryFile(id, filename, link, email);
-        Platform.runLater( () -> historyPresenter.addFile(history));
+        Platform.runLater( () -> managePresenter.addFile(history));
         log.info("File '" + filename + "' has been added to history");
         historyRepository.save(history);
     }

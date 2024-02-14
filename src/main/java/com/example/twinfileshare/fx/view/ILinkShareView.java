@@ -1,6 +1,6 @@
 package com.example.twinfileshare.fx.view;
 
-import com.example.twinfileshare.fx.presenter.UploadPresenter;
+import com.example.twinfileshare.fx.presenter.LinkSharePresenter;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -13,7 +13,7 @@ import java.security.GeneralSecurityException;
 import java.util.List;
 
 @Component
-public interface IUploadView extends Initializable {
+public interface ILinkShareView extends Initializable {
     void setAccountChoiceBoxItems(List<String> items);
     void addAccountChoiceBoxItem(String item);
     void setAccountChoiceBoxValue(String value);
@@ -39,7 +39,7 @@ public interface IUploadView extends Initializable {
     void setUploadBTNText(String text);
     List<File> openMultipleFileChooserWindow(String windowTitle, ActionEvent event);
     String showTextInputDialog(String placeholderText, String title, String header);
-    void setUploadPresenter(UploadPresenter presenter);
+    void setUploadPresenter(LinkSharePresenter presenter);
     void connectGoogleDrive(ActionEvent event);
     void disconnectSelectedAccount(ActionEvent event);
     void addFilesFromFileManager(ActionEvent event);

@@ -5,10 +5,10 @@ import com.example.twinfileshare.event.payload.DoubleEmailConnectEvent;
 import com.example.twinfileshare.event.payload.HandleProgressEvent;
 import com.example.twinfileshare.event.payload.NoDriveAccessEvent;
 import com.example.twinfileshare.event.payload.UserConnectedEvent;
-import com.example.twinfileshare.fx.presenter.UploadPresenter;
+import com.example.twinfileshare.fx.presenter.LinkSharePresenter;
 import com.example.twinfileshare.fx.alert.FxAlert;
-import com.example.twinfileshare.fx.model.UploadModel;
-import com.example.twinfileshare.fx.view.UploadView;
+import com.example.twinfileshare.fx.model.LinkShareModel;
+import com.example.twinfileshare.fx.view.LinkShareView;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import javafx.application.Platform;
 import javafx.scene.control.ButtonType;
@@ -20,10 +20,10 @@ import org.springframework.stereotype.Component;
 public class MainFxListener {
 
     @Autowired
-    private UploadView view;
+    private LinkShareView view;
 
     @Autowired
-    private UploadPresenter presenter;
+    private LinkSharePresenter presenter;
 
     @Autowired
     private FxAlert fxAlert;
@@ -52,7 +52,7 @@ public class MainFxListener {
     @Autowired
     private TWinFileShareApplication tWinFileShareApplication;
     @Autowired
-    private UploadModel uploadModel;
+    private LinkShareModel linkShareModel;
 
     @EventListener
     public void handleNoDriveAccessEvent(NoDriveAccessEvent event) {
