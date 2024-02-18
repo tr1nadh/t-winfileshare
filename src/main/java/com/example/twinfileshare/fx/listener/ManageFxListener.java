@@ -1,4 +1,4 @@
-package com.example.twinfileshare.listener;
+package com.example.twinfileshare.fx.listener;
 
 import com.example.twinfileshare.entity.SharedFile;
 import com.example.twinfileshare.event.payload.FileUploadSuccessEvent;
