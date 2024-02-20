@@ -8,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.springframework.stereotype.Controller;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +16,6 @@ import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.ResourceBundle;
 
-@Controller
 public class UploadView implements IUploadView {
 
     private UploadPresenter presenter;

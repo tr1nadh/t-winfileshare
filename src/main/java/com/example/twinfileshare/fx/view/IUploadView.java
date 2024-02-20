@@ -5,14 +5,12 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.SelectionMode;
-import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
 
-@Component
 public interface IUploadView extends Initializable {
     void setAccountChoiceBoxItems(List<String> items);
     void addAccountChoiceBoxItem(String item);

@@ -8,7 +8,6 @@ import com.example.twinfileshare.service.utility.Zipper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +16,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Log4j2
-@Service
 public class UploadModel {
 
     @Autowired
