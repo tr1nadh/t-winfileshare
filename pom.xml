@@ -18,6 +18,10 @@
 	<description>A file sharing tool</description>
 	<properties>
 		<java.version>21</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.release>17</maven.compiler.release>
+		<javafx.version>21</javafx.version>
+		<javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
 	</properties>
 
 	<dependencies>
@@ -136,10 +140,6 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.graalvm.buildtools</groupId>
-				<artifactId>native-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
@@ -160,13 +160,7 @@
 						<!-- Default configuration for running with: mvn clean javafx:run -->
 						<id>default-cli</id>
 						<configuration>
-							<mainClass>com.example.twinfileshare/com.example.twinfileshare.TWinFileShareApplication</mainClass>
-							<launcher>app</launcher>
-							<jlinkZipName>app</jlinkZipName>
-							<jlinkImageName>app</jlinkImageName>
-							<noManPages>true</noManPages>
-							<stripDebug>true</stripDebug>
-							<noHeaderFiles>true</noHeaderFiles>
+							<mainClass>com.example.twinfileshare.TWinFileShareApplication</mainClass>
 						</configuration>
 					</execution>
 				</executions>
