@@ -191,7 +191,7 @@ public class LinkSharePresenter {
                     zipName);
         else
             return linkShareModel.uploadFileToGoogleDrive(selectedEmail,
-                    requiredFiles.getFirst());
+                    requiredFiles.get(0));
     }
 
     private ArrayList<File> getRequiredFiles(ObservableList<String> requiredFileNames) {
