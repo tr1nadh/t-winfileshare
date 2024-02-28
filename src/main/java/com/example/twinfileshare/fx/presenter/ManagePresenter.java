@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Collections;
 
 @Component
 public class ManagePresenter {
@@ -34,7 +35,9 @@ public class ManagePresenter {
     private ManageRepository repository;
 
     public void init() {
-        view.addFilesToListView(repository.findAll().reversed());
+        var list = repository.findAll();
+        Collections.reverse(list);
+        view.addFilesToListView(list);
     }
 
     public void HandleChangeToMainScene() throws IOException {
