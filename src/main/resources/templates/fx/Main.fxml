@@ -20,9 +20,9 @@
           <Menu mnemonicParsing="false" text="Help">
             <items>
               <MenuItem mnemonicParsing="false" text="About" />
+                  <MenuItem mnemonicParsing="false" text="Feedback" />
             </items>
           </Menu>
-            <Menu mnemonicParsing="false" text="Feedback" />
         </menus>
       </MenuBar>
       <TabPane fx:id="naviTabPane" prefHeight="475.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
