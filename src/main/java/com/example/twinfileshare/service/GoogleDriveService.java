@@ -188,14 +188,17 @@ public class GoogleDriveService {
         var query = "mimeType='application/vnd.google-apps.folder' and name='" + driveDefFolder + "'";
         var queryRequest = drive.files().list()
                 .setQ(query)
-                .setFields("files(id)")
+                .setFields("files(id, trashed)")
                 .setSpaces("drive");
 
         var result = queryRequest.execute();
         var files = result.getFiles();
 
-        if (files != null && !files.isEmpty())
-            return files.get(0).getId();
+        if (files != null && !files.isEmpty()) {
+            var file = files.get(0);
+            if (!file.getTrashed())
+                return file.getId();
+        }
 
         log.info("Default folder -> " + driveDefFolder + " not found X");
         return null;
