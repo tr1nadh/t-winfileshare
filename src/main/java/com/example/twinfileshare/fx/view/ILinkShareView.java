@@ -25,7 +25,6 @@ public interface ILinkShareView extends Initializable {
     void disableAddFilesBTN(boolean disable);
     void disableRemoveFilesBTN(boolean disable);
     void disableClearFilesBTN(boolean disable);
-    void disableHistoryBTN(boolean disable);
     void setFileListViewSelectionMode(SelectionMode selectionMode);
     void addItemsToFileListView(List<String> items);
     ObservableList<String> getFileListViewItems();

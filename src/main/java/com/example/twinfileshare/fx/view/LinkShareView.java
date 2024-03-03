@@ -38,8 +38,6 @@ public class LinkShareView implements ILinkShareView {
     private Button uploadBTN;
     @FXML
     private ProgressBar fileUploadProgressBar;
-    @FXML
-    private Button historyBTN;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -89,11 +87,6 @@ public class LinkShareView implements ILinkShareView {
 
     public void disableClearFilesBTN(boolean disable) {
         clearFilesBTN.setDisable(disable);
-    }
-
-    @Override
-    public void disableHistoryBTN(boolean disable) {
-        historyBTN.setDisable(disable);
     }
 
     public void setFileListViewSelectionMode(SelectionMode selectionMode) {
