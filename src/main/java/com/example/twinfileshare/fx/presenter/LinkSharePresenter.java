@@ -2,7 +2,6 @@ package com.example.twinfileshare.fx.presenter;
 
 import com.example.twinfileshare.TWinFileShareApplication;
 import com.example.twinfileshare.event.payload.FileUploadSuccessEvent;
-import com.example.twinfileshare.fx.TWFSFxApplication;
 import com.example.twinfileshare.fx.alert.FxAlert;
 import com.example.twinfileshare.fx.model.LinkShareModel;
 import com.example.twinfileshare.fx.view.ILinkShareView;
@@ -17,7 +16,6 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
@@ -322,17 +320,5 @@ public class LinkSharePresenter {
     public void updateProgressBar(double value) {
         if (isUploadingActive)
             uploadView.updateFileUploadProgressBar(value);
-    }
-
-    public void handleChangeToHistoryScene() throws IOException {
-        TWFSFxApplication.loadScene("/templates/fx/Manage.fxml");
-    }
-
-    @Value("${twfs.feedback-url}")
-    private String feedbackUrl;
-
-    public void handleOpenFeedback() {
-        var hostServices = tWinFileShareApplication.getHostServices();
-        hostServices.showDocument(feedbackUrl);
     }
 }

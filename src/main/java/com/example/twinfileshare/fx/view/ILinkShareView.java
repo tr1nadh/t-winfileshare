@@ -44,6 +44,5 @@ public interface ILinkShareView extends Initializable {
     void addFilesFromFileManager(ActionEvent event);
     void removeFilesFromFileListView(ActionEvent event);
     void clearFileListView(ActionEvent event);
-    void changeToHistoryScene(ActionEvent event) throws IOException;
     void uploadFiles(ActionEvent event) throws IOException, InterruptedException, GeneralSecurityException;
 }
