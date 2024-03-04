@@ -5,9 +5,10 @@ import com.example.twinfileshare.event.payload.DoubleEmailConnectEvent;
 import com.example.twinfileshare.event.payload.HandleProgressEvent;
 import com.example.twinfileshare.event.payload.NoDriveAccessEvent;
 import com.example.twinfileshare.event.payload.UserConnectedEvent;
-import com.example.twinfileshare.fx.presenter.LinkSharePresenter;
 import com.example.twinfileshare.fx.alert.FxAlert;
 import com.example.twinfileshare.fx.model.LinkShareModel;
+import com.example.twinfileshare.fx.presenter.LinkSharePresenter;
+import com.example.twinfileshare.fx.presenter.ManagePresenter;
 import com.example.twinfileshare.fx.view.LinkShareView;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import javafx.application.Platform;
@@ -15,6 +16,8 @@ import javafx.scene.control.ButtonType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 
 @Component
 public class MainFxListener {
@@ -35,8 +38,11 @@ public class MainFxListener {
         });
     }
 
+    @Autowired
+    private ManagePresenter managePresenter;
+
     @EventListener
-    public void handleUserConnectedEvent(UserConnectedEvent event) {
+    public void handleUserConnectedEvent(UserConnectedEvent event) throws IOException {
         var email = event.getEmail();
         if (!view.accountChoiceBoxContains(email))
             view.addAccountChoiceBoxItem(email);
@@ -47,6 +53,8 @@ public class MainFxListener {
                     "Google drive successfully connected"
             );
         });
+
+        managePresenter.refresh(email);
     }
 
     @Autowired

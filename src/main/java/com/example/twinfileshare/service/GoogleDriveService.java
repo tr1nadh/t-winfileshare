@@ -235,4 +235,26 @@ public class GoogleDriveService {
         log.info("Default folder -> " + driveDefFolder + " created");
         return folderId;
     }
+
+    public List<File> findFilesFromCloud(String email) throws IOException {
+        if (Strings.isNullOrEmpty(email))
+            throw new IllegalStateException("email can't be null");
+
+        var cred = getCredential(email);
+        var drive = getDrive(cred);
+        var folderId = findFolder(drive);
+        var query = String.format("'%s' in parents and mimeType != 'application/vnd.google-apps.folder'", folderId);
+        var filesInCloud = drive.files().list()
+                .setQ(query)
+                .setFields("files(id, name, webViewLink)")
+                .execute();
+
+        var files = filesInCloud.getFiles();
+        if (files.isEmpty()) {
+            log.error("No files in the cloud");
+            return null;
+        }
+
+        return files;
+    }
 }

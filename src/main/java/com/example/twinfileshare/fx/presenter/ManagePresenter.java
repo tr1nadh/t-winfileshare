@@ -207,4 +207,19 @@ public class ManagePresenter {
                 .showInformation();
     }
 
+    public void refresh(String email) throws IOException {
+        var dbSharedFilesIds = repository.findAllIds();
+        var cloudSharedFiles = driveService.findFilesFromCloud(email);
+        for (var file : cloudSharedFiles) {
+            if (dbSharedFilesIds.contains(file.getId()))
+                continue;
+
+            var filename = file.getName();
+            var id = file.getId();
+            var link = file.getWebViewLink();
+            var sharedFile = new SharedFile(id, filename, link, email);
+            repository.save(sharedFile);
+        }
+    }
+
 }
