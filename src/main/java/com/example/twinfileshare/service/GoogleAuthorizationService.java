@@ -12,9 +12,7 @@ import com.google.api.client.auth.oauth2.ClientParametersAuthentication;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.*;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.UrlEncodedContent;
+import com.google.api.client.http.*;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
@@ -127,11 +125,19 @@ public class GoogleAuthorizationService {
         Map<String, String> data = new HashMap<>();
         data.put("token", googleUserCREDRepository.findAccessTokenByEmail(email));
 
-        var response = GoogleNetHttpTransport.newTrustedTransport()
+        var request = GoogleNetHttpTransport.newTrustedTransport()
                 .createRequestFactory()
-                .buildPostRequest(new GenericUrl(url), new UrlEncodedContent(data))
-                .execute();
+                .buildPostRequest(new GenericUrl(url), new UrlEncodedContent(data));
 
+        HttpResponse response = null;
+        try {
+            response = request.execute();
+        } catch (HttpResponseException ex) {
+            if (!ex.getMessage().contains("Token expired or revoked"))
+                throw new IllegalStateException(ex.getMessage());
+        }
+
+        assert response != null;
         var statusCode = response.getStatusCode();
         if (statusCode == 200) System.out.println("User with email: " + email + " has been revoked");
         else System.out.println("Error revoking user: " + email + ", status code: " + statusCode);
