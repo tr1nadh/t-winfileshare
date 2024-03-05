@@ -58,7 +58,8 @@ public class LinkShareModel {
         var file = new File(zipName + ".zip");
         var uploadFuture = driveService.uploadFile(email, file);
 
-        uploadFuture.thenAcceptAsync(isFinished -> deleteUploadedZipFile(file));
+        uploadFuture.thenAcceptAsync(isFinished -> deleteUploadedZipFile(file))
+                .exceptionallyAsync(ex -> {deleteUploadedZipFile(file); return null;});
 
         return uploadFuture;
     }
