@@ -203,9 +203,14 @@ public class LinkSharePresenter {
 
     private Void executeUploadTaskException(Throwable ex) {
         executePostUploadTasks();
-        Platform.runLater(() -> {
-            showUploadExceptionAlert(ex.getCause().getMessage());
-        });
+        if (ex.getCause().getMessage().contains("Stream closed")) {
+            Platform.runLater(this::showUploadCancelledAlert);
+        } else {
+            Platform.runLater(() -> {
+                showUploadExceptionAlert("Unknown error. contact dev!!!");
+            });
+        }
+
         return null;
     }
 
