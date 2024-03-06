@@ -2,6 +2,7 @@ package com.example.twinfileshare.fx.presenter;
 
 import com.example.twinfileshare.TWinFileShareApplication;
 import com.example.twinfileshare.event.payload.FileUploadSuccessEvent;
+import com.example.twinfileshare.event.payload.SelectedAccountChanged;
 import com.example.twinfileshare.fx.alert.FxAlert;
 import com.example.twinfileshare.fx.model.LinkShareModel;
 import com.example.twinfileshare.fx.view.ILinkShareView;
@@ -329,5 +330,9 @@ public class LinkSharePresenter {
     public void updateProgressBar(double value) {
         if (isUploadingActive)
             uploadView.updateFileUploadProgressBar(value);
+    }
+
+    public void handleAccountChoiceBoxValueChanged(String selectedValue) {
+        publisher.publishEvent(new SelectedAccountChanged(this, selectedValue));
     }
 }

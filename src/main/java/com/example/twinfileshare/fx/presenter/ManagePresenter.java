@@ -34,9 +34,6 @@ public class ManagePresenter {
     private ManageRepository repository;
 
     public void init() {
-        var list = repository.findAll();
-        Collections.reverse(list);
-        view.addFilesToListView(list);
         var accounts = userCREDRepository.getAllEmails();
         view.addItemsToAccountChoiceBox(accounts);
     }
@@ -221,6 +218,16 @@ public class ManagePresenter {
 
     public void handleLoadingSharedFiles(String currentValue) {
         var items = repository.getByEmail(currentValue);
+        Collections.reverse(items);
         view.setItemsToListView(items);
+    }
+
+    public void loadAccountSharedFiles(String selectedValue) {
+        var indexOfSelectedValue = view.getAccountChoiceBoxIndexOf(selectedValue);
+        view.setAccountByIndex(indexOfSelectedValue);
+    }
+
+    public void addAccount(String email) {
+        view.addItemToAccountChoiceBox(email);
     }
 }

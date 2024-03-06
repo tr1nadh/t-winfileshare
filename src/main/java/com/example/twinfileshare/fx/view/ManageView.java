@@ -79,4 +79,16 @@ public class ManageView implements Initializable {
     public void setManagePresenter(ManagePresenter presenter) {
         this.presenter = presenter;
     }
+
+    public int getAccountChoiceBoxIndexOf(String selectedValue) {
+        return accountChoiceBox.getItems().indexOf(selectedValue);
+    }
+
+    public void setAccountByIndex(int index) {
+        accountChoiceBox.getSelectionModel().select(index);
+    }
+
+    public void addItemToAccountChoiceBox(String item) {
+        accountChoiceBox.getItems().add(item);
+    }
 }

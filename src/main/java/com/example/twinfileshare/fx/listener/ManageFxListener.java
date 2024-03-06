@@ -2,6 +2,7 @@ package com.example.twinfileshare.fx.listener;
 
 import com.example.twinfileshare.entity.SharedFile;
 import com.example.twinfileshare.event.payload.FileUploadSuccessEvent;
+import com.example.twinfileshare.event.payload.SelectedAccountChanged;
 import com.example.twinfileshare.fx.presenter.ManagePresenter;
 import com.example.twinfileshare.repository.ManageRepository;
 import javafx.application.Platform;
@@ -31,5 +32,10 @@ public class ManageFxListener {
         Platform.runLater( () -> managePresenter.addFile(history));
         log.info("File '" + filename + "' has been added to history");
         manageRepository.save(history);
+    }
+
+    @EventListener
+    public void listenAccountChoiceBoxValueChanged(SelectedAccountChanged accountChanged) {
+        managePresenter.loadAccountSharedFiles(accountChanged.getSelectedValue());
     }
 }

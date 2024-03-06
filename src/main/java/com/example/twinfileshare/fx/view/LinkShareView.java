@@ -8,6 +8,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 
 import java.io.File;
@@ -41,6 +43,15 @@ public class LinkShareView implements ILinkShareView {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         presenter.init();
+        accountChoiceBox.valueProperty().addListener(((observableValue, oldValue, newValue) ->
+                AccountChoiceBoxValueChanged(newValue)));
+    }
+
+    @Autowired
+    private ApplicationEventPublisher publisher;
+
+    public void AccountChoiceBoxValueChanged(String selectedValue) {
+        presenter.handleAccountChoiceBoxValueChanged(selectedValue);
     }
 
     public void setAccountChoiceBoxItems(List<String> items) {
