@@ -38,8 +38,6 @@ public class LinkShareModel {
         googleUserCREDRepository.deleteByEmail(email);
     }
 
-    private boolean isUploadingActive;
-
     @Autowired
     private GoogleDriveService driveService;
 

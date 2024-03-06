@@ -13,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -177,7 +176,7 @@ public class LinkShareView implements ILinkShareView {
         presenter.handleClearListView();
     }
 
-    public void uploadFiles(ActionEvent event) throws IOException, InterruptedException, GeneralSecurityException {
+    public void uploadFiles(ActionEvent event) throws IOException {
         presenter.handleUploadFiles();
     }
 }

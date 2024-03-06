@@ -129,7 +129,7 @@ public class LinkSharePresenter {
 
     private boolean isUploadingActive;
 
-    public void handleUploadFiles() throws IOException, InterruptedException, GeneralSecurityException {
+    public void handleUploadFiles() throws IOException {
         var selectedEmail = uploadView.getAccountChoiceBoxValue();
         if (!isEmail(selectedEmail)) {
             fxAlert.informationAlert(
@@ -169,6 +169,10 @@ public class LinkSharePresenter {
 
         }
 
+        executeUpload(requiredFileNames, selectedEmail, zipName);
+    }
+
+    private void executeUpload(ObservableList<String> requiredFileNames, String selectedEmail, String zipName) throws IOException {
         executePreUploadTasks();
 
         var requiredFiles = getRequiredFiles(requiredFileNames);
