@@ -12,4 +12,6 @@ public interface ManageRepository extends JpaRepository<SharedFile, String> {
 
     @Query("select id from SharedFile")
     List<String> findAllIds();
+
+    List<SharedFile> getByEmail(String email);
 }

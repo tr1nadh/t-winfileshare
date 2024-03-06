@@ -38,6 +38,8 @@ public class ManagePresenter {
         var list = repository.findAll();
         Collections.reverse(list);
         view.addFilesToListView(list);
+        var accounts = userCREDRepository.getAllEmails();
+        view.addItemsToAccountChoiceBox(accounts);
     }
 
     public void HandleChangeToMainScene() throws IOException {
@@ -222,4 +224,8 @@ public class ManagePresenter {
         }
     }
 
+    public void handleLoadingSharedFiles(String currentValue) {
+        var items = repository.getByEmail(currentValue);
+        view.setItemsToListView(items);
+    }
 }

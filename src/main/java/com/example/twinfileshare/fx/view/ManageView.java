@@ -5,6 +5,7 @@ import com.example.twinfileshare.fx.presenter.ManagePresenter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
 import org.springframework.stereotype.Controller;
 
@@ -25,6 +26,12 @@ public class ManageView implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         presenter.init();
+        accountChoiceBox.valueProperty().addListener(((observableValue, oldValue, newValue) ->
+                loadSharedFiles(newValue)));
+    }
+
+    public void loadSharedFiles(String currentValue) {
+        presenter.handleLoadingSharedFiles(currentValue);
     }
 
     public void copyLinkToClipboard(ActionEvent event) throws InterruptedException {
@@ -58,8 +65,19 @@ public class ManageView implements Initializable {
         ManageListView.getItems().addAll(sharedFiles);
     }
 
+    public void setItemsToListView(List<SharedFile> sharedFiles) {
+        ManageListView.getItems().setAll(sharedFiles);
+    }
+
     public void deleteFileFromListView(SharedFile sharedFile) {
         ManageListView.getItems().remove(sharedFile);
+    }
+
+    @FXML
+    private ChoiceBox<String> accountChoiceBox;
+
+    public void addItemsToAccountChoiceBox(List<String> items) {
+        accountChoiceBox.getItems().addAll(items);
     }
 
     public void setManagePresenter(ManagePresenter presenter) {
