@@ -44,22 +44,22 @@ public class ManageView implements Initializable {
     }
 
     @FXML
-    private ListView<SharedFile> historyListView = new ListView<>();
+    private ListView<SharedFile> ManageListView = new ListView<>();
 
-    public SharedFile getSelectedHistoryFile() {
-        return historyListView.getSelectionModel().getSelectedItem();
+    public SharedFile getSelectedSharedFile() {
+        return ManageListView.getSelectionModel().getSelectedItem();
     }
 
     public void addFileToListView(SharedFile sharedFile) {
-        historyListView.getItems().add(sharedFile);
+        ManageListView.getItems().add(sharedFile);
     }
 
     public void addFilesToListView(List<SharedFile> sharedFiles) {
-        historyListView.getItems().addAll(sharedFiles);
+        ManageListView.getItems().addAll(sharedFiles);
     }
 
     public void deleteFileFromListView(SharedFile sharedFile) {
-        historyListView.getItems().remove(sharedFile);
+        ManageListView.getItems().remove(sharedFile);
     }
 
     public void setManagePresenter(ManagePresenter presenter) {
