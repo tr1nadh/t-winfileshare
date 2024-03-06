@@ -62,7 +62,7 @@ public class ManageView implements Initializable {
         historyListView.getItems().remove(sharedFile);
     }
 
-    public void setHistoryPresenter(ManagePresenter presenter) {
+    public void setManagePresenter(ManagePresenter presenter) {
         this.presenter = presenter;
     }
 }

@@ -27,8 +27,8 @@ public class ManagePresenter {
     private ManageView view;
 
     @PostConstruct
-    public void setHistoryView() {
-        view.setHistoryPresenter(this);
+    public void setManageView() {
+        view.setManagePresenter(this);
     }
 
     @Autowired
