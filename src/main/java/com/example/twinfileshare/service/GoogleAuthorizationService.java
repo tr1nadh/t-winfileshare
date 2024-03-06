@@ -6,6 +6,7 @@ import com.example.twinfileshare.event.payload.NoDriveAccessEvent;
 import com.example.twinfileshare.event.payload.UserConnectedEvent;
 import com.example.twinfileshare.listener.DriveTokenRefreshListener;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
+import com.example.twinfileshare.utility.Strings;
 import com.google.api.client.auth.oauth2.BearerToken;
 import com.google.api.client.auth.oauth2.ClientParametersAuthentication;
 import com.google.api.client.auth.oauth2.Credential;
@@ -23,7 +24,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.util.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -66,10 +66,10 @@ public class GoogleAuthorizationService {
     private ApplicationEventPublisher eventPublisher;
 
     public void checkAndSaveToken(String authCode, String scope) throws IOException, GeneralSecurityException {
-        if (StringUtils.isEmptyOrWhitespace(authCode))
+        if (Strings.isEmptyOrWhitespace(authCode))
             throw new IllegalStateException("Invalid authorization code");
 
-        if (StringUtils.isEmptyOrWhitespace(scope))
+        if (Strings.isEmptyOrWhitespace(scope))
             throw new IllegalStateException("Invalid scopes");
 
         if (!hasRequiredScopes(Arrays.stream(scope.split(" ")).toList())) {
@@ -110,7 +110,7 @@ public class GoogleAuthorizationService {
     }
 
     private GoogleIdToken.Payload verifyIdToken(String idToken) throws GeneralSecurityException, IOException {
-        if (idToken == null || idToken.isBlank())
+        if (Strings.isEmptyOrWhitespace(idToken))
             throw new IllegalStateException("Invalid ID token");
 
         var verifier = new GoogleIdTokenVerifier.Builder(HTTP_TRANSPORT, JSON_FACTORY).build();
@@ -120,6 +120,9 @@ public class GoogleAuthorizationService {
     }
 
     public void revokeUserWithEmail(String email) throws GeneralSecurityException, IOException {
+        if (Strings.isEmptyOrWhitespace(email))
+            throw new IllegalStateException("email cannot be empty or blank");
+
         var url = "https://oauth2.googleapis.com/revoke";
         Map<String, String> data = new HashMap<>();
         data.put("token", googleUserCREDRepository.findAccessTokenByEmail(email));

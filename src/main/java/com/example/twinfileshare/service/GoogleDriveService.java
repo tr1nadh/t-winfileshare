@@ -2,6 +2,7 @@ package com.example.twinfileshare.service;
 
 import com.example.twinfileshare.listener.AppMediaHttpUploaderProgressListener;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
+import com.example.twinfileshare.utility.Strings;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.media.MediaHttpUploader;
 import com.google.api.client.http.GenericUrl;
@@ -11,7 +12,6 @@ import com.google.api.client.http.InputStreamContent;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.client.util.Strings;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.Permission;
@@ -57,7 +57,7 @@ public class GoogleDriveService {
 
     @Async
     public CompletableFuture<DriveUploadResponse> uploadFile(String email, java.io.File file) throws IOException {
-        if (Strings.isNullOrEmpty(email))
+        if (Strings.isEmptyOrWhitespace(email))
             throw new IllegalStateException("Email cannot be empty or null");
 
         if (file == null)
@@ -124,11 +124,26 @@ public class GoogleDriveService {
     }
 
     public void fileShareWithAnyone(String fileId, String email, String filename) throws IOException {
+        if (Strings.isEmptyOrWhitespace(fileId))
+            throw new IllegalStateException("file id cannot be null or empty");
+
+        if (Strings.isEmptyOrWhitespace(email))
+            throw new IllegalStateException("email cannot be null or empty");
+
+        if (Strings.isEmptyOrWhitespace(filename))
+            throw new IllegalStateException("filename cannot be null or empty");
+
         var drive = getDrive(getCredential(email));
         executeShareAnyonePermission(fileId, filename, drive);
     }
 
     public void deleteFile(String email, String fileId) throws IOException {
+        if (Strings.isEmptyOrWhitespace(email))
+            throw new IllegalStateException("Email cannot be null or empty");
+
+        if (Strings.isEmptyOrWhitespace(fileId))
+            throw new IllegalStateException("File id cannot be null or empty");
+
         var drive = getDrive(getCredential(email));
         drive.files().delete(fileId).execute();
     }
@@ -205,10 +220,10 @@ public class GoogleDriveService {
     }
 
     public void deleteFilePermissions(String email, String fileId) throws IOException {
-        if (Strings.isNullOrEmpty(email))
+        if (Strings.isEmptyOrWhitespace(email))
             throw new IllegalStateException("Email cannot be empty or null");
 
-        if (Strings.isNullOrEmpty(fileId))
+        if (Strings.isEmptyOrWhitespace(fileId))
             throw new IllegalStateException("FileId cannot be empty or null");
 
         var cred = getCredential(email);
@@ -237,7 +252,7 @@ public class GoogleDriveService {
     }
 
     public List<File> findFilesFromCloud(String email) throws IOException {
-        if (Strings.isNullOrEmpty(email))
+        if (Strings.isEmptyOrWhitespace(email))
             throw new IllegalStateException("email can't be null");
 
         var cred = getCredential(email);
