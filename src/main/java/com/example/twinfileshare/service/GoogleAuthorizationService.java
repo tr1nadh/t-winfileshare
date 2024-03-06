@@ -149,18 +149,6 @@ public class GoogleAuthorizationService {
     @Value("${google.oauth2.client.secret}")
     private String googleClientSecret;
 
-    public void requestNewAccessToken(String refreshToken) throws IOException, GeneralSecurityException {
-        var newAccessTokenResponse =
-                new GoogleRefreshTokenRequest(HTTP_TRANSPORT, JSON_FACTORY, refreshToken,
-                googleClientId,
-                googleClientSecret).execute();
-
-        var idTokenPayload = verifyIdToken(newAccessTokenResponse.getIdToken());
-        var googleUserCRED = GoogleUserCRED.apply(newAccessTokenResponse, idTokenPayload);
-
-        googleUserCREDRepository.save(googleUserCRED);
-    }
-
     public Credential toGoogleCredential(GoogleUserCRED googleUserCRED) {
         var cred = new Credential.Builder(BearerToken.authorizationHeaderAccessMethod())
                 .setJsonFactory(JSON_FACTORY)
