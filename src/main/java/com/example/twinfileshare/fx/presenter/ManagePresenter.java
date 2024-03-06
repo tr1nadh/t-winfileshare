@@ -2,7 +2,6 @@ package com.example.twinfileshare.fx.presenter;
 
 import com.example.twinfileshare.entity.GoogleUserCRED;
 import com.example.twinfileshare.entity.SharedFile;
-import com.example.twinfileshare.fx.TWFSFxApplication;
 import com.example.twinfileshare.fx.alert.FxAlert;
 import com.example.twinfileshare.fx.view.ManageView;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
@@ -40,10 +39,6 @@ public class ManagePresenter {
         view.addFilesToListView(list);
         var accounts = userCREDRepository.getAllEmails();
         view.addItemsToAccountChoiceBox(accounts);
-    }
-
-    public void HandleChangeToMainScene() throws IOException {
-        TWFSFxApplication.loadScene("/templates/fx/LinkShare.fxml");
     }
 
     public void addFile(SharedFile sharedFile) {

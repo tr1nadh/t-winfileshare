@@ -19,10 +19,6 @@ public class ManageView implements Initializable {
 
     private ManagePresenter presenter;
 
-    public void changeToMainScene(ActionEvent event) throws IOException {
-        presenter.HandleChangeToMainScene();
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         presenter.init();
