@@ -22,16 +22,22 @@ public class ManageFxListener {
     private ManageRepository manageRepository;
 
     @EventListener
-    public void HandFileUploadSuccess(FileUploadSuccessEvent event) {
+    public void listenFileUploadSuccess(FileUploadSuccessEvent event) {
         var driveResponse = event.getDriveUploadResponse();
         var filename = driveResponse.getFilename();
         var id = driveResponse.getId();
         var link = driveResponse.getSharableLink();
         var email = driveResponse.getEmail();
-        var history = new SharedFile(id, filename, link, email);
-        Platform.runLater( () -> managePresenter.addFile(history));
+        var sharedFile = new SharedFile(id, filename, link, email);
+        Platform.runLater( () -> addFileToSharedList(sharedFile));
         log.info("File '" + filename + "' has been added to history");
-        manageRepository.save(history);
+        manageRepository.save(sharedFile);
+    }
+
+    private void addFileToSharedList(SharedFile sharedFile) {
+        var accountEmail = managePresenter.getCurrentSelectedAccount();
+        if (sharedFile.getEmail().equals(accountEmail))
+            managePresenter.addFile(sharedFile);
     }
 
     @EventListener

@@ -230,4 +230,8 @@ public class ManagePresenter {
     public void addAccount(String email) {
         view.addItemToAccountChoiceBox(email);
     }
+
+    public String getCurrentSelectedAccount() {
+        return view.getCurrentSelectedAccount();
+    }
 }
