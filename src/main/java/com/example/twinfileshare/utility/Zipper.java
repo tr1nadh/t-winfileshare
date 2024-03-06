@@ -1,4 +1,4 @@
-package com.example.twinfileshare.service.utility;
+package com.example.twinfileshare.utility;
 
 import com.google.api.client.util.Strings;
 import lombok.extern.log4j.Log4j2;
