@@ -1,4 +1,4 @@
-package com.example.twinfileshare.service.utility;
+package com.example.twinfileshare.service;
 
 public class UserScopes {
 
