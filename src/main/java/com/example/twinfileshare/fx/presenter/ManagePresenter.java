@@ -49,8 +49,8 @@ public class ManagePresenter {
     }
 
     public void handleCopyLinkToClipboard(ActionEvent event) {
-        var selectedHistoryFile = view.getSelectedHistoryFile();
-        if (selectedHistoryFile == null) {
+        var selectedSharedFile = view.getSelectedSharedFile();
+        if (selectedSharedFile == null) {
             Notifications.create()
                     .text("Select a file to copy sharable link")
                     .owner(event.getSource())
@@ -58,7 +58,7 @@ public class ManagePresenter {
             return;
         }
 
-        if (Strings.isNullOrEmpty(selectedHistoryFile.getSharableLink())) {
+        if (Strings.isNullOrEmpty(selectedSharedFile.getSharableLink())) {
             Notifications.create()
                     .text("Sharing not enabled in selected file")
                     .owner(event.getSource())
@@ -67,7 +67,7 @@ public class ManagePresenter {
         }
 
         var clipBoardContent = new ClipboardContent();
-        clipBoardContent.putString(selectedHistoryFile.getSharableLink());
+        clipBoardContent.putString(selectedSharedFile.getSharableLink());
         Clipboard.getSystemClipboard().setContent(clipBoardContent);
         Notifications.create()
                 .text("Sharable link copied to clipboard!")
@@ -82,8 +82,8 @@ public class ManagePresenter {
     private GoogleUserCREDRepository userCREDRepository;
 
     public void handleStopFileSharing(ActionEvent event) throws IOException {
-        var selectedHistoryFile = view.getSelectedHistoryFile();
-        if (selectedHistoryFile == null) {
+        var selectedSharedFile = view.getSelectedSharedFile();
+        if (selectedSharedFile == null) {
             Notifications.create()
                     .text("Select a file to stop file sharing")
                     .owner(event.getSource())
@@ -91,7 +91,7 @@ public class ManagePresenter {
             return;
         }
 
-        var email = selectedHistoryFile.getEmail();
+        var email = selectedSharedFile.getEmail();
         if (getGoogleUserCRED(email) == null) {
             Notifications.create()
                     .text("Account '" + email + "' is disconnected, cannot stop file sharing.")
@@ -100,7 +100,7 @@ public class ManagePresenter {
             return;
         }
 
-        if (Strings.isNullOrEmpty(selectedHistoryFile.getSharableLink())) {
+        if (Strings.isNullOrEmpty(selectedSharedFile.getSharableLink())) {
             Notifications.create()
                     .text("File sharing has been stopped")
                     .owner(event.getSource())
@@ -108,9 +108,9 @@ public class ManagePresenter {
             return;
         }
 
-        driveService.deleteFilePermissions(selectedHistoryFile.getEmail(), selectedHistoryFile.getId());
-        selectedHistoryFile.setSharableLink(null);
-        repository.save(selectedHistoryFile);
+        driveService.deleteFilePermissions(selectedSharedFile.getEmail(), selectedSharedFile.getId());
+        selectedSharedFile.setSharableLink(null);
+        repository.save(selectedSharedFile);
 
         Notifications.create()
                 .text("File sharing has been stopped")
@@ -123,8 +123,8 @@ public class ManagePresenter {
     }
 
     public void handleStartFileSharing(ActionEvent event) throws IOException {
-        var selectedHistoryFile = view.getSelectedHistoryFile();
-        if (selectedHistoryFile == null) {
+        var selectedSharedFile = view.getSelectedSharedFile();
+        if (selectedSharedFile == null) {
             Notifications.create()
                     .text("Select a file to start file sharing with anyone")
                     .owner(event.getSource())
@@ -132,7 +132,7 @@ public class ManagePresenter {
             return;
         }
 
-        var email = selectedHistoryFile.getEmail();
+        var email = selectedSharedFile.getEmail();
         if (getGoogleUserCRED(email) == null) {
             Notifications.create()
                     .text("Account '" + email + "' is disconnected, cannot start file sharing.")
@@ -141,7 +141,7 @@ public class ManagePresenter {
             return;
         }
 
-        if (!Strings.isNullOrEmpty(selectedHistoryFile.getSharableLink())) {
+        if (!Strings.isNullOrEmpty(selectedSharedFile.getSharableLink())) {
             Notifications.create()
                     .text("Selected file already is in sharing")
                     .owner(event.getSource())
@@ -150,9 +150,9 @@ public class ManagePresenter {
         }
 
         driveService.fileShareWithAnyone(
-                selectedHistoryFile.getId(),
-                selectedHistoryFile.getEmail(),
-                selectedHistoryFile.getFilename());
+                selectedSharedFile.getId(),
+                selectedSharedFile.getEmail(),
+                selectedSharedFile.getFilename());
 
         Notifications.create()
                 .text("File sharing has been started")
@@ -164,8 +164,8 @@ public class ManagePresenter {
     private FxAlert fxAlert;
 
     public void handleDeleteFile(ActionEvent event) throws IOException {
-        var selectedHistoryFile = view.getSelectedHistoryFile();
-        if (selectedHistoryFile == null) {
+        var selectedSharedFile = view.getSelectedSharedFile();
+        if (selectedSharedFile == null) {
             Notifications.create()
                     .text("Select a file to delete")
                     .owner(event.getSource())
@@ -173,7 +173,7 @@ public class ManagePresenter {
             return;
         }
 
-        var email = selectedHistoryFile.getEmail();
+        var email = selectedSharedFile.getEmail();
         if (getGoogleUserCRED(email) == null) {
             Notifications.create()
                     .text("Account '" + email + "' is disconnected, cannot delete file.")
@@ -184,11 +184,11 @@ public class ManagePresenter {
 
         fxAlert.confirmationAlert(
                 "Delete history file",
-                "Are you sure, you want to delete '" + selectedHistoryFile.getFilename() + "' ?",
+                "Are you sure, you want to delete '" + selectedSharedFile.getFilename() + "' ?",
                 "Deleting file here, will also delete in the cloud",
                 () -> {
                     try {
-                        deleteHistoryFile(selectedHistoryFile, event);
+                        deleteHistoryFile(selectedSharedFile, event);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
