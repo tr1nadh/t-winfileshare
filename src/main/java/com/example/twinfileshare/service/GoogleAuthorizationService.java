@@ -133,18 +133,18 @@ public class GoogleAuthorizationService {
                 .createRequestFactory()
                 .buildPostRequest(new GenericUrl(url), new UrlEncodedContent(data));
 
-        HttpResponse response = null;
+        HttpResponse response;
+        var statusCode = 0;
         try {
             response = request.execute();
+            statusCode = response.getStatusCode();
         } catch (HttpResponseException ex) {
-            if (!ex.getMessage().contains("Token expired or revoked"))
-                throw new IllegalStateException(ex.getMessage());
+            statusCode = ex.getStatusCode();
+            log.error(ex.getStatusMessage());
         }
 
-        assert response != null;
-        var statusCode = response.getStatusCode();
-        if (statusCode == 200) System.out.println("User with email: " + email + " has been revoked");
-        else System.out.println("Error revoking user: " + email + ", status code: " + statusCode);
+        if (statusCode == 200) log.error("Drive account: " + email + " has been revoked");
+        else log.error("Error revoking drive account: " + email + ", status code: " + statusCode);
     }
 
     @Value("${google.oauth2.client.id}")
