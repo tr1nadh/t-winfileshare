@@ -1,5 +1,6 @@
 package com.example.twinfileshare.fx.presenter;
 
+import com.example.twinfileshare.TWinFileShareApplication;
 import com.example.twinfileshare.fx.alert.FxAlert;
 import com.example.twinfileshare.fx.model.AccountMangeModal;
 import com.example.twinfileshare.fx.view.AccountManageView;
@@ -72,4 +73,13 @@ public class AccountMangePresenter {
     private boolean isEmail(String currentSelectedEmail) {
         return currentSelectedEmail.contains("@");
     }
+
+    @Autowired
+    private TWinFileShareApplication tWinFileShareApplication;
+
+    public void handleOpenGoogleAuthInBrowser() {
+        var hostServices = tWinFileShareApplication.getHostServices();
+        hostServices.showDocument(accountMangeModal.getGoogleSignInURL());
+    }
+
 }
