@@ -26,4 +26,8 @@ public class AccountMangeModal {
         googleAuthorizationService.revokeUserWithEmail(email);
         googleUserCREDRepository.deleteByEmail(email);
     }
+
+    public String getGoogleSignInURL() {
+        return googleAuthorizationService.getGoogleSignInURL();
+    }
 }
