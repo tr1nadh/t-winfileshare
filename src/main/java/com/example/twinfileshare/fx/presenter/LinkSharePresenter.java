@@ -353,4 +353,8 @@ public class LinkSharePresenter {
             e.printStackTrace();
         }
     }
+
+    public void removeAccountFromChoiceBox(String email) {
+        uploadView.removeItemFromAccountChoiceBox(email);
+    }
 }

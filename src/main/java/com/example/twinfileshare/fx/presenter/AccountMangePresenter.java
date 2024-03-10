@@ -1,6 +1,7 @@
 package com.example.twinfileshare.fx.presenter;
 
 import com.example.twinfileshare.TWinFileShareApplication;
+import com.example.twinfileshare.event.payload.AccountDisconnectedEvent;
 import com.example.twinfileshare.fx.alert.FxAlert;
 import com.example.twinfileshare.fx.model.AccountMangeModal;
 import com.example.twinfileshare.fx.view.AccountManageView;
@@ -9,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.ButtonType;
 import org.controlsfx.control.Notifications;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -36,6 +38,9 @@ public class AccountMangePresenter {
     @Autowired
     private FxAlert fxAlert;
 
+    @Autowired
+    private ApplicationEventPublisher publisher;
+
     public void handleDisconnectSelectedAccount(ActionEvent event) {
         var currentSelectedEmail = accountManageView.getAccountChoiceBoxValue();
         if (!isEmail(currentSelectedEmail)) {
@@ -55,6 +60,7 @@ public class AccountMangePresenter {
                 () -> {
                     try {
                         disconnectAccount(currentSelectedEmail);
+                        publisher.publishEvent(new AccountDisconnectedEvent(this, currentSelectedEmail));
                     } catch (GeneralSecurityException | IOException e) {
                         throw new RuntimeException(e);
                     }

@@ -87,4 +87,8 @@ public class EmailShareView implements Initializable {
     public String getMessageBodyTextValue() {
         return messageBodyText.getText();
     }
+
+    public void removeItemFromChoiceBox(String item) {
+        fromAccountChoiceBox.getItems().remove(item);
+    }
 }

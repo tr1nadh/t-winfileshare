@@ -69,4 +69,8 @@ public class EmailSharePresenter {
 
         System.out.println(message);
     }
+
+    public void removeAccountFromChoiceBox(String email) {
+        emailShareView.removeItemFromChoiceBox(email);
+    }
 }
