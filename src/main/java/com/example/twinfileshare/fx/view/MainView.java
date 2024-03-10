@@ -17,12 +17,16 @@ public class MainView implements Initializable {
     private Tab shareVLinkTab;
 
     @FXML
+    private Tab shareVEmailTab;
+
+    @FXML
     private Tab manageTab;
 
     @SneakyThrows
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         shareVLinkTab.setContent(TWFSFxApplication.generateScene("/templates/fx/LinkShare.fxml").getRoot());
+        shareVEmailTab.setContent(TWFSFxApplication.generateScene("/templates/fx/EmailShare.fxml").getRoot());
         manageTab.setContent(TWFSFxApplication.generateScene("/templates/fx/Manage.fxml").getRoot());
     }
 }
