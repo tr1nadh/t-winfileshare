@@ -32,6 +32,11 @@
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="477.0" prefWidth="600.0" />
             </content>
           </Tab>
+            <Tab fx:id="shareVEmailTab" text="Share via Email">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
             <Tab fx:id="manageTab" text="Manage">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
