@@ -303,7 +303,6 @@ public class LinkSharePresenter {
 
     private void disableRequiredUIElements() {
         uploadView.disableAccountChoiceBox(true);
-        uploadView.disableAccountDisconnectBTN(true);
         uploadView.disableAddFilesBTN(true);
         uploadView.disableRemoveFilesBTN(true);
         uploadView.disableClearFilesBTN(true);
@@ -312,7 +311,6 @@ public class LinkSharePresenter {
 
     private void enableRequiredUIElements() {
         uploadView.disableAccountChoiceBox(false);
-        uploadView.disableAccountDisconnectBTN(false);
         uploadView.disableAddFilesBTN(false);
         uploadView.disableRemoveFilesBTN(false);
         uploadView.disableClearFilesBTN(false);
