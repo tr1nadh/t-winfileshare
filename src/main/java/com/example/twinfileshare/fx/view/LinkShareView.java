@@ -190,4 +190,9 @@ public class LinkShareView implements ILinkShareView {
     public void uploadFiles(ActionEvent event) throws IOException {
         presenter.handleUploadFiles();
     }
+
+    @Override
+    public void openManageAccountsDialog(ActionEvent event) {
+        presenter.handleOpenManageAccountsDialog(event);
+    }
 }
