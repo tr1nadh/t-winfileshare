@@ -21,7 +21,6 @@ public interface ILinkShareView extends Initializable {
     String getAccountChoiceBoxValue();
     void disableAccountChoiceBox(boolean disable);
     boolean accountChoiceBoxContains(String item);
-    void disableAccountDisconnectBTN(boolean disable);
     void disableAddFilesBTN(boolean disable);
     void disableRemoveFilesBTN(boolean disable);
     void disableClearFilesBTN(boolean disable);
@@ -39,12 +38,9 @@ public interface ILinkShareView extends Initializable {
     List<File> openMultipleFileChooserWindow(String windowTitle, ActionEvent event);
     String showTextInputDialog(String placeholderText, String title, String header);
     void setUploadPresenter(LinkSharePresenter presenter);
-    void connectGoogleDrive(ActionEvent event);
-    void disconnectSelectedAccount(ActionEvent event);
     void addFilesFromFileManager(ActionEvent event);
     void removeFilesFromFileListView(ActionEvent event);
     void clearFileListView(ActionEvent event);
     void uploadFiles(ActionEvent event) throws IOException, InterruptedException, GeneralSecurityException;
-
     void openManageAccountsDialog(ActionEvent event);
 }

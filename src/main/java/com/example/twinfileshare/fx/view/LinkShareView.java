@@ -24,8 +24,6 @@ public class LinkShareView implements ILinkShareView {
     private LinkSharePresenter presenter;
 
     @FXML
-    private Button accountDisconnectBTN;
-    @FXML
     private Button addFilesBTN;
     @FXML
     private Button removeFilesBTN;
@@ -81,10 +79,6 @@ public class LinkShareView implements ILinkShareView {
 
     public boolean accountChoiceBoxContains(String item) {
         return accountChoiceBox.getItems().contains(item);
-    }
-
-    public void disableAccountDisconnectBTN(boolean disable){
-        accountDisconnectBTN.setDisable(disable);
     }
 
     public void disableAddFilesBTN(boolean disable) {
@@ -165,14 +159,6 @@ public class LinkShareView implements ILinkShareView {
 
     public void setUploadPresenter(LinkSharePresenter presenter) {
         this.presenter = presenter;
-    }
-
-    public void connectGoogleDrive(ActionEvent event) {
-        presenter.handleConnectGoogleDrive();
-    }
-
-    public void disconnectSelectedAccount(ActionEvent event) {
-        presenter.handleDisconnectSelectedAccount();
     }
 
     public void addFilesFromFileManager(ActionEvent event) {
