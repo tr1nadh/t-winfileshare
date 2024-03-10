@@ -17,6 +17,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.drive.DriveScopes;
+import com.google.api.services.gmail.GmailScopes;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,8 @@ public class GoogleAuthorizationService {
     private static final List<String> SCOPES = List.of(
             UserScopes.USER_INFO_EMAIL,
             UserScopes.USER_INFO_PROFILE,
-            DriveScopes.DRIVE);
+            DriveScopes.DRIVE,
+            GmailScopes.GMAIL_COMPOSE);
 
     @Value("${google.oauth2.callback-uri}")
     private String CALLBACK_URI;
