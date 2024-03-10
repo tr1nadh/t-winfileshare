@@ -95,4 +95,8 @@ public class ManageView implements Initializable {
     public String getCurrentSelectedAccount() {
         return accountChoiceBox.getSelectionModel().getSelectedItem();
     }
+
+    public void removeItemFromChoiceBox(String item) {
+        accountChoiceBox.getItems().remove(item);
+    }
 }

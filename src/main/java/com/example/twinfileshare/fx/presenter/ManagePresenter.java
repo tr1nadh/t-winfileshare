@@ -234,4 +234,8 @@ public class ManagePresenter {
     public String getCurrentSelectedAccount() {
         return view.getCurrentSelectedAccount();
     }
+
+    public void removeAccountFromChoiceBox(String email) {
+        view.removeItemFromChoiceBox(email);
+    }
 }
