@@ -6,16 +6,16 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.twinfileshare.fx.view.AccountManage">
+<AnchorPane prefHeight="229.0" prefWidth="482.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.twinfileshare.fx.view.AccountManage">
    <children>
-      <Button layoutX="100.0" layoutY="141.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="399.0" text="Connect google drive account">
+      <Button layoutX="41.0" layoutY="94.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="399.0" text="Connect google drive account">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <ChoiceBox fx:id="accountChoiceBox" layoutX="101.0" layoutY="188.0" prefHeight="31.0" prefWidth="313.0" value="Select an email" />
-      <Button fx:id="accountDisconnectBTN" layoutX="424.0" layoutY="188.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="76.0" text="Disconnect" />
-      <Label layoutX="203.0" layoutY="50.0" text="Manage accounts">
+      <ChoiceBox fx:id="accountChoiceBox" layoutX="42.0" layoutY="141.0" prefHeight="31.0" prefWidth="313.0" value="Select an email" />
+      <Button fx:id="accountDisconnectBTN" layoutX="365.0" layoutY="141.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="76.0" text="Disconnect" />
+      <Label layoutX="153.0" layoutY="24.0" text="Manage accounts">
          <font>
             <Font size="25.0" />
          </font>
