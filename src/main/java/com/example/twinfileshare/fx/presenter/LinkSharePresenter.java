@@ -7,9 +7,9 @@ import com.example.twinfileshare.fx.alert.FxAlert;
 import com.example.twinfileshare.fx.model.LinkShareModel;
 import com.example.twinfileshare.fx.view.ILinkShareView;
 import com.example.twinfileshare.service.DriveUploadResponse;
+import com.example.twinfileshare.utility.Strings;
 import jakarta.annotation.PostConstruct;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -60,11 +60,7 @@ public class LinkSharePresenter {
         var selectedFiles = uploadView.openMultipleFileChooserWindow(
                 "Select files to upload", event);
 
-        if (selectedFiles != null) {
-            uploadView.addItemsToFileListView(
-                    selectedFiles.stream().map(File::getName).toList());
-            totalAddedFiles.addAll(selectedFiles);
-        }
+        if (selectedFiles != null) uploadView.addItemsToFileListView(selectedFiles);
     }
 
     public void handleRemoveFilesFromListView() {
@@ -81,6 +77,18 @@ public class LinkSharePresenter {
         listViewItems.removeAll(selectedListViewItems);
     }
 
+    public void handleClearListView() {
+        if (uploadView.isFileListViewEmpty()) {
+            fxAlert.informationAlert(
+                    "No files to clear",
+                    "Add some files to clear"
+            );
+            return;
+        }
+
+        uploadView.removeAllFileListViewItems();
+    }
+
     private UploadPresenter uploadPresenter;
 
     public void handleUploadFiles(ActionEvent event) throws IOException {
@@ -93,8 +101,8 @@ public class LinkSharePresenter {
             return;
         }
 
-        var requiredFileNames = uploadView.getFileListViewItems();
-        if (requiredFileNames.isEmpty()) {
+        var requiredFiles = uploadView.getFileListViewItems();
+        if (requiredFiles.isEmpty()) {
             fxAlert.informationAlert(
                     "No files to upload",
                     "Add some files to upload"
@@ -103,10 +111,10 @@ public class LinkSharePresenter {
         }
 
         String zipName = null;
-        if (requiredFileNames.size() > 1) {
+        if (requiredFiles.size() > 1) {
             zipName = getZipName();
             if (zipName == null) return;
-            if (zipName.isEmpty() || zipName.isBlank()) {
+            if (Strings.isEmptyOrWhitespace(zipName)) {
                 fxAlert.errorAlert(
                         "Zip name error",
                         "Zip name cannot be empty or blank",
@@ -120,11 +128,10 @@ public class LinkSharePresenter {
 
         startUpload(event);
 
-        executeUpload(requiredFileNames, selectedEmail, zipName);
+        executeUpload(requiredFiles, selectedEmail, zipName);
     }
 
-    private void executeUpload(ObservableList<String> requiredFileNames, String selectedEmail, String zipName) throws IOException {
-        var requiredFiles = getRequiredFiles(requiredFileNames);
+    private void executeUpload(List<File> requiredFiles, String selectedEmail, String zipName) throws IOException {
         CompletableFuture<DriveUploadResponse> uploadTask =
                 getUploadTask(selectedEmail, requiredFiles, zipName);
 
@@ -237,19 +244,6 @@ public class LinkSharePresenter {
         var clipBoardContent = new ClipboardContent();
         clipBoardContent.putString(link);
         Clipboard.getSystemClipboard().setContent(clipBoardContent);
-    }
-
-    public void handleClearListView() {
-        if (uploadView.isFileListViewEmpty()) {
-            fxAlert.informationAlert(
-                    "No files to clear",
-                    "Add some files to clear"
-            );
-            return;
-        }
-
-        uploadView.setFileListViewItems(FXCollections.observableArrayList());
-        totalAddedFiles = new ArrayList<>();
     }
 
     public void handleAccountChoiceBoxValueChanged(String selectedValue) {

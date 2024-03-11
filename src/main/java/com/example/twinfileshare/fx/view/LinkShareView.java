@@ -2,7 +2,6 @@ package com.example.twinfileshare.fx.view;
 
 import com.example.twinfileshare.fx.presenter.LinkSharePresenter;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -32,7 +32,7 @@ public class LinkShareView implements ILinkShareView {
     @FXML
     private ChoiceBox<String> accountChoiceBox;
     @FXML
-    private ListView<String> fileListView;
+    private ListView<File> fileListView;
     @FXML
     private Button uploadBTN;
     @FXML
@@ -97,12 +97,18 @@ public class LinkShareView implements ILinkShareView {
         fileListView.getSelectionModel().setSelectionMode(selectionMode);
     }
 
-    public void addItemsToFileListView(List<String> files) {
-        fileListView.getItems().addAll(files);
+    @Override
+    public void addItemsToFileListView(List<File> items) {
+        fileListView.getItems().addAll(items);
     }
 
-    public ObservableList<String> getFileListViewItems() {
+    public List<File> getFileListViewItems() {
         return fileListView.getItems();
+    }
+
+    @Override
+    public void removeAllFileListViewItems() {
+        fileListView.getItems().setAll(new ArrayList<>());
     }
 
     @Override
@@ -114,7 +120,7 @@ public class LinkShareView implements ILinkShareView {
         fileListView.getItems().clear();
     }
 
-    public ObservableList<String> getSelectedFileListViewItems() {
+    public List<File> getSelectedFileListViewItems() {
         return fileListView.getSelectionModel().getSelectedItems();
     }
 
@@ -122,8 +128,8 @@ public class LinkShareView implements ILinkShareView {
         fileListView.setDisable(disable);
     }
 
-    public void setFileListViewItems(ObservableList<String> items) {
-        fileListView.setItems(items);
+    public void setFileListViewItems(List<File> items) {
+        fileListView.getItems().setAll(items);
     }
 
     public void setFileUploadProgressBarVisible(boolean visible) {

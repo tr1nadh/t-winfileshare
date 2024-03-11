@@ -1,7 +1,6 @@
 package com.example.twinfileshare.fx.view;
 
 import com.example.twinfileshare.fx.presenter.LinkSharePresenter;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.SelectionMode;
@@ -25,13 +24,13 @@ public interface ILinkShareView extends Initializable {
     void disableRemoveFilesBTN(boolean disable);
     void disableClearFilesBTN(boolean disable);
     void setFileListViewSelectionMode(SelectionMode selectionMode);
-    void addItemsToFileListView(List<String> items);
-    ObservableList<String> getFileListViewItems();
+    void addItemsToFileListView(List<File> items);
+    List<File> getFileListViewItems();
     boolean isFileListViewEmpty();
     void clearFileListViewItems();
-    ObservableList<String> getSelectedFileListViewItems();
+    List<File> getSelectedFileListViewItems();
     void disableFileListView(boolean disable);
-    void setFileListViewItems(ObservableList<String> items);
+    void setFileListViewItems(List<File> items);
     void setFileUploadProgressBarVisible(boolean visible);
     void updateFileUploadProgressBar(double value);
     void setUploadBTNText(String text);
@@ -43,4 +42,6 @@ public interface ILinkShareView extends Initializable {
     void clearFileListView(ActionEvent event);
     void uploadFiles(ActionEvent event) throws IOException, InterruptedException, GeneralSecurityException;
     void openManageAccountsDialog(ActionEvent event);
+
+    void removeAllFileListViewItems();
 }
