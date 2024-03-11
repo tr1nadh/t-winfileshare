@@ -1,6 +1,6 @@
 package com.example.twinfileshare.fx.view;
 
-import com.example.twinfileshare.fx.presenter.UploadPresenter;
+import com.example.twinfileshare.fx.presenter.UploadProgressPresenter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -8,7 +8,7 @@ import javafx.scene.control.ProgressBar;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class UploadView {
+public class UploadProgressView {
 
     @FXML
     private ProgressBar uploadProgressBar;
@@ -16,7 +16,7 @@ public class UploadView {
     @FXML
     private Label uploadLogText;
 
-    private UploadPresenter uploadPresenter;
+    private UploadProgressPresenter uploadProgressPresenter;
 
     public void updateProgressBar(double progress) {
         uploadProgressBar.setProgress(progress);
@@ -27,10 +27,10 @@ public class UploadView {
     }
 
     public void cancelUpload(ActionEvent event) {
-        uploadPresenter.handleCancelUpload();
+        uploadProgressPresenter.handleCancelUpload();
     }
 
-    public void setUploadPresenter(UploadPresenter uploadPresenter) {
-        this.uploadPresenter = uploadPresenter;
+    public void setUploadPresenter(UploadProgressPresenter uploadProgressPresenter) {
+        this.uploadProgressPresenter = uploadProgressPresenter;
     }
 }
