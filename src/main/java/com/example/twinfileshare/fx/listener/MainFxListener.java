@@ -1,14 +1,12 @@
 package com.example.twinfileshare.fx.listener;
 
 import com.example.twinfileshare.TWinFileShareApplication;
-import com.example.twinfileshare.event.payload.DoubleEmailConnectEvent;
-import com.example.twinfileshare.event.payload.HandleProgressEvent;
-import com.example.twinfileshare.event.payload.NoDriveAccessEvent;
-import com.example.twinfileshare.event.payload.UserConnectedEvent;
+import com.example.twinfileshare.event.payload.*;
 import com.example.twinfileshare.fx.alert.FxAlert;
 import com.example.twinfileshare.fx.model.LinkShareModel;
 import com.example.twinfileshare.fx.presenter.LinkSharePresenter;
 import com.example.twinfileshare.fx.presenter.ManagePresenter;
+import com.example.twinfileshare.fx.presenter.UploadPresenter;
 import com.example.twinfileshare.fx.view.LinkShareView;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import javafx.application.Platform;
@@ -31,11 +29,22 @@ public class MainFxListener {
     @Autowired
     private FxAlert fxAlert;
 
+    @Autowired
+    private UploadPresenter uploadPresenter;
+
     @EventListener
     public void handleProgressBar(HandleProgressEvent event) {
         Platform.runLater(() -> {
-            presenter.updateProgressBar(event.getProgress());
+            uploadPresenter.updateProgressBar(event.getProgress());
         });
+    }
+
+    @EventListener
+    public void handleCancelUpload(UploadCancelledEvent event) {
+        Platform.runLater( () -> {
+            presenter.cancelUpload();
+                }
+        );
     }
 
     @Autowired

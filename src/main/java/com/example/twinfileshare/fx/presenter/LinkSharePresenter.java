@@ -135,7 +135,7 @@ public class LinkSharePresenter {
 
     private boolean isUploadingActive;
 
-    public void handleUploadFiles() throws IOException {
+    public void handleUploadFiles(ActionEvent event) throws IOException {
         var selectedEmail = uploadView.getAccountChoiceBoxValue();
         if (!isEmail(selectedEmail)) {
             fxAlert.informationAlert(
@@ -173,6 +173,19 @@ public class LinkSharePresenter {
                 return;
             }
 
+        }
+
+        var node = (Node) event.getSource();
+        var stage = (Stage) node.getScene().getWindow();
+        try {
+            Stage dialog = new Stage();
+            Scene scene = TWFSFxApplication.generateScene("/templates/fx/UploadFiles.fxml");
+            dialog.setScene(scene);
+            dialog.initModality(Modality.WINDOW_MODAL);
+            dialog.initOwner(stage);
+            dialog.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         executeUpload(requiredFileNames, selectedEmail, zipName);
@@ -271,7 +284,7 @@ public class LinkSharePresenter {
         System.out.println("Uploading.........");
     }
 
-    private void cancelUpload() {
+    public void cancelUpload() {
         uploadView.setUploadBTNText("Upload files");
         linkShareModel.cancelUploadFiles();
     }

@@ -174,7 +174,7 @@ public class LinkShareView implements ILinkShareView {
     }
 
     public void uploadFiles(ActionEvent event) throws IOException {
-        presenter.handleUploadFiles();
+        presenter.handleUploadFiles(event);
     }
 
     @Override
