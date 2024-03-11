@@ -25,7 +25,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -52,8 +51,6 @@ public class LinkSharePresenter {
     private boolean isEmail(String currentSelectedEmail) {
         return currentSelectedEmail.contains("@");
     }
-
-    private List<File> totalAddedFiles = new ArrayList<>();
 
     public void handleAddFilesFilesFromFileManager(ActionEvent event) {
         var selectedFiles = uploadView.openMultipleFileChooserWindow(
@@ -168,7 +165,6 @@ public class LinkSharePresenter {
     private void executeUploadFinishedTasks(DriveUploadResponse driveUploadResponse) {
         System.out.println("Upload finished...");
         publisher.publishEvent(new FileUploadSuccessEvent(this, driveUploadResponse));
-        totalAddedFiles = new ArrayList<>();
         Platform.runLater(() -> {
             uploadView.clearFileListViewItems();
             closeUpload();
