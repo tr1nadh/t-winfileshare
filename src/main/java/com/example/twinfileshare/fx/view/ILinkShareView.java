@@ -15,25 +15,15 @@ import java.util.List;
 public interface ILinkShareView extends Initializable {
     void setAccountChoiceBoxItems(List<String> items);
     void addAccountChoiceBoxItem(String item);
-    void setAccountChoiceBoxValue(String value);
     void removeItemFromAccountChoiceBox(String item);
     String getAccountChoiceBoxValue();
-    void disableAccountChoiceBox(boolean disable);
     boolean accountChoiceBoxContains(String item);
-    void disableAddFilesBTN(boolean disable);
-    void disableRemoveFilesBTN(boolean disable);
-    void disableClearFilesBTN(boolean disable);
     void setFileListViewSelectionMode(SelectionMode selectionMode);
     void addItemsToFileListView(List<File> items);
     List<File> getFileListViewItems();
     boolean isFileListViewEmpty();
     void clearFileListViewItems();
     List<File> getSelectedFileListViewItems();
-    void disableFileListView(boolean disable);
-    void setFileListViewItems(List<File> items);
-    void setFileUploadProgressBarVisible(boolean visible);
-    void updateFileUploadProgressBar(double value);
-    void setUploadBTNText(String text);
     List<File> openMultipleFileChooserWindow(String windowTitle, ActionEvent event);
     String showTextInputDialog(String placeholderText, String title, String header);
     void setUploadPresenter(LinkSharePresenter presenter);
@@ -42,6 +32,5 @@ public interface ILinkShareView extends Initializable {
     void clearFileListView(ActionEvent event);
     void uploadFiles(ActionEvent event) throws IOException, InterruptedException, GeneralSecurityException;
     void openManageAccountsDialog(ActionEvent event);
-
     void removeAllFileListViewItems();
 }
