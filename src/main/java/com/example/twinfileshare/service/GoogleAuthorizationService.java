@@ -2,7 +2,7 @@ package com.example.twinfileshare.service;
 
 import com.example.twinfileshare.entity.GoogleUserCRED;
 import com.example.twinfileshare.event.payload.DoubleEmailConnectEvent;
-import com.example.twinfileshare.event.payload.NoDriveAccessEvent;
+import com.example.twinfileshare.event.payload.UnsuccessfulAuthorizationEvent;
 import com.example.twinfileshare.event.payload.UserConnectedEvent;
 import com.example.twinfileshare.listener.DriveTokenRefreshListener;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
@@ -76,7 +76,7 @@ public class GoogleAuthorizationService {
 
         if (!hasRequiredScopes(Arrays.stream(scope.split(" ")).toList())) {
             log.warn("User have not given drive access");
-            eventPublisher.publishEvent(new NoDriveAccessEvent(this));
+            eventPublisher.publishEvent(new UnsuccessfulAuthorizationEvent(this));
             return;
         }
 
