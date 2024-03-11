@@ -1,6 +1,5 @@
 package com.example.twinfileshare.fx.presenter;
 
-import com.example.twinfileshare.TWinFileShareApplication;
 import com.example.twinfileshare.event.payload.FileUploadSuccessEvent;
 import com.example.twinfileshare.event.payload.SelectedAccountChanged;
 import com.example.twinfileshare.fx.TWFSFxApplication;
@@ -49,25 +48,6 @@ public class LinkSharePresenter {
     public void init() {
         uploadView.setAccountChoiceBoxItems(linkShareModel.getAllEmails());
         uploadView.setFileListViewSelectionMode(SelectionMode.MULTIPLE);
-        uploadView.setFileUploadProgressBarVisible(false);
-    }
-
-    public void handleConnectGoogleDrive() {
-        fxAlert.confirmationAlert(
-                "Google drive authorization",
-                "Check the google drive box when giving permissions \n" +
-                        " in consent screen to give access.",
-                "Press OK to open the link in default browser.",
-                this::openAuthLinkInDefaultBrowser
-                );
-    }
-
-    @Autowired
-    private TWinFileShareApplication tWinFileShareApplication;
-
-    public void openAuthLinkInDefaultBrowser() {
-        var hostServices = tWinFileShareApplication.getHostServices();
-        hostServices.showDocument(linkShareModel.getGoogleSignInURL());
     }
 
     private boolean isEmail(String currentSelectedEmail) {
@@ -218,21 +198,6 @@ public class LinkSharePresenter {
         uploadPresenter.start(stage);
     }
 
-    private void openDialog(ActionEvent event, String resource) {
-        var node = (Node) event.getSource();
-        var stage = (Stage) node.getScene().getWindow();
-        try {
-            Stage dialog = new Stage();
-            Scene scene = TWFSFxApplication.generateScene(resource);
-            dialog.setScene(scene);
-            dialog.initModality(Modality.WINDOW_MODAL);
-            dialog.initOwner(stage);
-            dialog.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private String getZipName() {
         return uploadView.showTextInputDialog(
                 "zip name",
@@ -291,8 +256,19 @@ public class LinkSharePresenter {
         publisher.publishEvent(new SelectedAccountChanged(this, selectedValue));
     }
 
-    public void  handleOpenManageAccountsDialog(ActionEvent event) {
-        openDialog(event, "/templates/fx/AccountManage.fxml");
+    public void handleOpenManageAccountsDialog(ActionEvent event) {
+        var node = (Node) event.getSource();
+        var stage = (Stage) node.getScene().getWindow();
+        try {
+            Stage dialog = new Stage();
+            Scene scene = TWFSFxApplication.generateScene("/templates/fx/AccountManage.fxml");
+            dialog.setScene(scene);
+            dialog.initModality(Modality.WINDOW_MODAL);
+            dialog.initOwner(stage);
+            dialog.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void removeAccountFromChoiceBox(String email) {
