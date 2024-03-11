@@ -84,6 +84,16 @@ public class AccountMangePresenter {
     private TWinFileShareApplication tWinFileShareApplication;
 
     public void handleOpenGoogleAuthInBrowser() {
+        fxAlert.confirmationAlert(
+                "Google drive authorization",
+                "Check the google drive box when giving permissions \n" +
+                        " in consent screen to give access.",
+                "Press OK to open the link in default browser.",
+                this::openInBrowser
+        );
+    }
+
+    private void openInBrowser() {
         var hostServices = tWinFileShareApplication.getHostServices();
         hostServices.showDocument(accountMangeModal.getGoogleSignInURL());
     }
