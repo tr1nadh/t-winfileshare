@@ -27,7 +27,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -71,39 +70,8 @@ public class LinkSharePresenter {
         hostServices.showDocument(linkShareModel.getGoogleSignInURL());
     }
 
-    public void handleDisconnectSelectedAccount() {
-        var currentSelectedEmail = uploadView.getAccountChoiceBoxValue();
-        if (!isEmail(currentSelectedEmail)) {
-            fxAlert.informationAlert("Cannot disconnect account",
-                    "Select an email");
-            return;
-        }
-
-        fxAlert.confirmationAlert(
-                "Disconnect Account",
-                "Are sure you want to disconnect the google drive \n" +
-                        "account with email: " + currentSelectedEmail,
-                "",
-                () -> {
-                    try {
-                        disconnectAccount(currentSelectedEmail);
-                    } catch (GeneralSecurityException | IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                },
-                ButtonType.YES,
-                ButtonType.YES, ButtonType.NO
-        );
-    }
-
     private boolean isEmail(String currentSelectedEmail) {
         return currentSelectedEmail.contains("@");
-    }
-
-    private void disconnectAccount(String email) throws GeneralSecurityException, IOException {
-        linkShareModel.disconnectAccount(email);
-        uploadView.setAccountChoiceBoxValue("Select an email");
-        uploadView.removeItemFromAccountChoiceBox(email);
     }
 
     private List<File> totalAddedFiles = new ArrayList<>();
@@ -133,7 +101,7 @@ public class LinkSharePresenter {
         listViewItems.removeAll(selectedListViewItems);
     }
 
-    private boolean isUploadingActive;
+    private final UploadPresenter uploadPresenter = new UploadPresenter();
 
     public void handleUploadFiles(ActionEvent event) throws IOException {
         var selectedEmail = uploadView.getAccountChoiceBoxValue();
@@ -154,11 +122,6 @@ public class LinkSharePresenter {
             return;
         }
 
-        if (isUploadingActive) {
-            cancelUpload();
-            return;
-        }
-
         String zipName = null;
         if (requiredFileNames.size() > 1) {
             zipName = getZipName();
@@ -175,11 +138,27 @@ public class LinkSharePresenter {
 
         }
 
+        startUpload(event);
+
+        executeUpload(requiredFileNames, selectedEmail, zipName);
+    }
+
+    private void closeUpload() {
+        uploadPresenter.close();
+    }
+
+    private void startUpload(ActionEvent event) {
+        var node = (Node) event.getSource();
+        var stage = (Stage) node.getScene().getWindow();
+        uploadPresenter.start(stage);
+    }
+
+    private void openDialog(ActionEvent event, String resource) {
         var node = (Node) event.getSource();
         var stage = (Stage) node.getScene().getWindow();
         try {
             Stage dialog = new Stage();
-            Scene scene = TWFSFxApplication.generateScene("/templates/fx/UploadFiles.fxml");
+            Scene scene = TWFSFxApplication.generateScene(resource);
             dialog.setScene(scene);
             dialog.initModality(Modality.WINDOW_MODAL);
             dialog.initOwner(stage);
@@ -187,22 +166,19 @@ public class LinkSharePresenter {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        executeUpload(requiredFileNames, selectedEmail, zipName);
     }
 
     private void executeUpload(ObservableList<String> requiredFileNames, String selectedEmail, String zipName) throws IOException {
-        executePreUploadTasks();
-
         var requiredFiles = getRequiredFiles(requiredFileNames);
         CompletableFuture<DriveUploadResponse> uploadTask =
                 getUploadTask(selectedEmail, requiredFiles, zipName);
 
         uploadTask.thenAcceptAsync(driveUploadResponse -> {
-            executePostUploadTasks();
             if (driveUploadResponse.isUploadSuccess())
                 executeUploadFinishedTasks(driveUploadResponse);
             else Platform.runLater(this::showUploadCancelledAlert);
+
+            closeUpload();
         }).exceptionallyAsync(this::executeUploadTaskException);
     }
 
@@ -225,7 +201,8 @@ public class LinkSharePresenter {
     }
 
     private Void executeUploadTaskException(Throwable ex) {
-        executePostUploadTasks();
+        closeUpload();
+
         if (ex.getCause().getMessage().contains("Stream closed")) {
             Platform.runLater(this::showUploadCancelledAlert);
         } else {
@@ -266,26 +243,7 @@ public class LinkSharePresenter {
         });
     }
 
-    private void executePostUploadTasks() {
-        isUploadingActive = false;
-        Platform.runLater(() -> {
-            uploadView.setFileUploadProgressBarVisible(false);
-            uploadView.updateFileUploadProgressBar(0.0);
-            uploadView.setUploadBTNText("Upload files");
-            enableRequiredUIElements();
-        });
-    }
-
-    private void executePreUploadTasks() {
-        disableRequiredUIElements();
-        uploadView.setFileUploadProgressBarVisible(true);
-        isUploadingActive = true;
-        uploadView.setUploadBTNText("Cancel");
-        System.out.println("Uploading.........");
-    }
-
     public void cancelUpload() {
-        uploadView.setUploadBTNText("Upload files");
         linkShareModel.cancelUploadFiles();
     }
 
@@ -314,22 +272,6 @@ public class LinkSharePresenter {
         Clipboard.getSystemClipboard().setContent(clipBoardContent);
     }
 
-    private void disableRequiredUIElements() {
-        uploadView.disableAccountChoiceBox(true);
-        uploadView.disableAddFilesBTN(true);
-        uploadView.disableRemoveFilesBTN(true);
-        uploadView.disableClearFilesBTN(true);
-        uploadView.disableFileListView(true);
-    }
-
-    private void enableRequiredUIElements() {
-        uploadView.disableAccountChoiceBox(false);
-        uploadView.disableAddFilesBTN(false);
-        uploadView.disableRemoveFilesBTN(false);
-        uploadView.disableClearFilesBTN(false);
-        uploadView.disableFileListView(false);
-    }
-
     public void handleClearListView() {
         if (uploadView.isFileListViewEmpty()) {
             fxAlert.informationAlert(
@@ -343,31 +285,24 @@ public class LinkSharePresenter {
         totalAddedFiles = new ArrayList<>();
     }
 
-    public void updateProgressBar(double value) {
-        if (isUploadingActive)
-            uploadView.updateFileUploadProgressBar(value);
-    }
-
     public void handleAccountChoiceBoxValueChanged(String selectedValue) {
         publisher.publishEvent(new SelectedAccountChanged(this, selectedValue));
     }
 
     public void  handleOpenManageAccountsDialog(ActionEvent event) {
-        var node = (Node) event.getSource();
-        var stage = (Stage) node.getScene().getWindow();
-        try {
-            Stage dialog = new Stage();
-            Scene scene = TWFSFxApplication.generateScene("/templates/fx/AccountManage.fxml");
-            dialog.setScene(scene);
-            dialog.initModality(Modality.WINDOW_MODAL);
-            dialog.initOwner(stage);
-            dialog.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        openDialog(event, "/templates/fx/AccountManage.fxml");
     }
 
     public void removeAccountFromChoiceBox(String email) {
         uploadView.removeItemFromAccountChoiceBox(email);
+    }
+
+    public void updateProgress(double progress) {
+        if (!uploadPresenter.isUploadActive()) {
+            System.out.println("Uploading is not active");
+            return;
+        }
+
+        uploadPresenter.updateProgress(progress);
     }
 }

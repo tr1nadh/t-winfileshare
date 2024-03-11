@@ -35,7 +35,7 @@ public class MainFxListener {
     @EventListener
     public void handleProgressBar(HandleProgressEvent event) {
         Platform.runLater(() -> {
-            uploadPresenter.updateProgressBar(event.getProgress());
+            presenter.updateProgress(event.getProgress());
         });
     }
 
