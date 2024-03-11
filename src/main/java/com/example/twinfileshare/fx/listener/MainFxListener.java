@@ -3,10 +3,11 @@ package com.example.twinfileshare.fx.listener;
 import com.example.twinfileshare.TWinFileShareApplication;
 import com.example.twinfileshare.event.payload.DoubleEmailConnectEvent;
 import com.example.twinfileshare.event.payload.HandleProgressEvent;
-import com.example.twinfileshare.event.payload.NoDriveAccessEvent;
+import com.example.twinfileshare.event.payload.UnsuccessfulAuthorizationEvent;
 import com.example.twinfileshare.event.payload.UserConnectedEvent;
 import com.example.twinfileshare.fx.alert.FxAlert;
 import com.example.twinfileshare.fx.model.LinkShareModel;
+import com.example.twinfileshare.fx.presenter.AccountMangePresenter;
 import com.example.twinfileshare.fx.presenter.LinkSharePresenter;
 import com.example.twinfileshare.fx.presenter.ManagePresenter;
 import com.example.twinfileshare.fx.view.LinkShareView;
@@ -64,14 +65,17 @@ public class MainFxListener {
     @Autowired
     private LinkShareModel linkShareModel;
 
+    @Autowired
+    private AccountMangePresenter accountMangePresenter;
+
     @EventListener
-    public void handleNoDriveAccessEvent(NoDriveAccessEvent event) {
+    public void handleUnsuccessfulAuthorizationEvent(UnsuccessfulAuthorizationEvent event) {
         Platform.runLater( () -> {
             fxAlert.confirmationAlert(
                     "Authorization unsuccessful",
-                    "Google drive access required!",
-                    "Press OK to give google drive access.",
-                    presenter::openAuthLinkInDefaultBrowser
+                    "Google drive and gmail access required!",
+                    "Press OK to give access.",
+                    accountMangePresenter::openAuthURLInBrowser
             );
         });
     }
