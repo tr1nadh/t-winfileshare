@@ -101,7 +101,7 @@ public class LinkSharePresenter {
         listViewItems.removeAll(selectedListViewItems);
     }
 
-    private final UploadPresenter uploadPresenter = new UploadPresenter();
+    private UploadPresenter uploadPresenter;
 
     public void handleUploadFiles(ActionEvent event) throws IOException {
         var selectedEmail = uploadView.getAccountChoiceBoxValue();
@@ -143,8 +143,73 @@ public class LinkSharePresenter {
         executeUpload(requiredFileNames, selectedEmail, zipName);
     }
 
+    private void executeUpload(ObservableList<String> requiredFileNames, String selectedEmail, String zipName) throws IOException {
+        var requiredFiles = getRequiredFiles(requiredFileNames);
+        CompletableFuture<DriveUploadResponse> uploadTask =
+                getUploadTask(selectedEmail, requiredFiles, zipName);
+
+        uploadTask.thenAcceptAsync(driveUploadResponse -> {
+            if (driveUploadResponse.isUploadSuccess())
+                executeUploadFinishedTasks(driveUploadResponse);
+            else Platform.runLater(() -> {
+                closeUpload();
+                showUploadCancelledAlert();
+            });
+        }).exceptionallyAsync(ex -> {
+                Platform.runLater(this::closeUpload);
+                executeUploadTaskException(ex);
+            return null;
+        });
+    }
+
+    private void executeUploadTaskException(Throwable ex) {
+        if (ex.getCause().getMessage().contains("Stream closed")) {
+            Platform.runLater(this::showUploadCancelledAlert);
+        } else {
+            Platform.runLater(() -> {
+                showUploadExceptionAlert("Unknown error. contact dev!!!");
+            });
+        }
+    }
+
+    private void showUploadCancelledAlert() {
+        fxAlert.informationAlert(
+                "Upload cancelled",
+                "Upload has been cancelled!"
+        );
+    }
+
+    private void executeUploadFinishedTasks(DriveUploadResponse driveUploadResponse) {
+        System.out.println("Upload finished...");
+        publisher.publishEvent(new FileUploadSuccessEvent(this, driveUploadResponse));
+        totalAddedFiles = new ArrayList<>();
+        Platform.runLater(() -> {
+            uploadView.clearFileListViewItems();
+            closeUpload();
+            showUploadFinishedAlert(driveUploadResponse.getSharableLink());
+        });
+    }
+
+    private CompletableFuture<DriveUploadResponse> getUploadTask(String selectedEmail, List<File> requiredFiles, String zipName) throws IOException {
+        if (requiredFiles.size() > 1)
+            return linkShareModel.uploadFilesToGoogleDrive(selectedEmail, requiredFiles,
+                    zipName);
+        else
+            return linkShareModel.uploadFileToGoogleDrive(selectedEmail,
+                    requiredFiles.get(0));
+    }
+
+    private ArrayList<File> getRequiredFiles(ObservableList<String> requiredFileNames) {
+        var totalFiles = totalAddedFiles;
+        var requiredFiles = new ArrayList<File>();
+        totalFiles.stream().filter(file -> requiredFileNames.contains(file.getName()))
+                .forEach(requiredFiles::add);
+
+        return requiredFiles;
+    }
+
     private void closeUpload() {
-        uploadPresenter.close();
+        uploadPresenter.closeWindow();
     }
 
     private void startUpload(ActionEvent event) {
@@ -168,52 +233,6 @@ public class LinkSharePresenter {
         }
     }
 
-    private void executeUpload(ObservableList<String> requiredFileNames, String selectedEmail, String zipName) throws IOException {
-        var requiredFiles = getRequiredFiles(requiredFileNames);
-        CompletableFuture<DriveUploadResponse> uploadTask =
-                getUploadTask(selectedEmail, requiredFiles, zipName);
-
-        uploadTask.thenAcceptAsync(driveUploadResponse -> {
-            if (driveUploadResponse.isUploadSuccess())
-                executeUploadFinishedTasks(driveUploadResponse);
-            else Platform.runLater(this::showUploadCancelledAlert);
-
-            closeUpload();
-        }).exceptionallyAsync(this::executeUploadTaskException);
-    }
-
-    private CompletableFuture<DriveUploadResponse> getUploadTask(String selectedEmail, List<File> requiredFiles, String zipName) throws IOException {
-        if (requiredFiles.size() > 1)
-            return linkShareModel.uploadFilesToGoogleDrive(selectedEmail, requiredFiles,
-                    zipName);
-        else
-            return linkShareModel.uploadFileToGoogleDrive(selectedEmail,
-                    requiredFiles.get(0));
-    }
-
-    private ArrayList<File> getRequiredFiles(ObservableList<String> requiredFileNames) {
-        var totalFiles = totalAddedFiles;
-        var requiredFiles = new ArrayList<File>();
-        totalFiles.stream().filter(file -> requiredFileNames.contains(file.getName()))
-                .forEach(requiredFiles::add);
-
-        return requiredFiles;
-    }
-
-    private Void executeUploadTaskException(Throwable ex) {
-        closeUpload();
-
-        if (ex.getCause().getMessage().contains("Stream closed")) {
-            Platform.runLater(this::showUploadCancelledAlert);
-        } else {
-            Platform.runLater(() -> {
-                showUploadExceptionAlert("Unknown error. contact dev!!!");
-            });
-        }
-
-        return null;
-    }
-
     private String getZipName() {
         return uploadView.showTextInputDialog(
                 "zip name",
@@ -233,25 +252,8 @@ public class LinkSharePresenter {
     @Autowired
     private ApplicationEventPublisher publisher;
 
-    private void executeUploadFinishedTasks(DriveUploadResponse driveUploadResponse) {
-        System.out.println("Upload finished...");
-        publisher.publishEvent(new FileUploadSuccessEvent(this, driveUploadResponse));
-        totalAddedFiles = new ArrayList<>();
-        Platform.runLater(() -> {
-            uploadView.clearFileListViewItems();
-            showUploadFinishedAlert(driveUploadResponse.getSharableLink());
-        });
-    }
-
     public void cancelUpload() {
         linkShareModel.cancelUploadFiles();
-    }
-
-    private void showUploadCancelledAlert() {
-        fxAlert.informationAlert(
-                "Upload cancelled",
-                "Upload has been cancelled!"
-        );
     }
 
     private void showUploadFinishedAlert(String link) {
@@ -304,5 +306,11 @@ public class LinkSharePresenter {
         }
 
         uploadPresenter.updateProgress(progress);
+    }
+
+    @Autowired
+    public void setUploadPresenter(UploadPresenter uploadPresenter) {
+        this.uploadPresenter = uploadPresenter;
+        uploadPresenter.setCancellable(this::cancelUpload);
     }
 }
