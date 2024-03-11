@@ -8,6 +8,7 @@ import com.example.twinfileshare.event.payload.UserConnectedEvent;
 import com.example.twinfileshare.fx.alert.FxAlert;
 import com.example.twinfileshare.fx.model.LinkShareModel;
 import com.example.twinfileshare.fx.presenter.AccountMangePresenter;
+import com.example.twinfileshare.fx.presenter.EmailSharePresenter;
 import com.example.twinfileshare.fx.presenter.LinkSharePresenter;
 import com.example.twinfileshare.fx.presenter.ManagePresenter;
 import com.example.twinfileshare.fx.view.LinkShareView;
@@ -32,10 +33,17 @@ public class MainFxListener {
     @Autowired
     private FxAlert fxAlert;
 
+    @Autowired
+    private EmailSharePresenter emailSharePresenter;
+
     @EventListener
     public void handleProgressBar(HandleProgressEvent event) {
         Platform.runLater(() -> {
-            presenter.updateProgress(event.getProgress());
+            if (event.getSource() instanceof LinkSharePresenter) {
+                presenter.updateProgress(event.getProgress());
+            } else if (event.getSource() instanceof EmailSharePresenter) {
+                emailSharePresenter.updateProgress(event.getProgress());
+            }
         });
     }
 
