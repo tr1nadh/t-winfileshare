@@ -4,9 +4,9 @@ import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
 @Getter
-public class NoDriveAccessEvent extends ApplicationEvent {
+public class UnsuccessfulAuthorizationEvent extends ApplicationEvent {
 
-    public NoDriveAccessEvent(Object source) {
+    public UnsuccessfulAuthorizationEvent(Object source) {
         super(source);
     }
 }
