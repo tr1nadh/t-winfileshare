@@ -27,7 +27,7 @@ public class UploadView {
     }
 
     public void cancelUpload(ActionEvent event) {
-        uploadPresenter.handleCancelUpload(event);
+        uploadPresenter.handleCancelUpload();
     }
 
     public void setUploadPresenter(UploadPresenter uploadPresenter) {
