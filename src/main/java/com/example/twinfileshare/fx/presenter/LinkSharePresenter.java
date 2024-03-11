@@ -88,7 +88,7 @@ public class LinkSharePresenter {
         uploadView.removeAllFileListViewItems();
     }
 
-    private UploadPresenter uploadPresenter;
+    private UploadProgressPresenter uploadProgressPresenter;
 
     public void handleUploadFiles(ActionEvent event) throws IOException {
         var selectedEmail = uploadView.getAccountChoiceBoxValue();
@@ -186,13 +186,13 @@ public class LinkSharePresenter {
     }
 
     private void closeUpload() {
-        uploadPresenter.closeWindow();
+        uploadProgressPresenter.closeWindow();
     }
 
     private void startUpload(ActionEvent event) {
         var node = (Node) event.getSource();
         var stage = (Stage) node.getScene().getWindow();
-        uploadPresenter.start(stage);
+        uploadProgressPresenter.start(stage);
     }
 
     private String getZipName() {
@@ -260,17 +260,17 @@ public class LinkSharePresenter {
     }
 
     public void updateProgress(double progress) {
-        if (!uploadPresenter.isUploadActive()) {
+        if (!uploadProgressPresenter.isUploadActive()) {
             System.out.println("Uploading is not active");
             return;
         }
 
-        uploadPresenter.updateProgress(progress);
+        uploadProgressPresenter.updateProgress(progress);
     }
 
     @Autowired
-    public void setUploadPresenter(UploadPresenter uploadPresenter) {
-        this.uploadPresenter = uploadPresenter;
-        uploadPresenter.setCancellable(this::cancelUpload);
+    public void setUploadPresenter(UploadProgressPresenter uploadProgressPresenter) {
+        this.uploadProgressPresenter = uploadProgressPresenter;
+        uploadProgressPresenter.setCancellable(this::cancelUpload);
     }
 }
