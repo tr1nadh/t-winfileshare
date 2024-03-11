@@ -1,7 +1,7 @@
 package com.example.twinfileshare.fx.presenter;
 
 import com.example.twinfileshare.fx.TWFSFxApplication;
-import com.example.twinfileshare.fx.view.UploadView;
+import com.example.twinfileshare.fx.view.UploadProgressView;
 import jakarta.annotation.PostConstruct;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
@@ -16,10 +16,10 @@ import java.io.IOException;
 
 @Component()
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class UploadPresenter {
+public class UploadProgressPresenter {
 
     @Autowired
-    private UploadView uploadView;
+    private UploadProgressView uploadProgressView;
 
     private Stage uploadStage;
 
@@ -33,7 +33,7 @@ public class UploadPresenter {
         isUploadActive = true;
 
         try {
-            Scene scene = TWFSFxApplication.generateScene("/templates/fx/UploadFiles.fxml");
+            Scene scene = TWFSFxApplication.generateScene("/templates/fx/UploadProgressView.fxml");
             uploadStage.setScene(scene);
             uploadStage.initModality(Modality.APPLICATION_MODAL);
             uploadStage.setMaximized(false);
@@ -45,11 +45,11 @@ public class UploadPresenter {
     }
 
     public void updateProgress(double progress) {
-        uploadView.updateProgressBar(progress);
+        uploadProgressView.updateProgressBar(progress);
     }
 
     public void updateLog(String value) {
-        uploadView.setUploadLogText(value);
+        uploadProgressView.setUploadLogText(value);
     }
 
     public void handleCancelUpload() {
@@ -62,8 +62,8 @@ public class UploadPresenter {
     }
 
     @PostConstruct
-    private void setUploadView() {
-        uploadView.setUploadPresenter(this);
+    private void setUploadProgressView() {
+        uploadProgressView.setUploadPresenter(this);
     }
 
     public void closeWindow() {
