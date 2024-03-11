@@ -10,7 +10,6 @@ import com.example.twinfileshare.service.DriveUploadResponse;
 import com.example.twinfileshare.utility.Strings;
 import jakarta.annotation.PostConstruct;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -184,15 +183,6 @@ public class LinkSharePresenter {
         else
             return linkShareModel.uploadFileToGoogleDrive(selectedEmail,
                     requiredFiles.get(0));
-    }
-
-    private ArrayList<File> getRequiredFiles(ObservableList<String> requiredFileNames) {
-        var totalFiles = totalAddedFiles;
-        var requiredFiles = new ArrayList<File>();
-        totalFiles.stream().filter(file -> requiredFileNames.contains(file.getName()))
-                .forEach(requiredFiles::add);
-
-        return requiredFiles;
     }
 
     private void closeUpload() {
