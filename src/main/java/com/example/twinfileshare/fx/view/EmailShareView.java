@@ -5,11 +5,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.springframework.stereotype.Controller;
 
-import javax.mail.MessagingException;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -38,7 +41,7 @@ public class EmailShareView implements Initializable {
     private Button clearFilesBTN;
 
     @FXML
-    private ListView<String> fileListView;
+    private ListView<File> fileListView;
 
     @FXML
     private Button sendBTN;
@@ -64,8 +67,8 @@ public class EmailShareView implements Initializable {
         emailSharePresenter.handleManageAccounts(event);
     }
 
-    public void sendAndShare(ActionEvent event) throws MessagingException, IOException {
-        emailSharePresenter.handleSendAndShare();
+    public void sendAndShare(ActionEvent event) throws IOException {
+        emailSharePresenter.handleSendAndShare(event);
     }
 
     public void setEmailSharePresenter(EmailSharePresenter emailSharePresenter) {
@@ -90,5 +93,58 @@ public class EmailShareView implements Initializable {
 
     public void removeItemFromChoiceBox(String item) {
         fromAccountChoiceBox.getItems().remove(item);
+    }
+
+    public List<File> openMultipleFileChooserWindow(String windowTitle, ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(windowTitle);
+
+        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+        return fileChooser.showOpenMultipleDialog(stage);
+    }
+
+    public void addItemsToFileListView(List<File> items) {
+        fileListView.getItems().addAll(items);
+    }
+
+    public List<File> getFileListViewItems() {
+        return fileListView.getItems();
+    }
+
+    public List<File> getSelectedFileListViewItems() {
+        return fileListView.getSelectionModel().getSelectedItems();
+    }
+
+    public boolean isFileListViewEmpty() {
+        return fileListView.getItems().isEmpty();
+    }
+
+    public void removeAllFileListViewItems() {
+        fileListView.getItems().setAll(new ArrayList<>());
+    }
+
+    public void addFilesFilesFromFileManager(ActionEvent event) {
+        emailSharePresenter.handleAddFilesFilesFromFileManager(event);
+    }
+
+    public void removeFilesFromListView(ActionEvent event) {
+        emailSharePresenter.handleRemoveFilesFromListView();
+    }
+
+    public void clearListView(ActionEvent event) {
+        emailSharePresenter.handleClearListView();
+    }
+
+    public String getAccountChoiceBoxValue() {
+        return fromAccountChoiceBox.getValue();
+    }
+
+    public String showTextInputDialog(String zipName, String header, String placeholderText) {
+        var text = new TextInputDialog();
+        text.setTitle(zipName);
+        text.setHeaderText(header);
+        text.getEditor().setPromptText(placeholderText);
+
+        return text.showAndWait().orElse(null);
     }
 }
