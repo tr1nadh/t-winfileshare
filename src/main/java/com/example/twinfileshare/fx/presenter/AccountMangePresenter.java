@@ -87,7 +87,7 @@ public class AccountMangePresenter {
     public void handleOpenGoogleAuthInBrowser() {
         fxAlert.confirmationAlert(
                 "Google drive & gmail authorization",
-                "Check the google drive and gmail box when giving permissions \n" +
+                "Check the select all when giving permissions \n" +
                         " in consent screen to give access.",
                 "Press OK to open the link in default browser.",
                 this::openAuthURLInBrowser
