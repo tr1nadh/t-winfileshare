@@ -1,6 +1,7 @@
 package com.example.twinfileshare.fx.listener;
 
 import com.example.twinfileshare.event.payload.AccountDisconnectedEvent;
+import com.example.twinfileshare.fx.presenter.AccountMangePresenter;
 import com.example.twinfileshare.fx.presenter.EmailSharePresenter;
 import com.example.twinfileshare.fx.presenter.LinkSharePresenter;
 import com.example.twinfileshare.fx.presenter.ManagePresenter;
@@ -17,6 +18,8 @@ public class FxListener {
     private EmailSharePresenter emailSharePresenter;
     @Autowired
     private ManagePresenter managePresenter;
+    @Autowired
+    private AccountMangePresenter accountMangePresenter;
 
     @EventListener
     public void handleAccountDisconnectedEvent(AccountDisconnectedEvent event) {
@@ -24,5 +27,6 @@ public class FxListener {
         linkSharePresenter.removeAccountFromChoiceBox(email);
         emailSharePresenter.removeAccountFromChoiceBox(email);
         managePresenter.removeAccountFromChoiceBox(email);
+        accountMangePresenter.removeAccount(email);
     }
 }
