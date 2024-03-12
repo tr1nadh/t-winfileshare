@@ -48,4 +48,20 @@ public class MainPresenter {
             e.printStackTrace();
         }
     }
+
+    @Value("${twfs.contact-url}")
+    private String contactURL;
+
+    public void handleOpenContactDevLink() {
+        var hostServices = tWinFileShareApplication.getHostServices();
+        hostServices.showDocument(contactURL);
+    }
+
+    @Value("${twfs.request-access-url}")
+    private String requestAccessURL;
+
+    public void handleOpenRequestAccessLink() {
+        var hostServices = tWinFileShareApplication.getHostServices();
+        hostServices.showDocument(requestAccessURL);
+    }
 }

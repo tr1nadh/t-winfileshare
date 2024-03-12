@@ -48,6 +48,14 @@ public class MainView implements Initializable {
         mainPresenter.handleOpenAboutDialog();
     }
 
+    public void openContactDevLink(ActionEvent event) {
+        mainPresenter.handleOpenContactDevLink();
+    }
+
+    public void openRequestAccessLink(ActionEvent event) {
+        mainPresenter.handleOpenRequestAccessLink();
+    }
+
     public void setMainPresenter(MainPresenter mainPresenter) {
         this.mainPresenter = mainPresenter;
     }
