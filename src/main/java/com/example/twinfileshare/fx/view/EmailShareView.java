@@ -151,4 +151,20 @@ public class EmailShareView implements Initializable {
     public void addItemToFromAccountChoiceBox(String item) {
         fromAccountChoiceBox.getItems().add(item);
     }
+
+    public void setFromAccountChoiceBoxValue(String value) {
+        fromAccountChoiceBox.setValue(value);
+    }
+
+    public void setToTextValue(String value) {
+        toText.setText(value);
+    }
+
+    public void setTitleTextValue(String value) {
+        titleText.setText(value);
+    }
+
+    public void setBodyTextValue(String value) {
+        messageBodyText.setText(value);
+    }
 }

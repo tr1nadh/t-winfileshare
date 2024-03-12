@@ -233,10 +233,18 @@ public class EmailSharePresenter {
         var toEmail = emailShareView.getToTextValue();
         Platform.runLater(() -> {
             emailShareView.removeAllFileListViewItems();
-            closeUpload();
             showEmailSentAlert(toEmail);
             uploadProgressPresenter.updateLog("email sent!");
+            closeUpload();
+            clearTheFields();
         });
+    }
+
+    private void clearTheFields() {
+        emailShareView.setFromAccountChoiceBoxValue("Select an email");
+        emailShareView.setToTextValue("");
+        emailShareView.setTitleTextValue("");
+        emailShareView.setBodyTextValue("");
     }
 
     public void updateProgress(double progress) {
