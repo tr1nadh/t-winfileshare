@@ -53,3 +53,5 @@ twfs:
     name: ${TWFS_WINDOW_NAME}
     icon: ${TWFS_WINDOW_ICON}
   feedback-url: ${TWFS_FEEDBACK_URL}
+  contact-url: ${TWFS_CONTACT_URL}
+  request-access-url: ${TWFS_REQUEST_ACCESS_URL}
