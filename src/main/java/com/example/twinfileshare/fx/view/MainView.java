@@ -1,6 +1,8 @@
 package com.example.twinfileshare.fx.view;
 
 import com.example.twinfileshare.fx.TWFSFxApplication;
+import com.example.twinfileshare.fx.presenter.MainPresenter;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Tab;
@@ -26,6 +28,9 @@ public class MainView implements Initializable {
     @FXML
     private AnchorPane manageAccountPane;
 
+    private MainPresenter mainPresenter;
+
+
     @SneakyThrows
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -33,5 +38,13 @@ public class MainView implements Initializable {
         shareVEmailTab.setContent(TWFSFxApplication.generateScene("/templates/fx/EmailShare.fxml").getRoot());
         manageTab.setContent(TWFSFxApplication.generateScene("/templates/fx/Manage.fxml").getRoot());
         manageAccountPane.getChildren().setAll(TWFSFxApplication.generateScene("/templates/fx/AccountManage.fxml").getRoot());
+    }
+
+    public void openFeedbackLink(ActionEvent event) {
+        mainPresenter.handleOpenFeedbackLink();
+    }
+
+    public void setMainPresenter(MainPresenter mainPresenter) {
+        this.mainPresenter = mainPresenter;
     }
 }
