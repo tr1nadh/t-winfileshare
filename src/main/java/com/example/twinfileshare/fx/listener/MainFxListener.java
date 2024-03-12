@@ -61,6 +61,8 @@ public class MainFxListener {
 
         managePresenter.refresh(email);
         managePresenter.addAccount(email);
+        emailSharePresenter.addAccount(email);
+        accountMangePresenter.addAccount(email);
     }
 
     @Autowired
