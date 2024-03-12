@@ -168,6 +168,7 @@ public class LinkSharePresenter {
         Platform.runLater(() -> {
             uploadView.clearFileListViewItems();
             closeUpload();
+            uploadView.setAccountChoiceBoxValue("Select an email");
             showUploadFinishedAlert(driveUploadResponse.getSharableLink());
         });
     }

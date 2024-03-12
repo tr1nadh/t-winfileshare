@@ -33,4 +33,5 @@ public interface ILinkShareView extends Initializable {
     void uploadFiles(ActionEvent event) throws IOException, InterruptedException, GeneralSecurityException;
     void openManageAccountsDialog(ActionEvent event);
     void removeAllFileListViewItems();
+    void setAccountChoiceBoxValue(String value);
 }
