@@ -2,23 +2,16 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="229.0" prefWidth="482.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.twinfileshare.fx.view.AccountManageView">
+<AnchorPane prefHeight="48.0" prefWidth="604.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.twinfileshare.fx.view.AccountManageView">
    <children>
-      <Button layoutX="41.0" layoutY="94.0" mnemonicParsing="false" onAction="#openGoogleAuthInBrowser" prefHeight="39.0" prefWidth="399.0" text="Connect google drive account">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Button>
-      <ChoiceBox fx:id="accountChoiceBox" layoutX="42.0" layoutY="141.0" prefHeight="31.0" prefWidth="313.0" value="Select an email" />
-      <Button fx:id="accountDisconnectBTN" layoutX="365.0" layoutY="141.0" mnemonicParsing="false" onAction="#disconnectSelectedAccount" prefHeight="31.0" prefWidth="76.0" text="Disconnect" />
-      <Label layoutX="153.0" layoutY="24.0" text="Manage accounts">
-         <font>
-            <Font size="25.0" />
-         </font>
-      </Label>
+      <AnchorPane layoutX="3.0" layoutY="7.0" prefHeight="32.0" prefWidth="601.0">
+         <children>
+            <Button layoutX="63.0" layoutY="4.0" mnemonicParsing="false" onAction="#openGoogleAuthInBrowser" text="Connect account" />
+            <Button layoutX="442.0" layoutY="4.0" mnemonicParsing="false" onAction="#disconnectSelectedAccount" text="Disconnect" />
+            <ChoiceBox fx:id="accountChoiceBox" layoutX="175.0" layoutY="4.0" prefHeight="25.0" prefWidth="260.0" />
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
