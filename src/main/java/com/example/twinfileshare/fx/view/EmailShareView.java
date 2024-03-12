@@ -147,4 +147,8 @@ public class EmailShareView implements Initializable {
 
         return text.showAndWait().orElse(null);
     }
+
+    public void addItemToFromAccountChoiceBox(String item) {
+        fromAccountChoiceBox.getItems().add(item);
+    }
 }

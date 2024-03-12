@@ -312,4 +312,8 @@ public class EmailSharePresenter {
         this.uploadProgressPresenter = uploadProgressPresenter;
         uploadProgressPresenter.setCancellable(this::cancelUpload);
     }
+
+    public void addAccount(String email) {
+        emailShareView.addItemToFromAccountChoiceBox(email);
+    }
 }

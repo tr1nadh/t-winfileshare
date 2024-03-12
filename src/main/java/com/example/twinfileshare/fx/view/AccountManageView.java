@@ -50,4 +50,8 @@ public class AccountManageView implements Initializable {
     public String getAccountChoiceBoxValue() {
         return accountChoiceBox.getValue();
     }
+
+    public void addItemToAccountChoiceBox(String item) {
+        accountChoiceBox.getItems().add(item);
+    }
 }

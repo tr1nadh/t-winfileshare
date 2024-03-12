@@ -99,4 +99,11 @@ public class AccountMangePresenter {
         hostServices.showDocument(accountMangeModal.getGoogleSignInURL());
     }
 
+    public void addAccount(String email) {
+        accountManageView.addItemToAccountChoiceBox(email);
+    }
+
+    public void removeAccount(String email) {
+        accountManageView.removeItemFromAccountChoiceBox(email);
+    }
 }
