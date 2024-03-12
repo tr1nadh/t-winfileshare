@@ -20,7 +20,7 @@
           <Menu mnemonicParsing="false" text="Help">
             <items>
               <MenuItem mnemonicParsing="false" text="About" />
-                  <MenuItem mnemonicParsing="false" text="Feedback" />
+                  <MenuItem mnemonicParsing="false" onAction="#openFeedbackLink" text="Feedback" />
             </items>
           </Menu>
         </menus>
