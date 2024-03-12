@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -25,16 +27,19 @@
           </Menu>
         </menus>
       </MenuBar>
-      <TabPane fx:id="naviTabPane" prefHeight="475.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+      <AnchorPane prefHeight="32.0" prefWidth="601.0">
+         <children>
+            <Button layoutX="79.0" layoutY="4.0" mnemonicParsing="false" text="Connect account" />
+            <Button layoutX="427.0" layoutY="4.0" mnemonicParsing="false" text="Disconnect" />
+            <ChoiceBox layoutX="188.0" layoutY="4.0" prefHeight="25.0" prefWidth="236.0" />
+         </children>
+      </AnchorPane>
+      <TabPane fx:id="naviTabPane" prefHeight="443.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
-          <Tab fx:id="shareVLinkTab" text="Share via Link">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="477.0" prefWidth="600.0" />
-            </content>
-          </Tab>
+          <Tab fx:id="shareVLinkTab" text="Share via Link" />
             <Tab fx:id="shareVEmailTab" text="Share via Email">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="395.0" prefWidth="600.0" />
               </content>
             </Tab>
             <Tab fx:id="manageTab" text="Manage">

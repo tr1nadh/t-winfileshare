@@ -7,20 +7,19 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.twinfileshare.fx.view.LinkShareView">
+<AnchorPane prefHeight="367.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.twinfileshare.fx.view.LinkShareView">
    <children>
-      <ChoiceBox fx:id="accountChoiceBox" layoutX="101.0" layoutY="72.0" prefHeight="31.0" prefWidth="268.0" value="Select an email" />
-      <Button fx:id="addFilesBTN" layoutX="101.0" layoutY="113.0" mnemonicParsing="false" onAction="#addFilesFromFileManager" prefHeight="31.0" prefWidth="89.0" text="Add files" />
-      <ListView fx:id="fileListView" layoutX="100.0" layoutY="150.0" prefHeight="190.0" prefWidth="399.0" />
-      <Button fx:id="removeFilesBTN" layoutX="200.0" layoutY="113.0" mnemonicParsing="false" onAction="#removeFilesFromFileListView" prefHeight="31.0" prefWidth="69.0" text="Remove" />
-      <Button fx:id="uploadBTN" layoutX="101.0" layoutY="347.0" mnemonicParsing="false" onAction="#uploadFiles" prefHeight="39.0" prefWidth="399.0" text="Upload files">
+      <ChoiceBox fx:id="accountChoiceBox" layoutX="101.0" layoutY="55.0" prefHeight="25.0" prefWidth="399.0" value="Select an email" />
+      <Button fx:id="addFilesBTN" layoutX="101.0" layoutY="89.0" mnemonicParsing="false" onAction="#addFilesFromFileManager" prefHeight="0.0" prefWidth="89.0" text="Add files" />
+      <ListView fx:id="fileListView" layoutX="101.0" layoutY="120.0" prefHeight="190.0" prefWidth="399.0" />
+      <Button fx:id="removeFilesBTN" layoutX="195.0" layoutY="89.0" mnemonicParsing="false" onAction="#removeFilesFromFileListView" prefHeight="0.0" prefWidth="69.0" text="Remove" />
+      <Button fx:id="uploadBTN" layoutX="101.0" layoutY="317.0" mnemonicParsing="false" onAction="#uploadFiles" prefHeight="0.0" prefWidth="399.0" text="Upload files">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="clearFilesBTN" layoutX="282.0" layoutY="113.0" mnemonicParsing="false" onAction="#clearFileListView" prefHeight="31.0" prefWidth="69.0" text="Clear" />
-      <Button fx:id="manageAccounts" layoutX="375.0" layoutY="72.0" mnemonicParsing="false" onAction="#openManageAccountsDialog" prefHeight="31.0" prefWidth="124.0" text="Manage accounts" />
-      <Label layoutX="212.0" layoutY="15.0" text="Share via Link">
+      <Button fx:id="clearFilesBTN" layoutX="269.0" layoutY="89.0" mnemonicParsing="false" onAction="#clearFileListView" prefHeight="0.0" prefWidth="69.0" text="Clear" />
+      <Label layoutX="212.0" layoutY="8.0" text="Share via Link">
          <font>
             <Font name="Times New Roman" size="32.0" />
          </font>

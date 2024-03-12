@@ -7,21 +7,21 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.twinfileshare.fx.view.ManageView">
+<AnchorPane prefHeight="365.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.twinfileshare.fx.view.ManageView">
    <children>
-      <ListView fx:id="ManageListView" layoutX="46.0" layoutY="117.0" prefHeight="253.0" prefWidth="491.0" />
-      <Label layoutX="248.0" layoutY="21.0" text="Manage">
+      <ListView fx:id="ManageListView" layoutX="46.0" layoutY="92.0" prefHeight="253.0" prefWidth="491.0" />
+      <Label layoutX="248.0" layoutY="11.0" text="Manage">
          <font>
             <Font name="Copperplate Gothic Light" size="25.0" />
          </font>
       </Label>
-      <Button layoutX="272.0" layoutY="81.0" mnemonicParsing="false" onAction="#stopFileSharing" prefHeight="29.0" prefWidth="97.0" text="Stop sharing" />
-      <Button layoutX="205.0" layoutY="81.0" mnemonicParsing="false" onAction="#copyLinkToClipboard" prefHeight="29.0" prefWidth="59.0" text="Copy 📋" />
-      <Button layoutX="375.0" layoutY="81.0" mnemonicParsing="false" onAction="#startFileSharing" prefHeight="29.0" prefWidth="97.0" text="Start sharing" />
-      <Button layoutX="478.0" layoutY="81.0" mnemonicParsing="false" onAction="#deleteFile" prefHeight="29.0" prefWidth="59.0" text="Delete">
+      <Button layoutX="272.0" layoutY="54.0" mnemonicParsing="false" onAction="#stopFileSharing" prefHeight="29.0" prefWidth="97.0" text="Stop sharing" />
+      <Button layoutX="205.0" layoutY="54.0" mnemonicParsing="false" onAction="#copyLinkToClipboard" prefHeight="29.0" prefWidth="59.0" text="Copy 📋" />
+      <Button layoutX="375.0" layoutY="54.0" mnemonicParsing="false" onAction="#startFileSharing" prefHeight="29.0" prefWidth="97.0" text="Start sharing" />
+      <Button layoutX="478.0" layoutY="54.0" mnemonicParsing="false" onAction="#deleteFile" prefHeight="29.0" prefWidth="59.0" text="Delete">
          <font>
             <Font size="11.0" />
          </font></Button>
-      <ChoiceBox fx:id="accountChoiceBox" layoutX="46.0" layoutY="81.0" prefHeight="29.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="accountChoiceBox" layoutX="46.0" layoutY="54.0" prefHeight="29.0" prefWidth="150.0" />
    </children>
 </AnchorPane>
