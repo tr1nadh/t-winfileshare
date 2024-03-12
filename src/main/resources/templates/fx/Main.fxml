@@ -21,7 +21,7 @@
             <items>
               <MenuItem mnemonicParsing="false" onAction="#openAboutDialog" text="About" />
                   <MenuItem mnemonicParsing="false" onAction="#openFeedbackLink" text="Feedback" />
-                  <MenuItem mnemonicParsing="false" text="Request access" />
+                  <MenuItem mnemonicParsing="false" onAction="#openRequestAccessLink" text="Request access" />
             </items>
           </Menu>
         </menus>
