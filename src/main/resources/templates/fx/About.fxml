@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane prefHeight="228.0" prefWidth="453.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.twinfileshare.fx.view.MainView">
+   <children>
+      <Label layoutX="191.0" layoutY="14.0" text="About">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Label>
+      <Text layoutX="40.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" text="T-WinFileShare (TWFS) application is a file sharing application that uses google drive and gmail to share files securely." wrappingWidth="372.501953125" />
+      <Text layoutX="40.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="It is developed by @tr1nadh." wrappingWidth="372.501953125" />
+      <Button layoutX="176.0" layoutY="173.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="101.0" text="Contact" />
+   </children>
+</AnchorPane>
