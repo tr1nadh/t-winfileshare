@@ -216,12 +216,12 @@ public class LinkSharePresenter {
     }
 
     private void showUploadFinishedAlert(String link) {
-        var copyButton = new ButtonType("Copy");
+        var copyButton = new ButtonType("Copy sharable link");
         fxAlert.confirmationAlert(
                 "Successfully files are uploaded!",
                 "By default files are uploaded to a default folder \n" +
                         " and sharable to anyone with viewer access via link.",
-                "Copy the below link: " + link,
+                "",
                 () -> {copyToClipBoard(link);},
                 copyButton, copyButton, ButtonType.OK
         );
