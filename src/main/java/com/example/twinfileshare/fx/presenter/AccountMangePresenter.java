@@ -28,6 +28,7 @@ public class AccountMangePresenter {
     public void init() {
         var emails = accountMangeModal.getAllEmails();
         accountManageView.setItemsToAccountChoiceBox(emails);
+        accountManageView.setAccountChoiceBoxValue("Select an email");
     }
 
     @PostConstruct
