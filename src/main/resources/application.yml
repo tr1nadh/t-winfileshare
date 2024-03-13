@@ -55,3 +55,4 @@ twfs:
   feedback-url: ${TWFS_FEEDBACK_URL}
   contact-url: ${TWFS_CONTACT_URL}
   request-access-url: ${TWFS_REQUEST_ACCESS_URL}
+  about-url: ${TWFS_ABOUT_URL}
