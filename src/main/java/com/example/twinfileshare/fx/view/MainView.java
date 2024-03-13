@@ -55,6 +55,10 @@ public class MainView implements Initializable {
         mainPresenter.handleOpenRequestAccessSite();
     }
 
+    public void closeTheApplication(ActionEvent event) {
+        mainPresenter.handleCloseTheApplication();
+    }
+
     public void setMainPresenter(MainPresenter mainPresenter) {
         this.mainPresenter = mainPresenter;
     }

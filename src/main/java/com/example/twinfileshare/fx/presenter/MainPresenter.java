@@ -3,6 +3,7 @@ package com.example.twinfileshare.fx.presenter;
 import com.example.twinfileshare.TWinFileShareApplication;
 import com.example.twinfileshare.fx.view.MainView;
 import jakarta.annotation.PostConstruct;
+import javafx.application.Platform;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -52,5 +53,9 @@ public class MainPresenter {
     public void handleOpenContactSite() {
         var hostServices = tWinFileShareApplication.getHostServices();
         hostServices.showDocument(contactURL);
+    }
+
+    public void handleCloseTheApplication() {
+        Platform.exit();
     }
 }
