@@ -2,6 +2,7 @@ package com.example.twinfileshare.fx.presenter;
 
 import com.example.twinfileshare.SendMessage;
 import com.example.twinfileshare.event.payload.FileUploadSuccessEvent;
+import com.example.twinfileshare.event.payload.SelectedAccountChanged;
 import com.example.twinfileshare.fx.TWFSFxApplication;
 import com.example.twinfileshare.fx.alert.FxAlert;
 import com.example.twinfileshare.fx.model.EmailShareModal;
@@ -13,8 +14,6 @@ import jakarta.annotation.PostConstruct;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -46,22 +45,6 @@ public class EmailSharePresenter {
 
     @Autowired
     private TWFSFxApplication twfsFxApplication;
-
-
-    public void handleManageAccounts(ActionEvent event) {
-        var node = (Node) event.getSource();
-        var stage = (Stage) node.getScene().getWindow();
-        try {
-            Stage dialog = new Stage();
-            Scene scene = TWFSFxApplication.generateScene("/templates/fx/AccountManage.fxml");
-            dialog.setScene(scene);
-            dialog.initModality(Modality.APPLICATION_MODAL);
-            dialog.initOwner(stage);
-            dialog.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Autowired
     private SendMessage sendMessage;
@@ -248,15 +231,6 @@ public class EmailSharePresenter {
         emailShareView.setBodyTextValue("");
     }
 
-    public void updateProgress(double progress) {
-        if (!uploadProgressPresenter.isUploadActive()) {
-            System.out.println("Uploading is not active");
-            return;
-        }
-
-        uploadProgressPresenter.updateProgress(progress);
-    }
-
     private void sendEmail(DriveUploadResponse driveUploadResponse) throws MessagingException, IOException {
         var fromEmail = emailShareView.getSelectedFromAccountChoiceBoxItem();
         var toEmail = emailShareView.getToTextValue();
@@ -324,5 +298,9 @@ public class EmailSharePresenter {
 
     public void addAccount(String email) {
         emailShareView.addItemToFromAccountChoiceBox(email);
+    }
+
+    public void handleAccountChoiceBoxValueChanged(String selectedValue) {
+        publisher.publishEvent(new SelectedAccountChanged(this, selectedValue));
     }
 }

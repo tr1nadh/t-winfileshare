@@ -39,6 +39,12 @@ public class EmailShareView implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         emailSharePresenter.init();
+        fromAccountChoiceBox.valueProperty().addListener(((observableValue, oldValue, newValue) ->
+                accountChoiceBoxValueChanged(newValue)));
+    }
+
+    public void accountChoiceBoxValueChanged(String selectedValue) {
+        emailSharePresenter.handleAccountChoiceBoxValueChanged(selectedValue);
     }
 
     public void setFromAccountChoiceBoxItems(List<String> items) {
