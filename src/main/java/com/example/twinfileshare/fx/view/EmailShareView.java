@@ -32,25 +32,7 @@ public class EmailShareView implements Initializable {
     private TextArea messageBodyText;
 
     @FXML
-    private Button addFilesBTN;
-
-    @FXML
-    private Button removeFilesBTN;
-
-    @FXML
-    private Button clearFilesBTN;
-
-    @FXML
     private ListView<File> fileListView;
-
-    @FXML
-    private Button sendBTN;
-
-    @FXML
-    private ProgressBar fileUploadProgressBar;
-
-    @FXML
-    private Button manageAccounts;
 
     private EmailSharePresenter emailSharePresenter;
 
@@ -61,10 +43,6 @@ public class EmailShareView implements Initializable {
 
     public void setFromAccountChoiceBoxItems(List<String> items) {
         fromAccountChoiceBox.getItems().addAll(items);
-    }
-
-    public void manageAccounts(ActionEvent event) {
-        emailSharePresenter.handleManageAccounts(event);
     }
 
     public void sendAndShare(ActionEvent event) throws IOException {

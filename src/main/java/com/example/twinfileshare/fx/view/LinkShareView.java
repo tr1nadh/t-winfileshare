@@ -4,11 +4,12 @@ import com.example.twinfileshare.fx.presenter.LinkSharePresenter;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 
 import java.io.File;
@@ -22,21 +23,10 @@ import java.util.ResourceBundle;
 public class LinkShareView implements ILinkShareView {
 
     private LinkSharePresenter presenter;
-
-    @FXML
-    private Button addFilesBTN;
-    @FXML
-    private Button removeFilesBTN;
-    @FXML
-    private Button clearFilesBTN;
     @FXML
     private ChoiceBox<String> accountChoiceBox;
     @FXML
     private ListView<File> fileListView;
-    @FXML
-    private Button uploadBTN;
-    @FXML
-    private ProgressBar fileUploadProgressBar;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -44,9 +34,6 @@ public class LinkShareView implements ILinkShareView {
         accountChoiceBox.valueProperty().addListener(((observableValue, oldValue, newValue) ->
                 AccountChoiceBoxValueChanged(newValue)));
     }
-
-    @Autowired
-    private ApplicationEventPublisher publisher;
 
     public void AccountChoiceBoxValueChanged(String selectedValue) {
         presenter.handleAccountChoiceBoxValueChanged(selectedValue);
@@ -73,24 +60,8 @@ public class LinkShareView implements ILinkShareView {
         return accountChoiceBox.getValue();
     }
 
-    public void disableAccountChoiceBox(boolean disable) {
-        accountChoiceBox.setDisable(disable);
-    }
-
     public boolean accountChoiceBoxContains(String item) {
         return accountChoiceBox.getItems().contains(item);
-    }
-
-    public void disableAddFilesBTN(boolean disable) {
-        addFilesBTN.setDisable(disable);
-    }
-
-    public void disableRemoveFilesBTN(boolean disable) {
-        removeFilesBTN.setDisable(disable);
-    }
-
-    public void disableClearFilesBTN(boolean disable) {
-        clearFilesBTN.setDisable(disable);
     }
 
     public void setFileListViewSelectionMode(SelectionMode selectionMode) {
@@ -122,26 +93,6 @@ public class LinkShareView implements ILinkShareView {
 
     public List<File> getSelectedFileListViewItems() {
         return fileListView.getSelectionModel().getSelectedItems();
-    }
-
-    public void disableFileListView(boolean disable) {
-        fileListView.setDisable(disable);
-    }
-
-    public void setFileListViewItems(List<File> items) {
-        fileListView.getItems().setAll(items);
-    }
-
-    public void setFileUploadProgressBarVisible(boolean visible) {
-        fileUploadProgressBar.setVisible(visible);
-    }
-
-    public void updateFileUploadProgressBar(double value) {
-        fileUploadProgressBar.setProgress(value);
-    }
-
-    public void setUploadBTNText(String text) {
-        uploadBTN.setText(text);
     }
 
     public List<File> openMultipleFileChooserWindow(String windowTitle, ActionEvent event) {
@@ -181,10 +132,5 @@ public class LinkShareView implements ILinkShareView {
 
     public void uploadFiles(ActionEvent event) throws IOException {
         presenter.handleUploadFiles(event);
-    }
-
-    @Override
-    public void openManageAccountsDialog(ActionEvent event) {
-        presenter.handleOpenManageAccountsDialog(event);
     }
 }

@@ -31,7 +31,6 @@ public interface ILinkShareView extends Initializable {
     void removeFilesFromFileListView(ActionEvent event);
     void clearFileListView(ActionEvent event);
     void uploadFiles(ActionEvent event) throws IOException, InterruptedException, GeneralSecurityException;
-    void openManageAccountsDialog(ActionEvent event);
     void removeAllFileListViewItems();
     void setAccountChoiceBoxValue(String value);
 }
