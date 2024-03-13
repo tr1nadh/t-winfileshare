@@ -32,10 +32,10 @@ public class LinkShareView implements ILinkShareView {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         presenter.init();
         accountChoiceBox.valueProperty().addListener(((observableValue, oldValue, newValue) ->
-                AccountChoiceBoxValueChanged(newValue)));
+                accountChoiceBoxValueChanged(newValue)));
     }
 
-    public void AccountChoiceBoxValueChanged(String selectedValue) {
+    public void accountChoiceBoxValueChanged(String selectedValue) {
         presenter.handleAccountChoiceBoxValueChanged(selectedValue);
     }
 

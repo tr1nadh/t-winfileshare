@@ -2,7 +2,6 @@ package com.example.twinfileshare.fx.presenter;
 
 import com.example.twinfileshare.event.payload.FileUploadSuccessEvent;
 import com.example.twinfileshare.event.payload.SelectedAccountChanged;
-import com.example.twinfileshare.fx.TWFSFxApplication;
 import com.example.twinfileshare.fx.alert.FxAlert;
 import com.example.twinfileshare.fx.model.LinkShareModel;
 import com.example.twinfileshare.fx.view.ILinkShareView;
@@ -12,12 +11,10 @@ import jakarta.annotation.PostConstruct;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -237,33 +234,9 @@ public class LinkSharePresenter {
         publisher.publishEvent(new SelectedAccountChanged(this, selectedValue));
     }
 
-    public void handleOpenManageAccountsDialog(ActionEvent event) {
-        var node = (Node) event.getSource();
-        var stage = (Stage) node.getScene().getWindow();
-        try {
-            Stage dialog = new Stage();
-            Scene scene = TWFSFxApplication.generateScene("/templates/fx/AccountManage.fxml");
-            dialog.setScene(scene);
-            dialog.initModality(Modality.WINDOW_MODAL);
-            dialog.initOwner(stage);
-            dialog.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void removeAccountFromChoiceBox(String email) {
         uploadView.removeItemFromAccountChoiceBox(email);
         uploadView.setAccountChoiceBoxValue("Select an email");
-    }
-
-    public void updateProgress(double progress) {
-        if (!uploadProgressPresenter.isUploadActive()) {
-            System.out.println("Uploading is not active");
-            return;
-        }
-
-        uploadProgressPresenter.updateProgress(progress);
     }
 
     @Autowired
