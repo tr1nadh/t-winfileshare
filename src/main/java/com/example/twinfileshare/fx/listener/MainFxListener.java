@@ -55,7 +55,7 @@ public class MainFxListener {
         Platform.runLater(() -> {
             fxAlert.informationAlert(
                     "Authorization successful",
-                    "Google drive successfully connected"
+                    "Account successfully connected"
             );
         });
 
