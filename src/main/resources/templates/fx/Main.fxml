@@ -20,8 +20,9 @@
           <Menu mnemonicParsing="false" text="Help">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#openAboutSite" text="About" />
-                  <MenuItem mnemonicParsing="false" onAction="#openFeedbackLink" text="Feedback" />
-                  <MenuItem mnemonicParsing="false" onAction="#openRequestAccessLink" text="Request access" />
+                  <MenuItem mnemonicParsing="false" onAction="#openFeedbackSite" text="Feedback" />
+                <MenuItem mnemonicParsing="false" onAction="#openRequestAccessSite" text="Request access" />
+                <MenuItem mnemonicParsing="false" onAction="#openContactSite" text="Contact" />
             </items>
           </Menu>
         </menus>

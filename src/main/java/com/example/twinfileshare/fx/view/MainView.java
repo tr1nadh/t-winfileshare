@@ -40,20 +40,19 @@ public class MainView implements Initializable {
         manageAccountPane.getChildren().setAll(TWFSFxApplication.generateScene("/templates/fx/AccountManage.fxml").getRoot());
     }
 
-    public void openFeedbackLink(ActionEvent event) {
-        mainPresenter.handleOpenFeedbackLink();
+    public void openFeedbackSite(ActionEvent event) {
+        mainPresenter.handleOpenFeedbackSite();
     }
 
     public void openAboutSite(ActionEvent event) {
         mainPresenter.handleOpenAboutSite();
     }
 
-    public void openContactDevLink(ActionEvent event) {
-        mainPresenter.handleOpenContactDevLink();
+    public void openContactSite(ActionEvent event) {
+        mainPresenter.handleOpenContactSite();
     }
-
-    public void openRequestAccessLink(ActionEvent event) {
-        mainPresenter.handleOpenRequestAccessLink();
+    public void openRequestAccessSite(ActionEvent event) {
+        mainPresenter.handleOpenRequestAccessSite();
     }
 
     public void setMainPresenter(MainPresenter mainPresenter) {

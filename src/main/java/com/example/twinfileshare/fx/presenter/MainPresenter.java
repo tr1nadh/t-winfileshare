@@ -25,7 +25,7 @@ public class MainPresenter {
     @Value("${twfs.feedback-url}")
     private String feedbackURL;
 
-    public void handleOpenFeedbackLink() {
+    public void handleOpenFeedbackSite() {
         var hostServices = tWinFileShareApplication.getHostServices();
         hostServices.showDocument(feedbackURL);
     }
@@ -38,19 +38,19 @@ public class MainPresenter {
         hostServices.showDocument(aboutURL);
     }
 
-    @Value("${twfs.contact-url}")
-    private String contactURL;
-
-    public void handleOpenContactDevLink() {
-        var hostServices = tWinFileShareApplication.getHostServices();
-        hostServices.showDocument(contactURL);
-    }
-
     @Value("${twfs.request-access-url}")
     private String requestAccessURL;
 
-    public void handleOpenRequestAccessLink() {
+    public void handleOpenRequestAccessSite() {
         var hostServices = tWinFileShareApplication.getHostServices();
         hostServices.showDocument(requestAccessURL);
+    }
+
+    @Value("${twfs.contact-url}")
+    private String contactURL;
+
+    public void handleOpenContactSite() {
+        var hostServices = tWinFileShareApplication.getHostServices();
+        hostServices.showDocument(contactURL);
     }
 }
