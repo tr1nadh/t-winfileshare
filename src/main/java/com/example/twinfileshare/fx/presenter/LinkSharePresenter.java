@@ -254,6 +254,7 @@ public class LinkSharePresenter {
 
     public void removeAccountFromChoiceBox(String email) {
         uploadView.removeItemFromAccountChoiceBox(email);
+        uploadView.setAccountChoiceBoxValue("Select an email");
     }
 
     public void updateProgress(double progress) {

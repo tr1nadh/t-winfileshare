@@ -99,4 +99,8 @@ public class ManageView implements Initializable {
     public void removeItemFromChoiceBox(String item) {
         accountChoiceBox.getItems().remove(item);
     }
+
+    public void setAccountChoiceBoxValue(String value) {
+        accountChoiceBox.setValue(value);
+    }
 }

@@ -105,5 +105,6 @@ public class AccountMangePresenter {
 
     public void removeAccount(String email) {
         accountManageView.removeItemFromAccountChoiceBox(email);
+        accountManageView.setAccountChoiceBoxValue("Select an email");
     }
 }

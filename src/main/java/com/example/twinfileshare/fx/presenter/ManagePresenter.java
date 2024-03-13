@@ -237,5 +237,6 @@ public class ManagePresenter {
 
     public void removeAccountFromChoiceBox(String email) {
         view.removeItemFromChoiceBox(email);
+        view.setAccountChoiceBoxValue("Select an email");
     }
 }

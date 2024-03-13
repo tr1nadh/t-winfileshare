@@ -71,6 +71,7 @@ public class EmailSharePresenter {
 
     public void removeAccountFromChoiceBox(String email) {
         emailShareView.removeItemFromChoiceBox(email);
+        emailShareView.setFromAccountChoiceBoxValue("Select an email");
     }
 
     public void handleAddFilesFilesFromFileManager(ActionEvent event) {
