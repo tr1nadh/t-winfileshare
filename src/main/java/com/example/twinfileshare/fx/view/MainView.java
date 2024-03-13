@@ -44,8 +44,8 @@ public class MainView implements Initializable {
         mainPresenter.handleOpenFeedbackLink();
     }
 
-    public void openAboutDialog(ActionEvent event) {
-        mainPresenter.handleOpenAboutDialog();
+    public void openAboutSite(ActionEvent event) {
+        mainPresenter.handleOpenAboutSite();
     }
 
     public void openContactDevLink(ActionEvent event) {

@@ -1,17 +1,11 @@
 package com.example.twinfileshare.fx.presenter;
 
 import com.example.twinfileshare.TWinFileShareApplication;
-import com.example.twinfileshare.fx.TWFSFxApplication;
 import com.example.twinfileshare.fx.view.MainView;
 import jakarta.annotation.PostConstruct;
-import javafx.scene.Scene;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
 
 @Service
 public class MainPresenter {
@@ -36,17 +30,12 @@ public class MainPresenter {
         hostServices.showDocument(feedbackURL);
     }
 
-    public void handleOpenAboutDialog() {
-        try {
-            Stage dialog = new Stage();
-            Scene scene = TWFSFxApplication.generateScene("/templates/fx/About.fxml");
-            dialog.setScene(scene);
-            dialog.initModality(Modality.NONE);
-            dialog.setMaximized(false);
-            dialog.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    @Value("${twfs.about-url}")
+    private String aboutURL;
+
+    public void handleOpenAboutSite() {
+        var hostServices = tWinFileShareApplication.getHostServices();
+        hostServices.showDocument(aboutURL);
     }
 
     @Value("${twfs.contact-url}")
