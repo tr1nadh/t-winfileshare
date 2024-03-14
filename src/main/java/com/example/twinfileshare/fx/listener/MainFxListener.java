@@ -10,6 +10,7 @@ import com.example.twinfileshare.fx.model.LinkShareModel;
 import com.example.twinfileshare.fx.presenter.*;
 import com.example.twinfileshare.fx.view.LinkShareView;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
+import com.example.twinfileshare.utility.SettingsManager;
 import javafx.application.Platform;
 import javafx.scene.control.ButtonType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,9 @@ public class MainFxListener {
     @Autowired
     private ManagePresenter managePresenter;
 
+    @Autowired
+    private SettingsManager settingsManager;
+
     @EventListener
     public void handleUserConnectedEvent(UserConnectedEvent event) throws IOException {
         var email = event.getEmail();
@@ -63,6 +67,12 @@ public class MainFxListener {
         managePresenter.addAccount(email);
         emailSharePresenter.addAccount(email);
         accountMangePresenter.addAccount(email);
+
+        var settings = settingsManager.readSettings();
+        if (!settings.isHasAccess()) {
+            settings.setHasAccess(true);
+            settingsManager.writeSettings(settings);
+        }
     }
 
     @Autowired
