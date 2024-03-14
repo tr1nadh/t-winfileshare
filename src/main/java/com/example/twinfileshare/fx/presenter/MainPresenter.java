@@ -1,7 +1,11 @@
 package com.example.twinfileshare.fx.presenter;
 
 import com.example.twinfileshare.TWinFileShareApplication;
+import com.example.twinfileshare.fx.TWFSFxApplication;
+import com.example.twinfileshare.fx.alert.FxAlert;
 import com.example.twinfileshare.fx.view.MainView;
+import com.example.twinfileshare.repository.GoogleUserCREDRepository;
+import com.example.twinfileshare.utility.SettingsManager;
 import jakarta.annotation.PostConstruct;
 import javafx.application.Platform;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +18,9 @@ public class MainPresenter {
     @Autowired
     private MainView mainView;
 
+    public MainPresenter() {
+        TWFSFxApplication.startup(this::showRequestAccessAlert);
+    }
 
     @PostConstruct
     public void setMainView() {
@@ -57,5 +64,32 @@ public class MainPresenter {
 
     public void handleCloseTheApplication() {
         Platform.exit();
+    }
+
+    @Autowired
+    private FxAlert fxAlert;
+
+    @Autowired
+    private SettingsManager settingsManager;
+
+    @Autowired
+    private GoogleUserCREDRepository googleUserCREDRepository;
+
+    public void showRequestAccessAlert() {
+        var settings = settingsManager.readSettings();
+        if (settings.isHasAccess())
+            return;
+
+        fxAlert.informationAlert(
+                "Request alert",
+                "As the application is in beta stage, " +
+                        "you are required to request access in help menu!!"
+        );
+
+        var emails = googleUserCREDRepository.getAllEmails();
+        if (!emails.isEmpty()) {
+            settings.setHasAccess(true);
+            settingsManager.writeSettings(settings);
+        }
     }
 }
