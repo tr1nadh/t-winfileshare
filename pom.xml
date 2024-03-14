@@ -180,7 +180,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.2.0</version>
+				<version>3.5.2</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -190,10 +190,9 @@
 						<configuration>
 							<shadedArtifactAttached>true</shadedArtifactAttached>
 							<shadedClassifierName>project-classifier</shadedClassifierName>
-							<outputFile>shade\${project.artifactId}.jar</outputFile>
+							<outputFile>shade/${project.artifactId}.jar</outputFile>
 							<transformers>
-								<transformer implementation=
-													 "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 									<mainClass>com.example.twinfileshare.Launcher</mainClass>
 								</transformer>
 							</transformers>
