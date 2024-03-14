@@ -18,10 +18,14 @@ public class TWFSFxApplication {
 
     private static Stage mainStage;
 
+    private static Runnable startupRunnable;
+
     public static void loadPrimaryView(Stage stage) throws IOException {
         mainStage = getStageWithProperties(stage);
         mainStage.setScene(generateScene("/templates/fx/Main.fxml"));
         mainStage.show();
+
+        if (startupRunnable != null) startupRunnable.run();
     }
 
     private static String appWindowName;
@@ -57,5 +61,9 @@ public class TWFSFxApplication {
     public static void loadScene(String resource) throws IOException {
         mainStage.setScene(generateScene(resource));
         mainStage.show();
+    }
+
+    public static void startup(Runnable runnable) {
+        startupRunnable = runnable;
     }
 }
