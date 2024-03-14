@@ -13,7 +13,7 @@
 <!--	Project info -->
 	<groupId>com.example</groupId>
 	<artifactId>t-winfileshare</artifactId>
-	<version>twfs-v1.4.11-beta</version>
+	<version>1.4.14-beta</version>
 	<name>T-Win File Share</name>
 	<description>A file sharing tool</description>
 	<properties>
