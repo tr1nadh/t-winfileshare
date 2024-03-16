@@ -33,7 +33,7 @@ import java.util.*;
 
 @Service
 @Log4j2
-public class GoogleAuthorizationService {
+public class GoogleAuthorizer {
     private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
     private static final List<String> SCOPES = List.of(

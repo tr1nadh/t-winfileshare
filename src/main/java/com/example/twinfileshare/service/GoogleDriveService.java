@@ -43,7 +43,7 @@ public class GoogleDriveService {
     private GoogleUserCREDRepository googleUserCREDRepository;
 
     @Autowired
-    private GoogleAuthorizationService authorizationService;
+    private GoogleAuthorizer authorizationService;
 
     @Value("${google.oauth2.client.application-name}")
     private String googleClientAppName;

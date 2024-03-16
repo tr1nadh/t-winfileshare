@@ -1,7 +1,7 @@
 package com.example.twinfileshare;
 
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
-import com.example.twinfileshare.service.GoogleAuthorizationService;
+import com.example.twinfileshare.service.GoogleAuthorizer;
 import com.google.api.client.googleapis.json.GoogleJsonError;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -28,7 +28,7 @@ public class SendMessage {
     private GoogleUserCREDRepository googleUserCREDRepository;
 
     @Autowired
-    private GoogleAuthorizationService authorizationService;
+    private GoogleAuthorizer authorizationService;
 
     @Value("${google.oauth2.client.application-name}")
     private String googleClientAppName;

@@ -2,7 +2,7 @@ package com.example.twinfileshare.fx.model;
 
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.example.twinfileshare.service.DriveUploadResponse;
-import com.example.twinfileshare.service.GoogleAuthorizationService;
+import com.example.twinfileshare.service.GoogleAuthorizer;
 import com.example.twinfileshare.service.GoogleDriveService;
 import com.example.twinfileshare.utility.Zipper;
 import lombok.extern.log4j.Log4j2;
@@ -21,12 +21,12 @@ import java.util.concurrent.CompletableFuture;
 public class LinkShareModel {
 
     @Autowired
-    private GoogleAuthorizationService googleAuthorizationService;
+    private GoogleAuthorizer googleAuthorizer;
     @Autowired
     private GoogleUserCREDRepository googleUserCREDRepository;
 
     public String getGoogleSignInURL() {
-        return googleAuthorizationService.getGoogleSignInURL();
+        return googleAuthorizer.getGoogleSignInURL();
     }
 
     public List<String> getAllEmails() {
@@ -34,7 +34,7 @@ public class LinkShareModel {
     }
 
     public void disconnectAccount(String email) throws GeneralSecurityException, IOException {
-        googleAuthorizationService.revokeUserWithEmail(email);
+        googleAuthorizer.revokeUserWithEmail(email);
         googleUserCREDRepository.deleteByEmail(email);
     }
 

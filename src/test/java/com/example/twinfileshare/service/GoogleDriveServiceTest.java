@@ -33,7 +33,7 @@ class GoogleDriveServiceTest {
     }
 
     @Autowired
-    private GoogleAuthorizationService authorizationService;
+    private GoogleAuthorizer authorizationService;
 
     @Test
     void deleteAllInDb() {

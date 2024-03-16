@@ -1,7 +1,7 @@
 package com.example.twinfileshare.fx.model;
 
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
-import com.example.twinfileshare.service.GoogleAuthorizationService;
+import com.example.twinfileshare.service.GoogleAuthorizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,14 +20,14 @@ public class AccountMangeModal {
     }
 
     @Autowired
-    private GoogleAuthorizationService googleAuthorizationService;
+    private GoogleAuthorizer googleAuthorizer;
 
     public void disconnectAccount(String email) throws GeneralSecurityException, IOException {
-        googleAuthorizationService.revokeUserWithEmail(email);
+        googleAuthorizer.revokeUserWithEmail(email);
         googleUserCREDRepository.deleteByEmail(email);
     }
 
     public String getGoogleSignInURL() {
-        return googleAuthorizationService.getGoogleSignInURL();
+        return googleAuthorizer.getGoogleSignInURL();
     }
 }
