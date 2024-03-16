@@ -3,7 +3,7 @@ package com.example.twinfileshare.fx.model;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.example.twinfileshare.service.DriveUploadResponse;
 import com.example.twinfileshare.service.GoogleAuthorizationService;
-import com.example.twinfileshare.service.GoogleDriveService;
+import com.example.twinfileshare.service.GoogleDrive;
 import com.example.twinfileshare.utility.Zipper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class LinkShareModel {
     }
 
     @Autowired
-    private GoogleDriveService driveService;
+    private GoogleDrive driveService;
 
     @Autowired
     private ApplicationEventPublisher publisher;

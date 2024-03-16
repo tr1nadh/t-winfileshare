@@ -1,7 +1,7 @@
 package com.example.twinfileshare.listener;
 
 import com.example.twinfileshare.event.payload.HandleProgressEvent;
-import com.example.twinfileshare.service.GoogleDriveService;
+import com.example.twinfileshare.service.GoogleDrive;
 import com.google.api.client.googleapis.media.MediaHttpUploader;
 import com.google.api.client.googleapis.media.MediaHttpUploaderProgressListener;
 import lombok.extern.log4j.Log4j2;
@@ -13,9 +13,9 @@ import java.io.IOException;
 public class AppMediaHttpUploaderProgressListener implements MediaHttpUploaderProgressListener {
 
     private final ApplicationEventPublisher publisher;
-    private final GoogleDriveService driveService;
+    private final GoogleDrive driveService;
 
-    public AppMediaHttpUploaderProgressListener(ApplicationEventPublisher publisher, GoogleDriveService driveService) {
+    public AppMediaHttpUploaderProgressListener(ApplicationEventPublisher publisher, GoogleDrive driveService) {
         this.publisher = publisher;
         this.driveService = driveService;
     }

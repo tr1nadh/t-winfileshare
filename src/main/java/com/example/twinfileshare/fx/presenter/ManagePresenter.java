@@ -6,7 +6,7 @@ import com.example.twinfileshare.fx.alert.FxAlert;
 import com.example.twinfileshare.fx.view.ManageView;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.example.twinfileshare.repository.ManageRepository;
-import com.example.twinfileshare.service.GoogleDriveService;
+import com.example.twinfileshare.service.GoogleDrive;
 import com.google.api.client.util.Strings;
 import jakarta.annotation.PostConstruct;
 import javafx.event.ActionEvent;
@@ -70,7 +70,7 @@ public class ManagePresenter {
     }
 
     @Autowired
-    private GoogleDriveService driveService;
+    private GoogleDrive driveService;
 
     @Autowired
     private GoogleUserCREDRepository userCREDRepository;

@@ -34,7 +34,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Log4j2
 @Service
-public class GoogleDriveService {
+public class GoogleDrive {
 
     private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();

@@ -12,13 +12,13 @@ import java.util.concurrent.ExecutionException;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-class GoogleDriveServiceTest {
+class GoogleDriveTest {
 
     @Autowired
     private GoogleUserCREDRepository googleUserCREDRepository;
 
     @Autowired
-    private GoogleDriveService service;
+    private GoogleDrive service;
 
     @Test
     void uploadFileWhenAccessTokenIsInvalid() throws IOException, ExecutionException, InterruptedException {
