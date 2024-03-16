@@ -33,7 +33,7 @@ class GoogleDriveServiceTest {
     }
 
     @Autowired
-    private GoogleAuthorizer authorizationService;
+    private GoogleAuthorizationService googleAuthorizationService;
 
     @Test
     void deleteAllInDb() {
@@ -43,7 +43,7 @@ class GoogleDriveServiceTest {
     @Test
     void refreshAccessToken() {
         var cred = googleUserCREDRepository.findByEmail("test-email");
-        var gCred = authorizationService.toGoogleCredential(cred);
+        var gCred = googleAuthorizationService.toGoogleCredential(cred);
         System.out.println("Previous access token: " + gCred.getAccessToken());
 
         boolean isAccessTokenRefreshed = false;

@@ -43,7 +43,7 @@ public class GoogleDriveService {
     private GoogleUserCREDRepository googleUserCREDRepository;
 
     @Autowired
-    private GoogleAuthorizer authorizationService;
+    private GoogleAuthorizationService googleAuthorizationService;
 
     @Value("${google.oauth2.client.application-name}")
     private String googleClientAppName;
@@ -170,7 +170,7 @@ public class GoogleDriveService {
 
     private Credential getCredential(String email) {
         var googleUserCRED = googleUserCREDRepository.findByEmail(email);
-        return authorizationService.toGoogleCredential(googleUserCRED);
+        return googleAuthorizationService.toGoogleCredential(googleUserCRED);
     }
 
     private boolean isUploadCancelled;

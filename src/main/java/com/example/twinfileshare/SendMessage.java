@@ -1,7 +1,7 @@
 package com.example.twinfileshare;
 
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
-import com.example.twinfileshare.service.GoogleAuthorizer;
+import com.example.twinfileshare.service.GoogleAuthorizationService;
 import com.google.api.client.googleapis.json.GoogleJsonError;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -28,7 +28,7 @@ public class SendMessage {
     private GoogleUserCREDRepository googleUserCREDRepository;
 
     @Autowired
-    private GoogleAuthorizer authorizationService;
+    private GoogleAuthorizationService googleAuthorizationService;
 
     @Value("${google.oauth2.client.application-name}")
     private String googleClientAppName;
@@ -37,7 +37,7 @@ public class SendMessage {
                              String messageSubject, String bodyText, String link)
             throws MessagingException, IOException {
         var googleUserCRED = googleUserCREDRepository.findByEmail(fromEmailAddress);
-        var credential = authorizationService.toGoogleCredential(googleUserCRED);
+        var credential = googleAuthorizationService.toGoogleCredential(googleUserCRED);
 
         // Create the gmail API client
         Gmail service = new Gmail.Builder(new NetHttpTransport(),
