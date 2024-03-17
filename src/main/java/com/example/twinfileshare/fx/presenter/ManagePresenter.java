@@ -6,7 +6,7 @@ import com.example.twinfileshare.fx.alert.FxAlert;
 import com.example.twinfileshare.fx.view.ManageView;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.example.twinfileshare.repository.ManageRepository;
-import com.example.twinfileshare.service.GoogleDrive;
+import com.example.twinfileshare.service.GoogleDriveService;
 import com.google.api.client.util.Strings;
 import jakarta.annotation.PostConstruct;
 import javafx.event.ActionEvent;
@@ -70,7 +70,7 @@ public class ManagePresenter {
     }
 
     @Autowired
-    private GoogleDrive driveService;
+    private GoogleDriveService driveService;
 
     @Autowired
     private GoogleUserCREDRepository userCREDRepository;
@@ -143,10 +143,9 @@ public class ManagePresenter {
             return;
         }
 
-        driveService.fileShareWithAnyone(
+        driveService.enableFileSharingWithAnyone(
                 selectedSharedFile.getId(),
-                selectedSharedFile.getEmail(),
-                selectedSharedFile.getFilename());
+                selectedSharedFile.getEmail());
 
         Notifications.create()
                 .text("File sharing has been started")
@@ -203,7 +202,7 @@ public class ManagePresenter {
 
     public void refresh(String email) throws IOException {
         var dbSharedFilesIds = repository.findAllIds();
-        var cloudSharedFiles = driveService.findFilesFromCloud(email);
+        var cloudSharedFiles = driveService.fetchFilesFromCloud(email);
         for (var file : cloudSharedFiles) {
             if (dbSharedFilesIds.contains(file.getId()))
                 continue;
