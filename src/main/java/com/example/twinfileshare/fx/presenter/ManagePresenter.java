@@ -144,8 +144,8 @@ public class ManagePresenter {
         }
 
         driveService.enableFileSharingWithAnyone(
-                selectedSharedFile.getId(),
-                selectedSharedFile.getEmail());
+                selectedSharedFile.getEmail(),
+                selectedSharedFile.getId());
 
         Notifications.create()
                 .text("File sharing has been started")
@@ -191,6 +191,7 @@ public class ManagePresenter {
 
     private void deleteHistoryFile(SharedFile selectedSharedFile, ActionEvent event) throws IOException {
         driveService.deleteFile(selectedSharedFile.getEmail(), selectedSharedFile.getId());
+        System.out.println(selectedSharedFile);
         view.deleteFileFromListView(selectedSharedFile);
         repository.delete(selectedSharedFile);
 
