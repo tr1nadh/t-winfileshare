@@ -1,7 +1,6 @@
 package com.example.twinfileshare.service;
 
 import com.example.twinfileshare.listener.AppMediaHttpUploaderProgressListener;
-import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.example.twinfileshare.utility.Strings;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.media.MediaHttpUploader;
@@ -9,19 +8,13 @@ import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.InputStreamContent;
-import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.Permission;
 import lombok.extern.log4j.Log4j2;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -30,27 +23,21 @@ import java.nio.file.Files;
 import java.util.List;
 
 @Log4j2
-@Service
 public class GoogleDrive {
 
-    private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
-    private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
-
-    @Autowired
-    private GoogleUserCREDRepository googleUserCREDRepository;
-
-    @Autowired
-    private GoogleAuthorizationService googleAuthorizationService;
-
-    @Value("${google.oauth2.client.application-name}")
-    private String googleClientAppName;
-
+    private final HttpTransport httpTransport;
+    private final JsonFactory jsonFactory;
+    private final String googleClientAppName;
     private InputStreamContent mediaContent;
+    private final AppMediaHttpUploaderProgressListener progressListener;
 
-    @Autowired
-    private ApplicationEventPublisher publisher;
-
-    private AppMediaHttpUploaderProgressListener progressListener;
+    public GoogleDrive(HttpTransport httpTransport, JsonFactory jsonFactory, String
+            googleClientAppName, AppMediaHttpUploaderProgressListener progressListener) {
+        this.httpTransport = httpTransport;
+        this.jsonFactory = jsonFactory;
+        this.googleClientAppName = googleClientAppName;
+        this.progressListener = progressListener;
+    }
 
     @Async
     public HttpResponse uploadFile(Credential cred, java.io.File file, String folderId) throws IOException {
@@ -78,7 +65,6 @@ public class GoogleDrive {
 
     private MediaHttpUploader getMediaHttpUploader(Drive.Files.Create createRequest) {
         var mediaHttpUploader = createRequest.getMediaHttpUploader();
-        progressListener = new AppMediaHttpUploaderProgressListener(publisher, this);
         mediaHttpUploader.setProgressListener(progressListener);
         return mediaHttpUploader;
     }
@@ -90,12 +76,17 @@ public class GoogleDrive {
     }
 
     public void enableFileSharingWithAnyone(Credential cred, String fileId) throws IOException {
-        var drive = buildDrive(cred);
+        if (cred == null)
+            throw new IllegalStateException("Credential cannot be null");
+
+        if (Strings.isEmptyOrWhitespace(fileId))
+            throw new IllegalStateException("FileId cannot be empty or null");
 
         var permissions = new Permission();
         permissions.setType("anyone");
         permissions.setRole("reader");
 
+        var drive = buildDrive(cred);
         drive.permissions().create(fileId, permissions).execute();
     }
 
@@ -118,7 +109,7 @@ public class GoogleDrive {
     }
 
     private Drive buildDrive(Credential cred) {
-        return new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, cred)
+        return new Drive.Builder(httpTransport, jsonFactory, cred)
                 .setApplicationName(googleClientAppName).build();
     }
 

@@ -1,14 +1,14 @@
 package com.example.twinfileshare.service;
 
+import com.example.twinfileshare.listener.AppMediaHttpUploaderProgressListener;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.example.twinfileshare.utility.Strings;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.http.HttpResponse;
-import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.drive.model.File;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,23 +26,23 @@ import java.util.concurrent.CompletableFuture;
 @Log4j2
 public class GoogleDriveService {
 
-    private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
-    private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
-
-    @Value("${google.oauth2.client.application-name}")
-    private String googleClientAppName;
-
     @Autowired
     private ApplicationEventPublisher publisher;
-
     @Autowired
     private GoogleUserCREDRepository googleUserCREDRepository;
-
     @Autowired
     private GoogleAuthorizationService googleAuthorizationService;
 
-    @Autowired
     private GoogleDrive googleDrive;
+    @Value("${google.oauth2.client.application-name}")
+    private String googleClientAppName;
+
+    @PostConstruct
+    public void init() {
+        googleDrive = new GoogleDrive(new NetHttpTransport(), GsonFactory.getDefaultInstance(),
+                googleClientAppName,
+                new AppMediaHttpUploaderProgressListener(publisher, this));
+    }
 
     @Async
     public CompletableFuture<DriveUploadResponse> uploadAndShareFileWithAnyone(String email, java.io.File file) throws IOException {
@@ -97,6 +97,12 @@ public class GoogleDriveService {
     }
 
     public void enableFileSharingWithAnyone(String email, String fileId) throws IOException {
+        if (Strings.isNullOrEmpty(email))
+            throw new IllegalStateException("Email cannot be empty or null");
+
+        if (Strings.isNullOrEmpty(fileId))
+            throw new IllegalStateException("FileId cannot be empty or null");
+
         var cred = getCredential(email);
         googleDrive.enableFileSharingWithAnyone(cred, fileId);
     }
