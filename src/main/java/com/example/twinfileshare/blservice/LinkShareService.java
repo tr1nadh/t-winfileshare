@@ -1,4 +1,4 @@
-package com.example.twinfileshare.fx.model;
+package com.example.twinfileshare.blservice;
 
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.example.twinfileshare.service.DriveUploadResponse;
@@ -16,14 +16,10 @@ import java.util.concurrent.CompletableFuture;
 
 @Log4j2
 @Service
-public class LinkShareModel {
+public class LinkShareService {
 
     @Autowired
     private GoogleUserCREDRepository googleUserCREDRepository;
-
-    public List<String> getAllEmails() {
-        return googleUserCREDRepository.getAllEmails();
-    }
 
     @Autowired
     private GoogleDriveService driveService;
