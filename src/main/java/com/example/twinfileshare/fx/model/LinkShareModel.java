@@ -2,7 +2,6 @@ package com.example.twinfileshare.fx.model;
 
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.example.twinfileshare.service.DriveUploadResponse;
-import com.example.twinfileshare.service.GoogleAuthorizationService;
 import com.example.twinfileshare.service.GoogleDriveService;
 import com.example.twinfileshare.utility.Zipper;
 import lombok.extern.log4j.Log4j2;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -21,21 +19,10 @@ import java.util.concurrent.CompletableFuture;
 public class LinkShareModel {
 
     @Autowired
-    private GoogleAuthorizationService googleAuthorizationService;
-    @Autowired
     private GoogleUserCREDRepository googleUserCREDRepository;
-
-    public String getGoogleSignInURL() {
-        return googleAuthorizationService.getGoogleAuthorizationURL();
-    }
 
     public List<String> getAllEmails() {
         return googleUserCREDRepository.getAllEmails();
-    }
-
-    public void disconnectAccount(String email) throws GeneralSecurityException, IOException {
-        googleAuthorizationService.revokeAccount(email);
-        googleUserCREDRepository.deleteByEmail(email);
     }
 
     @Autowired
