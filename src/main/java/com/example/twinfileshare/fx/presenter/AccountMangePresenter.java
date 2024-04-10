@@ -3,8 +3,10 @@ package com.example.twinfileshare.fx.presenter;
 import com.example.twinfileshare.TWinFileShareApplication;
 import com.example.twinfileshare.event.payload.AccountDisconnectedEvent;
 import com.example.twinfileshare.fx.alert.FxAlert;
-import com.example.twinfileshare.fx.model.AccountMangeModal;
 import com.example.twinfileshare.fx.view.AccountManageView;
+import com.example.twinfileshare.modal.GoogleUserCredModal;
+import com.example.twinfileshare.service.AccountManageService;
+import com.example.twinfileshare.service.GoogleAuthorizationService;
 import jakarta.annotation.PostConstruct;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ButtonType;
@@ -23,10 +25,13 @@ public class AccountMangePresenter {
     private AccountManageView accountManageView;
 
     @Autowired
-    private AccountMangeModal accountMangeModal;
+    private GoogleUserCredModal googleUserCredModal;
+
+    @Autowired
+    private AccountManageService accountManageService;
 
     public void init() {
-        var emails = accountMangeModal.getAllEmails();
+        var emails = googleUserCredModal.getAllEmails();
         accountManageView.setItemsToAccountChoiceBox(emails);
         accountManageView.setAccountChoiceBoxValue("Select an email");
     }
@@ -72,7 +77,7 @@ public class AccountMangePresenter {
     }
 
     private void disconnectAccount(String email) throws GeneralSecurityException, IOException {
-        accountMangeModal.disconnectAccount(email);
+        accountManageService.disconnectAccount(email);
         accountManageView.setAccountChoiceBoxValue("Select an email");
         accountManageView.removeItemFromAccountChoiceBox(email);
     }
@@ -94,9 +99,12 @@ public class AccountMangePresenter {
         );
     }
 
+    @Autowired
+    private GoogleAuthorizationService googleAuthorizationService;
+
     public void openAuthURLInBrowser() {
         var hostServices = tWinFileShareApplication.getHostServices();
-        hostServices.showDocument(accountMangeModal.getGoogleSignInURL());
+        hostServices.showDocument(googleAuthorizationService.getGoogleAuthorizationURL());
     }
 
     public void addAccount(String email) {
