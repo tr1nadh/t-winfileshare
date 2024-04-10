@@ -1,8 +1,7 @@
-package com.example.twinfileshare.blservice;
+package com.example.twinfileshare.service;
 
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
-import com.example.twinfileshare.service.DriveUploadResponse;
-import com.example.twinfileshare.service.GoogleDriveService;
+import com.example.twinfileshare.google.DriveUploadResponse;
 import com.example.twinfileshare.utility.Zipper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;

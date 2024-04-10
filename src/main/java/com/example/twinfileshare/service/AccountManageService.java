@@ -1,4 +1,4 @@
-package com.example.twinfileshare.blservice;
+package com.example.twinfileshare.service;
 
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.example.twinfileshare.service.GoogleAuthorizationService;
