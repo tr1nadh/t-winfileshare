@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 @Service
-public class SendMessage {
+public class MessageSender {
 
     @Autowired
     private GoogleUserCREDRepository googleUserCREDRepository;
