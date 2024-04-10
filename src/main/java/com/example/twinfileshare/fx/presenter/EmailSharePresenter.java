@@ -1,13 +1,13 @@
 package com.example.twinfileshare.fx.presenter;
 
-import com.example.twinfileshare.SendMessage;
+import com.example.twinfileshare.MessageSender;
 import com.example.twinfileshare.event.payload.FileUploadSuccessEvent;
 import com.example.twinfileshare.event.payload.SelectedAccountChanged;
 import com.example.twinfileshare.fx.TWFSFxApplication;
 import com.example.twinfileshare.fx.alert.FxAlert;
-import com.example.twinfileshare.fx.model.EmailShareModal;
 import com.example.twinfileshare.fx.model.LinkShareModel;
 import com.example.twinfileshare.fx.view.EmailShareView;
+import com.example.twinfileshare.modal.GoogleUserCredModal;
 import com.example.twinfileshare.service.DriveUploadResponse;
 import com.example.twinfileshare.utility.Strings;
 import jakarta.annotation.PostConstruct;
@@ -31,23 +31,23 @@ public class EmailSharePresenter {
     @Autowired
     private EmailShareView emailShareView;
 
-    @Autowired
-    private EmailShareModal emailShareModal;
-
     @PostConstruct
     public void setView() {
         emailShareView.setEmailSharePresenter(this);
     }
 
+    @Autowired
+    private GoogleUserCredModal googleUserCredModal;
+
     public void init() {
-        emailShareView.setFromAccountChoiceBoxItems(emailShareModal.getAllEmails());
+        emailShareView.setFromAccountChoiceBoxItems(googleUserCredModal.getAllEmails());
     }
 
     @Autowired
     private TWFSFxApplication twfsFxApplication;
 
     @Autowired
-    private SendMessage sendMessage;
+    private MessageSender messageSender;
 
     @Autowired
     private LinkSharePresenter presenter;
@@ -236,7 +236,7 @@ public class EmailSharePresenter {
         var toEmail = emailShareView.getToTextValue();
         var subject = emailShareView.getTitleTextValue();
         var body = emailShareView.getMessageBodyTextValue();
-        var message = sendMessage.sendEmail(fromEmail,
+        var message = messageSender.sendEmail(fromEmail,
                 toEmail, subject, body, driveUploadResponse.getSharableLink());
         System.out.println(message);
     }
