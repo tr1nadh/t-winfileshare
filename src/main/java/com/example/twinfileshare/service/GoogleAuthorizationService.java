@@ -4,6 +4,8 @@ import com.example.twinfileshare.entity.GoogleUserCRED;
 import com.example.twinfileshare.event.payload.DoubleEmailConnectEvent;
 import com.example.twinfileshare.event.payload.UnsuccessfulAuthorizationEvent;
 import com.example.twinfileshare.event.payload.UserConnectedEvent;
+import com.example.twinfileshare.google.GoogleAuthorizer;
+import com.example.twinfileshare.google.UserScopes;
 import com.example.twinfileshare.listener.DriveTokenRefreshListener;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
 import com.example.twinfileshare.utility.Strings;

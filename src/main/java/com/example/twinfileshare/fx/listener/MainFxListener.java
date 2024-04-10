@@ -6,7 +6,7 @@ import com.example.twinfileshare.event.payload.HandleProgressEvent;
 import com.example.twinfileshare.event.payload.UnsuccessfulAuthorizationEvent;
 import com.example.twinfileshare.event.payload.UserConnectedEvent;
 import com.example.twinfileshare.fx.alert.FxAlert;
-import com.example.twinfileshare.fx.model.LinkShareModel;
+import com.example.twinfileshare.service.LinkShareService;
 import com.example.twinfileshare.fx.presenter.*;
 import com.example.twinfileshare.fx.view.LinkShareView;
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
@@ -78,7 +78,7 @@ public class MainFxListener {
     @Autowired
     private TWinFileShareApplication tWinFileShareApplication;
     @Autowired
-    private LinkShareModel linkShareModel;
+    private LinkShareService linkShareService;
 
     @Autowired
     private AccountMangePresenter accountMangePresenter;

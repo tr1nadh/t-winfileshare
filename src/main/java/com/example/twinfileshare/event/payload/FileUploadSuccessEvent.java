@@ -1,6 +1,6 @@
 package com.example.twinfileshare.event.payload;
 
-import com.example.twinfileshare.service.DriveUploadResponse;
+import com.example.twinfileshare.google.DriveUploadResponse;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 

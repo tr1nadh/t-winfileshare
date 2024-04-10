@@ -3,9 +3,10 @@ package com.example.twinfileshare.fx.presenter;
 import com.example.twinfileshare.event.payload.FileUploadSuccessEvent;
 import com.example.twinfileshare.event.payload.SelectedAccountChanged;
 import com.example.twinfileshare.fx.alert.FxAlert;
-import com.example.twinfileshare.fx.model.LinkShareModel;
+import com.example.twinfileshare.service.LinkShareService;
 import com.example.twinfileshare.fx.view.ILinkShareView;
-import com.example.twinfileshare.service.DriveUploadResponse;
+import com.example.twinfileshare.modal.GoogleUserCredModal;
+import com.example.twinfileshare.google.DriveUploadResponse;
 import com.example.twinfileshare.utility.Strings;
 import jakarta.annotation.PostConstruct;
 import javafx.application.Platform;
@@ -31,7 +32,8 @@ public class LinkSharePresenter {
     @Autowired
     private ILinkShareView uploadView;
     @Autowired
-    private LinkShareModel linkShareModel;
+    private LinkShareService linkShareService;
+
     @Autowired
     private FxAlert fxAlert;
 
@@ -40,8 +42,11 @@ public class LinkSharePresenter {
         uploadView.setUploadPresenter(this);
     }
 
+    @Autowired
+    private GoogleUserCredModal googleUserCredModal;
+
     public void init() {
-        uploadView.setAccountChoiceBoxItems(linkShareModel.getAllEmails());
+        uploadView.setAccountChoiceBoxItems(googleUserCredModal.getAllEmails());
         uploadView.setFileListViewSelectionMode(SelectionMode.MULTIPLE);
     }
 
@@ -172,10 +177,10 @@ public class LinkSharePresenter {
 
     private CompletableFuture<DriveUploadResponse> getUploadTask(String selectedEmail, List<File> requiredFiles, String zipName) throws IOException {
         if (requiredFiles.size() > 1)
-            return linkShareModel.uploadFilesToGoogleDrive(selectedEmail, requiredFiles,
+            return linkShareService.uploadFilesToGoogleDrive(selectedEmail, requiredFiles,
                     zipName);
         else
-            return linkShareModel.uploadFileToGoogleDrive(selectedEmail,
+            return linkShareService.uploadFileToGoogleDrive(selectedEmail,
                     requiredFiles.get(0));
     }
 
@@ -209,7 +214,7 @@ public class LinkSharePresenter {
     private ApplicationEventPublisher publisher;
 
     public void cancelUpload() {
-        linkShareModel.cancelUploadFiles();
+        linkShareService.cancelUploadFiles();
     }
 
     private void showUploadFinishedAlert(String link) {
