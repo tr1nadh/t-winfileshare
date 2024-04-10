@@ -1,6 +1,7 @@
-package com.example.twinfileshare.service;
+package com.example.twinfileshare.blservice;
 
 import com.example.twinfileshare.repository.GoogleUserCREDRepository;
+import com.example.twinfileshare.service.GoogleAuthorizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
