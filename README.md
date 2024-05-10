@@ -1,2 +1,2 @@
 # T-WinFileShare
-It's a file sharing tool with preferred cloud service provider
+TWFS is a file sharing tool that lets you use google drive to share files effectively
